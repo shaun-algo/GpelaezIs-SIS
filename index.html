@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>DepEd Dashboard | Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/png" href="assets/img/logo/logo.png" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/index_new.css" />
+    <link rel="stylesheet" href="assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1" />
+    <link rel="stylesheet" href="assets/css/login-form.css?v=20261012-location-consent-v4" />
+    <link rel="stylesheet" href="assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1" />
+    <script src="assets/js/auth/portal-host.js"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css" />
+</head>
+<body class="signup-split-body">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+
+    <main class="signup-split" role="main">
+        <!-- Left Panel - Branding & Information -->
+        <section class="signup-left" aria-labelledby="login-left-title">
+            <div class="left-inner">
+                <div class="brand-mark">
+                    <img src="assets/img/logo/logo.png" alt="School Logo">
+                </div>
+
+                <h1 id="login-left-title">
+                    G.Pelaez Integrated<br class="school-name-break"> School
+                    <span class="school-location">Gitagum Misamis Oriental</span>
+                </h1>
+
+                <details class="left-dropdown">
+                    <summary>Learn more</summary>
+                    <ul class="left-features" role="list">
+                        <li>Manage learner profiles</li>
+                        <li>Record attendance and grades</li>
+                        <li>Generate reports</li>
+                        <li>Generate performance and rankings</li>
+                        <li>Identify learners who may need support</li>
+                    </ul>
+                </details>
+            </div>
+        </section>
+
+        <!-- Right Panel - Login Form -->
+        <section class="signup-right" aria-labelledby="login-form-title">
+            <div class="signup-container">
+                <div class="right-logo" aria-label="Department of Education logo">
+                    <img src="assets/img/logo/Seal_of_the_Department_of_Education_of_the_Philippines.png" alt="Department of Education" class="deped-logo-text" />
+                </div>
+                <div class="signup-card">
+
+                    <div class="form-header">
+                        <h2 class="form-title" id="login-form-title">Sign In</h2>
+
+                    </div>
+
+                    <form class="login-form" id="loginForm">
+                        <div class="form-group">
+                            <label class="form-label" for="username">
+                                <i class="fas fa-user-circle"></i> Username
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="username"
+                                name="username"
+                                placeholder="Enter your username"
+                                autocomplete="username"
+                                required
+                            />
+                            <span class="error-message">Username is required</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="password">
+                                <i class="fas fa-shield-alt"></i> Password
+                            </label>
+                            <div class="password-wrapper">
+                                <input
+                                    type="password"
+                                    class="form-control"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    autocomplete="current-password"
+                                    required
+                                />
+                                <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password" aria-controls="password" aria-pressed="false">
+                                    <span class="toggle-password-icon" aria-hidden="true">
+                                        <i class="fas fa-eye toggle-password-icon--show"></i>
+                                        <i class="fas fa-eye-slash toggle-password-icon--hide"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <span class="error-message">Password is required</span>
+                        </div>
+
+                        <div class="login-options">
+                            <a href="email-otp/index.html" class="forgot-link">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="loginBtn">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+
+                        <p class="login-status" id="loginStatus" role="alert"></p>
+
+                        <div class="login-reassurance">
+                        <p class="privacy-note">
+                            By signing in, you agree to the
+                               <a href="https://www.deped.gov.ph/about-deped/data-privacy-notice/" class="privacy-link" target="_blank" rel="noopener noreferrer">DepEd Data Privacy Notice</a>.
+                        </p>
+                        <p class="privacy-subnote">In compliance with Republic Act No. 10173 (Data Privacy Act of 2012)</p>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="login-location-modal" id="loginLocationModal" hidden aria-hidden="true">
+        <div class="login-location-dialog" role="dialog" aria-modal="true" aria-label="Location access" aria-describedby="loginLocationDescription">
+            <video class="login-location-earth" autoplay loop muted playsinline preload="metadata" aria-hidden="true">
+                <source src="assets/icons/earth.mp4" type="video/mp4">
+            </video>
+            <p id="loginLocationDescription">Allow this browser to share its approximate city or province so you can recognize this device in Account Security.</p>
+            <div class="login-location-actions">
+                <button type="button" class="login-location-skip" data-login-location-skip>Continue without location</button>
+                <button type="button" class="login-location-allow" data-login-location-allow>Allow location</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Axios -->
+    <script src="assets/vendor/axios/axios.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="assets/js/network-status.js?v=20261009-network-status-v1" data-network-status="true" defer></script>
+    <script src="assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+    <script src="assets/js/auth/login.js?v=20261012-location-consent-v2"></script>
+</body>
+</html>

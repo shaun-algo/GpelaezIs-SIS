@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Dashboard</title>
+    <link rel="icon" type="image/png" href="../assets/img/logo/logo.png" />
+</head>
+<body>
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+<script>
+let dashboardRouteInProgress = false;
+
+async function routeToRoleDashboard() {
+    if (dashboardRouteInProgress) return;
+    dashboardRouteInProgress = true;
+
+    try {
+        const res = await fetch('../api/auth/me.php', {
+            credentials: 'include',
+            cache: 'no-store',
+            headers: { 'Cache-Control': 'no-store', 'Pragma': 'no-cache' }
+        });
+        if (res.status === 401) {
+            try {
+                sessionStorage.setItem('sessionEnded', '1');
+                sessionStorage.setItem('sessionEndReason', 'expired');
+            } catch (_) {
+                // Ignore storage errors and still send the user to sign in.
+            }
+            window.location.replace('../index.html');
+            return;
+        }
+        if (!res.ok) {
+            document.body.textContent = 'The session could not be verified right now. Please refresh and try again.';
+            return;
+        }
+
+        const payload = await res.json();
+        const roleName = String(payload?.data?.role_name || '').toLowerCase();
+        let target = 'admin_dashboard.html';
+        if (roleName.includes('teacher')) target = 'teacher_dashboard.html';
+        if (roleName.includes('learner') || roleName.includes('student')) target = 'learner_dashboard.html';
+        window.location.replace(target);
+    } catch (_) {
+        document.body.textContent = 'The session could not be verified right now. Please refresh and try again.';
+    } finally {
+        dashboardRouteInProgress = false;
+    }
+}
+
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) routeToRoleDashboard();
+});
+window.addEventListener('popstate', routeToRoleDashboard);
+
+// History navigation must still be allowed to verify and route normally. A
+// valid session stays active; only a failed auth/me request sends the user to
+// the login page.
+routeToRoleDashboard();
+</script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+    <script src="../assets/js/network-status.js?v=20261009-network-status-v1" data-network-status="true" defer></script>
+</body>
+</html>

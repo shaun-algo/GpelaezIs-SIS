@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="referrer" content="no-referrer">
+    <title>Email verification | School Portal</title>
+    <link rel="stylesheet" href="../assets/css/recovery.css?v=20261009-learner-recovery-v1">
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="recovery-illustrated-page">
+    <main class="recovery-layout">
+        <aside class="school-panel school-panel--illustrated">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School logo" width="100" height="100">
+            <h1 class="recovery-heading">Recover access to your school portal.</h1>
+            <p class="recovery-guidance">Use your username. We will send a code to the email saved on your school record.</p>
+            <img class="school-characters" src="../assets/learner_teacher.png" alt="A learner and teacher walking together">
+        </aside>
+        <section class="form-panel">
+            <div class="recovery-card recovery-card--otp">
+                <h2>Recover your account</h2>
+
+                <form id="recoveryForm" data-mode="otp" data-api-base="../api/auth/email_otp" novalidate>
+                    <section class="otp-panel is-active" data-otp-step="username" aria-labelledby="otpUsernameTitle">
+                        <h3 id="otpUsernameTitle">Find your account</h3>
+                        <p class="field-help">Learners should enter their 12-digit LRN. Staff should enter their employee ID.</p>
+                        <label for="otpUsername">Username</label>
+                        <input id="otpUsername" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="191" required placeholder="Enter your username">
+                        <button type="submit" id="sendOtpButton">Send verification code</button>
+                    </section>
+
+                    <section class="otp-panel" data-otp-step="code" aria-labelledby="otpCodeTitle" hidden>
+                        <div class="otp-panel-heading"><div><h3 id="otpCodeTitle">Enter the code</h3><p id="otpDestination">Sent to your school-record email.</p></div><button type="button" class="text-button" id="changeUsernameButton">Change username</button></div>
+                        <label for="otpCode">6-digit code</label>
+                        <input id="otpCode" name="otp" type="text" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required placeholder="000000">
+                        <button type="submit" id="verifyOtpButton">Verify code</button>
+                        <button type="button" class="secondary-button" id="resendOtpButton">Resend code</button>
+                    </section>
+
+                    <section class="otp-panel" data-otp-step="password" aria-labelledby="otpPasswordTitle" hidden>
+                        <h3 id="otpPasswordTitle">Choose a new password</h3>
+                        <label for="newPassword">New password</label>
+                        <input id="newPassword" name="new_password" type="password" autocomplete="new-password" minlength="8" required placeholder="Create a new password">
+                        <div class="password-checks" aria-label="Password requirements">
+                            <label><input type="checkbox" disabled data-rule="length"> At least 8 characters</label>
+                            <label><input type="checkbox" disabled data-rule="capital"> One capital letter</label>
+                            <label><input type="checkbox" disabled data-rule="number"> One number</label>
+                        </div>
+                        <label for="confirmPassword">Confirm password</label>
+                        <input id="confirmPassword" name="confirm_password" type="password" autocomplete="new-password" minlength="8" required placeholder="Re-enter your password">
+                        <label class="show-password"><input id="showPassword" type="checkbox"> Show passwords</label>
+                        <button type="submit" id="resetPasswordButton">Set new password</button>
+                    </section>
+
+                    <section class="otp-panel adviser-confirmation" data-otp-step="adviser" aria-labelledby="adviserTitle" hidden>
+                        <div class="confirmation-mark" aria-hidden="true">✓</div>
+                        <h3 id="adviserTitle">Request sent for adviser review</h3>
+                        <p id="adviserMessage">Your adviser must verify your identity before a private reset link can be issued.</p>
+                        <button type="button" class="secondary-button" id="adviserStartOver">Use another username</button>
+                    </section>
+
+                    <p id="status" role="status" aria-live="polite" tabindex="-1" hidden></p>
+                </form>
+                <a class="back-link" href="../index.html">Back to sign in</a>
+                <p class="help">Learner accounts use adviser-assisted recovery.</p>
+            </div>
+        </section>
+    </main>
+    <script src="../assets/js/network-status.js?v=20261009-network-status-v1" data-network-status="true" defer></script>
+    <script src="../assets/js/auth/recovery.js?v=20261009-learner-recovery-v1" defer></script>
+</body>
+</html>

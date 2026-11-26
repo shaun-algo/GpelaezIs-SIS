@@ -1,0 +1,67 @@
+/* Subject Categories masterlist ordering controls. */
+
+body.subject-categories-page .subject-category-search-stack {
+    display: grid;
+    gap: 8px;
+    min-width: min(100%, 460px);
+    flex: 1 1 460px;
+}
+
+body.subject-categories-page .subject-category-guidance {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding: 9px 12px;
+    border: 1px solid #f2c94c;
+    border-radius: 8px;
+    background: #fff8d6;
+    color: #7a4b00;
+    font-size: .82rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+body.subject-categories-page .subject-category-guidance i {
+    margin-top: 2px;
+    color: #b77900;
+}
+
+body.subject-categories-page .subject-category-guidance strong {
+    font-weight: 800;
+}
+
+body.subject-categories-page #dataTableBody .subject-category-sortable-row {
+    cursor: grab;
+}
+
+body.subject-categories-page #dataTableBody .subject-category-sortable-row:active {
+    cursor: grabbing;
+}
+
+body.subject-categories-page #dataTableBody .subject-category-dragging {
+    opacity: 0.52;
+}
+
+body.subject-categories-page #dataTableBody .subject-category-drag-over-before td {
+    border-top: 2px solid var(--deped-blue, #0055a4);
+}
+
+body.subject-categories-page #dataTableBody .subject-category-drag-over-after td {
+    border-bottom: 2px solid var(--deped-blue, #0055a4);
+}
+
+body.subject-categories-page .subject-category-drag-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.3rem;
+    margin-right: 0.4rem;
+    color: var(--gray-400, #94a3b8);
+    cursor: grab;
+}
+
+body.subject-categories-page .subject-category-drag-handle:hover,
+body.subject-categories-page .subject-category-drag-handle:focus-visible {
+    color: var(--deped-blue, #0055a4);
+}

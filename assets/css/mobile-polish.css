@@ -1,0 +1,6024 @@
+/*
+ * Cross-module mobile polish
+ *
+ * This is intentionally a small final layer. It keeps the existing module
+ * markup, data contracts, and desktop layouts intact while standardising the
+ * mobile shell, touch targets, wrapping, and overflow behaviour.
+ */
+
+html {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    min-width: 320px;
+    overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+    max-width: 100%;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+    touch-action: manipulation;
+}
+
+:where(button, a, input, select, textarea):focus-visible {
+    outline: 3px solid rgba(0, 85, 164, 0.24);
+    outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --topbar-height: calc(58px + env(safe-area-inset-top));
+    }
+
+    .topbar {
+        height: var(--topbar-height);
+        min-height: var(--topbar-height);
+        padding: env(safe-area-inset-top) 0.75rem 0;
+        gap: 0.5rem;
+    }
+
+    .topbar-left,
+    .topbar-right,
+    .logo,
+    .user-menu {
+        min-width: 0;
+    }
+
+    .topbar-left {
+        gap: 0.45rem;
+    }
+
+    .topbar-right {
+        gap: 0.15rem;
+    }
+
+    .menu-toggle,
+    .notification-btn,
+    .user-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .menu-toggle,
+    .notification-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+    }
+
+    .logo-img,
+    .logo-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .user-btn {
+        width: 44px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .user-btn .user-avatar {
+        width: 34px;
+        height: 34px;
+    }
+
+    .user-btn .profile-menu-indicator {
+        display: none;
+    }
+
+    .notification-dropdown,
+    .user-dropdown {
+        right: 0;
+        max-width: calc(100vw - 1rem);
+    }
+
+    .sidebar {
+        width: min(20rem, calc(100vw - 0.75rem));
+        height: 100dvh;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .sidebar-overlay {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .main-content,
+    .main-content.expanded {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        margin-left: 0;
+        padding: 1rem 0.75rem calc(1.25rem + env(safe-area-inset-bottom));
+    }
+
+    .main-content > *,
+    .main-content > * > *,
+    .card,
+    .card-header,
+    .card-body,
+    .form-group,
+    .form-row > *,
+    .form-grid > * {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .page-header {
+        align-items: flex-start;
+        gap: 0.65rem;
+        margin-bottom: 1rem;
+    }
+
+    .page-title {
+        max-width: 100%;
+        font-size: clamp(1.3rem, 5vw, 1.65rem);
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
+
+    .page-subtitle {
+        max-width: 42rem;
+        line-height: 1.45;
+    }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .card-header {
+        padding: 0.9rem 1rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .card-title {
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .summary-cards,
+    .charts-row,
+    .dashboard-row,
+    .quick-actions {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.75rem;
+    }
+
+    .summary-card .card-content {
+        padding: 1rem;
+    }
+
+    .card-value {
+        font-size: 1.65rem;
+    }
+
+    .card-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.35rem;
+    }
+
+    .chart-card,
+    .performance-card,
+    .alerts-card {
+        min-height: 0;
+    }
+
+    .btn {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0.65rem 0.85rem;
+        line-height: 1.2;
+        white-space: normal;
+    }
+
+    .form-control,
+    input,
+    select,
+    textarea {
+        max-width: 100%;
+    }
+
+    .form-row,
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .form-section {
+        padding: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .section-fields {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.75rem;
+    }
+
+    .table-container,
+    .table-responsive,
+    [class*="table-wrap"],
+    [class*="table-wrapper"] {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    table {
+        max-width: none;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem 0.65rem;
+    }
+
+    .action-buttons {
+        gap: 0.35rem;
+        flex-wrap: wrap;
+    }
+
+    .action-btn,
+    .pagination-btn {
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        min-height: 44px;
+    }
+
+    .pagination-section {
+        gap: 0.75rem;
+        padding: 0.85rem 1rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+
+    .modal {
+        padding: max(0.5rem, env(safe-area-inset-top)) max(0.5rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.5rem, env(safe-area-inset-left));
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 100%;
+        max-height: calc(100dvh - 1rem);
+        margin: 0;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .announcement-card,
+    .compose-card {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .announcement-header,
+    .announcement-footer,
+    .compose-top,
+    .compose-actions {
+        gap: 0.75rem;
+    }
+
+    body.analytics-modern .main-content {
+        padding: 1rem 0.75rem calc(1.25rem + env(safe-area-inset-bottom));
+    }
+
+    body.analytics-modern .chart-card,
+    body.analytics-modern .performance-card,
+    body.analytics-modern .alerts-card,
+    body.analytics-modern.analytics-overview .performance-card {
+        min-height: 0;
+    }
+
+    body.analytics-modern canvas,
+    body.analytics-modern.analytics-overview canvas {
+        height: 250px !important;
+        max-height: 300px;
+    }
+
+    body.analytics-modern .analytics-filter-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem;
+    }
+
+    body.analytics-modern .analytics-filter-actions .btn {
+        width: 100%;
+    }
+
+    body.report-cards-page .rc-main {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body.report-cards-page .rc-student-items {
+        max-height: 16rem;
+    }
+
+    body.report-cards-page .rc-controls {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body.report-cards-page .rc-controls .btn {
+        width: 100%;
+    }
+
+    body.sf10-page .sf10-shell {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body.class-records-page .cr-grade-sheet-wrap,
+    body.class-records-page .cr-observed-table-wrap,
+    body.class-records-page .cr-honors-table-wrap {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 560px) {
+    .main-content,
+    .main-content.expanded {
+        padding-inline: 0.65rem;
+    }
+
+    .page-title {
+        font-size: 1.35rem;
+    }
+
+    .card-header,
+    .card-body {
+        padding-inline: 0.85rem;
+    }
+
+    .btn {
+        min-height: 44px;
+        padding-inline: 0.75rem;
+    }
+
+    .pagination-section {
+        align-items: stretch;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    .analytics-filter-actions {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .topbar {
+        padding-inline: 0.5rem;
+    }
+
+    .main-content,
+    .main-content.expanded {
+        padding-inline: 0.55rem;
+    }
+
+    .card-header,
+    .card-body {
+        padding-inline: 0.75rem;
+    }
+
+    .btn {
+        padding-inline: 0.65rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .topbar,
+    .sidebar,
+    .sidebar-overlay,
+    .btn,
+    .action-btn,
+    .pagination-btn,
+    .card,
+    .form-control,
+    .search-input {
+        transition: none !important;
+    }
+}
+
+/* Compact attendance controls and record cards on phones without shrinking
+   primary tap targets or changing the desktop layout. */
+@media screen and (max-width: 48rem) {
+    body.attendance-page #mainContent {
+        padding: 0.75rem 0.65rem;
+    }
+
+    body.attendance-page .attendance-shell {
+        border-radius: 0.75rem;
+    }
+
+    body.attendance-page .attendance-shell-header {
+        gap: 0.5rem;
+        padding: 0.7rem 0.8rem !important;
+    }
+
+    body.attendance-page .attendance-shell-header .card-title {
+        font-size: 0.95rem;
+        line-height: 1.25;
+    }
+
+    body.attendance-page .attendance-shell > .card-body {
+        padding: 0.75rem !important;
+    }
+
+    body.attendance-page .att-filters.attendance-filter-grid {
+        gap: 0.6rem;
+        margin-bottom: 0.75rem !important;
+        padding: 0.7rem;
+        border-radius: 0.7rem;
+    }
+
+    body.attendance-page .att-filters .form-label,
+    body.attendance-page .learner-att-toolbar .form-label {
+        margin-bottom: 0.25rem;
+        font-size: 0.66rem;
+        letter-spacing: 0.045em;
+    }
+
+    body.attendance-page .att-filters .form-control,
+    body.attendance-page .learner-att-toolbar .form-control,
+    body.attendance-page .learner-att-school-year-toggle {
+        min-height: 42px;
+        padding: 0.5rem 0.65rem;
+        border-radius: 0.6rem;
+        font-size: 0.86rem;
+    }
+
+    body.attendance-page .att-wizard-select-step {
+        gap: 0.6rem;
+    }
+
+    body.attendance-page .att-wizard-validation {
+        font-size: 0.74rem;
+    }
+
+    body.attendance-page .att-wizard-proceed,
+    body.attendance-page .att-mobile-change-selection {
+        min-height: 44px;
+        margin-bottom: 0;
+        border-radius: 0.65rem;
+        font-size: 0.86rem;
+    }
+
+    body.attendance-page .attendance-table-card {
+        margin-top: 0.65rem;
+        border-radius: 0.7rem !important;
+    }
+
+    body.attendance-page .attendance-table-header {
+        gap: 0.5rem;
+        padding: 0.65rem 0.75rem !important;
+    }
+
+    body.attendance-page .attendance-table-header #attSearch {
+        min-height: 40px;
+        padding: 0.45rem 0.65rem;
+        font-size: 0.84rem;
+    }
+
+    body.attendance-page .attendance-table-card .att-table tbody {
+        gap: 0.5rem;
+    }
+
+    body.attendance-page .attendance-table-card .att-table tbody > tr:not(.att-gender-separator) {
+        gap: 0.5rem;
+        padding: 0.65rem;
+        border-radius: 0.6rem;
+    }
+
+    body.attendance-page .attendance-table-card .att-table .att-name {
+        font-size: 0.86rem;
+        line-height: 1.25;
+    }
+
+    body.attendance-page .attendance-table-card .att-table .att-lrn {
+        font-size: 0.66rem;
+    }
+
+    body.attendance-page .attendance-table-card .att-table .att-status-cell {
+        padding-top: 0.5rem !important;
+    }
+
+    body.attendance-page .attendance-table-card .att-table .att-status-cell::before {
+        margin-bottom: 0.3rem;
+        font-size: 0.64rem;
+    }
+
+    body.attendance-page .attendance-table-card .att-select {
+        min-height: 42px;
+        padding: 0.5rem 0.6rem;
+        font-size: 0.84rem;
+    }
+
+    body.attendance-page.att-learner-mode .learner-att-panel {
+        gap: 0.8rem;
+    }
+
+    body.attendance-page.att-learner-mode .learner-att-toolbar {
+        gap: 0.65rem;
+        padding: 0.7rem;
+        border-radius: 0.7rem;
+    }
+
+    body.attendance-page.att-learner-mode #myAttendanceView .att-table-wrap {
+        margin-top: 0.8rem;
+    }
+
+    body.attendance-page.att-learner-mode .learner-att-table th,
+    body.attendance-page.att-learner-mode .learner-att-table td {
+        padding: 0.6rem 0.4rem;
+        font-size: 0.68rem;
+        line-height: 1.3;
+    }
+
+}
+
+/* -------------------------------------------------------------------------
+ * Posts feed rhythm
+ * -------------------------------------------------------------------------
+ * Keep announcement cards comfortably sized on phones while allowing longer
+ * posts to grow. The feed is a reading surface, so reduce visual padding and
+ * identity scale while retaining the 44px action targets.
+ */
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) .announcement-dashboard .announcement-composer-top,
+    html:not([data-security-view]) .profile-posts .announcement-composer-top {
+        margin-bottom: 0.75rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .compose-card,
+    html:not([data-security-view]) .profile-posts ~ .announcement-composer-top .compose-card,
+    html:not([data-security-view]) .announcement-composer-top .compose-card {
+        padding: 0.8rem;
+        border-radius: 0.75rem;
+    }
+
+    html:not([data-security-view]) .announcement-composer-top .compose-row {
+        grid-template-columns: 2.5rem minmax(0, 1fr);
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    html:not([data-security-view]) .announcement-composer-top .compose-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        flex: 0 0 2.5rem;
+        font-size: 0.95rem;
+    }
+
+    html:not([data-security-view]) .announcement-composer-top .compose-field {
+        min-height: 3.25rem;
+        padding: 0.7rem 0.8rem;
+        border-radius: 0.65rem;
+        font-size: 0.9rem;
+        line-height: 1.35;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcements-container,
+    html:not([data-security-view]) .profile-posts .announcements-container {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcements-feed,
+    html:not([data-security-view]) .profile-posts .announcements-feed {
+        gap: 0.65rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-card,
+    html:not([data-security-view]) .profile-posts .announcement-card {
+        min-height: clamp(24rem, 60svh, 28rem) !important;
+        padding: 0.875rem;
+        border-radius: 0.75rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-header,
+    html:not([data-security-view]) .profile-posts .announcement-header {
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.65rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-author,
+    html:not([data-security-view]) .profile-posts .announcement-author {
+        gap: 0.6rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .author-avatar,
+    html:not([data-security-view]) .profile-posts .author-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        flex: 0 0 2.5rem;
+        font-size: 1rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .author-info,
+    html:not([data-security-view]) .profile-posts .author-info {
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .author-info h4,
+    html:not([data-security-view]) .profile-posts .author-info h4 {
+        margin-bottom: 0.1rem;
+        min-width: 0;
+        max-width: 100%;
+        font-size: 0.84rem;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-meta,
+    html:not([data-security-view]) .profile-posts .announcement-meta {
+        gap: 0.3rem;
+        margin-top: 0.15rem;
+        font-size: 0.76rem;
+        line-height: 1.25;
+        flex-wrap: wrap;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-time,
+    html:not([data-security-view]) .profile-posts .announcement-time {
+        font-size: 0.76rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-title,
+    html:not([data-security-view]) .profile-posts .announcement-title {
+        margin-bottom: 0.55rem;
+        font-size: 1.1rem;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-body,
+    html:not([data-security-view]) .profile-posts .announcement-body {
+        margin-bottom: 0.75rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-content,
+    html:not([data-security-view]) .profile-posts .announcement-content {
+        min-height: 0 !important;
+        padding: 0.8rem 0.9rem !important;
+        border-radius: 0.7rem;
+        line-height: 1.5;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-content .announcement-copy,
+    html:not([data-security-view]) .profile-posts .announcement-content .announcement-copy {
+        max-width: none;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-readmore,
+    html:not([data-security-view]) .profile-posts .announcement-readmore {
+        font-size: 0.88rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-attachment,
+    html:not([data-security-view]) .profile-posts .announcement-attachment {
+        gap: 0.6rem;
+        margin-top: 0.75rem;
+        padding: 0.7rem 0.75rem;
+        border-radius: 0.65rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-attachment > i,
+    html:not([data-security-view]) .profile-posts .announcement-attachment > i {
+        font-size: 1.15rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .attachment-info strong,
+    html:not([data-security-view]) .profile-posts .attachment-info strong {
+        font-size: 0.85rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .attachment-info small,
+    html:not([data-security-view]) .profile-posts .attachment-info small {
+        font-size: 0.75rem;
+        overflow-wrap: anywhere;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-footer,
+    html:not([data-security-view]) .profile-posts .announcement-footer {
+        gap: 0.5rem;
+        padding-top: 0.65rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-expiry,
+    html:not([data-security-view]) .profile-posts .announcement-expiry {
+        font-size: 0.76rem;
+        line-height: 1.3;
+    }
+
+    /* Keep dashboard posts at the same comfortable minimum as other feeds. */
+    html:not([data-security-view]) .announcement-dashboard .dashboard-feed-column .announcement-card {
+        min-height: clamp(24rem, 60svh, 28rem) !important;
+        padding: 0.875rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .dashboard-feed-column .announcement-body {
+        min-height: 0;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .dashboard-feed-column .announcement-content {
+        display: block;
+        align-items: initial;
+        justify-content: initial;
+        text-align: left;
+        line-height: 1.5;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcements-empty,
+    html:not([data-security-view]) .profile-posts .empty-state {
+        min-height: 0;
+        padding: 2.5rem 0.75rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .empty-state i,
+    html:not([data-security-view]) .profile-posts .empty-state i {
+        margin-bottom: 0.75rem;
+        font-size: 2.75rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .empty-state h3,
+    html:not([data-security-view]) .profile-posts .empty-state h3 {
+        margin-bottom: 0.35rem;
+        font-size: 1.1rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .empty-state p,
+    html:not([data-security-view]) .profile-posts .empty-state p {
+        font-size: 0.9rem;
+        line-height: 1.45;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-feed-end,
+    html:not([data-security-view]) .profile-posts .announcement-feed-end {
+        margin-top: 2rem;
+        padding-bottom: 1.5rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-feed-end__icon,
+    html:not([data-security-view]) .profile-posts .announcement-feed-end__icon {
+        width: clamp(8.5rem, 38vw, 11rem);
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-feed-end__copy,
+    html:not([data-security-view]) .profile-posts .announcement-feed-end__copy {
+        margin-top: 0.35rem;
+        padding: 0.75rem 0.7rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-feed-end__title,
+    html:not([data-security-view]) .profile-posts .announcement-feed-end__title {
+        font-size: 1rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-feed-end__note,
+    html:not([data-security-view]) .profile-posts .announcement-feed-end__note {
+        font-size: 0.78rem;
+    }
+
+    /* Loading markup contains inline values, so these need to win explicitly. */
+    html:not([data-security-view]) .announcement-dashboard .announcements-feed > .loading-state,
+    html:not([data-security-view]) .profile-posts .announcements-feed > .loading-state {
+        padding: 2rem 0.75rem !important;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcements-feed > .loading-state i,
+    html:not([data-security-view]) .profile-posts .announcements-feed > .loading-state i {
+        margin-bottom: 0.65rem !important;
+        font-size: 1.5rem !important;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcements-feed > .loading-state p,
+    html:not([data-security-view]) .profile-posts .announcements-feed > .loading-state p {
+        font-size: 0.9rem !important;
+    }
+}
+
+@media screen and (max-width: 22.5rem) {
+    html:not([data-security-view]) .announcement-dashboard .announcement-card,
+    html:not([data-security-view]) .profile-posts .announcement-card {
+        padding: 0.75rem;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-content,
+    html:not([data-security-view]) .profile-posts .announcement-content {
+        padding: 0.7rem 0.75rem !important;
+    }
+}
+
+/* Keep reported-post controls above any open menu backdrop. */
+@media screen and (max-width: 48rem) {
+    #reportedPostsSection .announcement-reports-page-header {
+        align-items: flex-start;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    #reportedPostsSection .announcement-reports-page-header > div:first-child {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    #reportedPostsSection .announcement-reports-page-header .page-title {
+        font-size: clamp(1.65rem, 7vw, 1.85rem);
+        font-weight: 750;
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+        white-space: nowrap;
+    }
+
+    #reportedPostsSection .announcement-reports-view-menu {
+        align-self: flex-start;
+        margin-top: 0;
+    }
+}
+
+#reportedPostsSection .announcement-report-case.has-open-action-menu .announcement-report-case__menu {
+    z-index: 21;
+}
+
+#reportedPostsSection .announcement-report-action-menu::before {
+    display: none;
+}
+
+#reportedPostsSection .announcement-reports-view-menu {
+    position: relative;
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+#reportedPostsSection .announcement-reports-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    padding: 0.25rem 0;
+    border: 0;
+    background: transparent;
+    color: var(--deped-blue);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#reportedPostsSection .announcement-reports-back:hover,
+#reportedPostsSection .announcement-reports-back:focus-visible {
+    color: var(--deped-blue-dark, #004482);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+#reportedPostsSection .announcement-reports-back[hidden] {
+    display: none;
+}
+
+#reportedPostsSection .announcement-reports-view-menu.is-open {
+    z-index: 21;
+}
+
+#reportedPostsSection .announcement-reports-view-toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    border: 1px solid var(--app-line);
+    border-radius: 0.75rem;
+    background: var(--surface-0);
+}
+
+#reportedPostsSection .announcement-reports-view-option {
+    display: grid;
+    gap: 0.15rem;
+}
+
+#reportedPostsSection .announcement-reports-view-option strong {
+    font-size: 0.9rem;
+    font-weight: 650;
+}
+
+#reportedPostsSection .announcement-reports-view-option small {
+    color: var(--gray-500);
+    font-size: 0.75rem;
+}
+
+#reportedPostsSection .announcement-report-case {
+    height: 23rem;
+    box-sizing: border-box;
+}
+
+#reportedPostsSection .announcement-report-case__state.is-resolved {
+    padding: 0.15rem 0.45rem;
+    border: 1px solid rgba(33, 124, 82, 0.2);
+    border-radius: 999px;
+    background: rgba(33, 124, 82, 0.08);
+    color: #217c52;
+}
+
+#reportedPostsSection .announcement-report-case__details {
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    overflow: hidden;
+}
+
+#reportedPostsSection .announcement-report-post {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 0.75rem;
+    transition: background-color 140ms ease, outline-color 140ms ease;
+}
+
+#reportedPostsSection .announcement-report-post:hover {
+    background: rgba(0, 85, 164, 0.035);
+}
+
+#reportedPostsSection .announcement-report-post:focus-visible {
+    outline: 2px solid var(--deped-blue);
+    outline-offset: 3px;
+}
+
+#reportedPostsSection .announcement-report-post h4 {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+#reportedPostsSection .announcement-report-post__body {
+    display: -webkit-box;
+    max-height: none;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+}
+
+#reportedPostsSection .announcement-report-post__attribution {
+    margin-top: auto;
+    padding-top: 0.65rem;
+}
+
+@media screen and (min-width: 45.0625rem) {
+    #reportedPostsSection .announcement-report-case {
+        height: auto;
+        min-height: 0;
+    }
+
+    #reportedPostsSection .announcement-report-case__details {
+        height: auto;
+        padding: 0.9rem 1.15rem;
+        overflow: visible;
+    }
+
+    #reportedPostsSection .announcement-report-post h4 {
+        margin-bottom: 0.45rem;
+    }
+
+    #reportedPostsSection .announcement-report-post__body {
+        -webkit-line-clamp: 4;
+        line-height: 1.5;
+    }
+
+    #reportedPostsSection .announcement-report-post__attribution {
+        margin-top: 0.65rem;
+        padding-top: 0.35rem;
+    }
+}
+
+#reportedPostsSection .announcement-reporters {
+    min-width: 0;
+}
+
+#reportedPostsSection .announcement-reporters {
+    cursor: pointer;
+    border-radius: 0.75rem;
+    transition: background-color 140ms ease, outline-color 140ms ease;
+}
+
+#reportedPostsSection .announcement-reporters:hover,
+#reportedPostsSection .announcement-reporters:focus-visible,
+#reportedPostsSection .announcement-reporters[aria-expanded="true"] {
+    background: rgba(0, 85, 164, 0.035);
+}
+
+#reportedPostsSection .announcement-reporters:focus-visible {
+    outline: 2px solid var(--deped-blue);
+    outline-offset: 3px;
+}
+
+#reportedPostsSection .announcement-reporter-stack {
+    pointer-events: none;
+}
+
+#reportedPostsSection .announcement-report-reasons-dialog {
+    position: fixed;
+    inset: 50% auto auto 50%;
+    width: min(38rem, calc(100vw - 2rem));
+    max-width: none;
+    max-height: min(82dvh, 42rem);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--app-line);
+    border-radius: 1rem;
+    background: var(--surface-0);
+    color: var(--gray-800);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+    transform: translate(-50%, -50%);
+}
+
+/* The View post dialog uses the same feed width and card geometry as the
+   dashboard post stream; only the review header remains dialog-specific. */
+#reportedPostsSection .announcement-report-post-dialog {
+    width: min(44rem, calc(100vw - 2rem));
+}
+
+#reportedPostsSection .announcement-report-reasons-dialog::backdrop {
+    background: rgba(15, 23, 42, 0.48);
+    backdrop-filter: blur(2px);
+}
+
+#reportedPostsSection .announcement-report-reasons-dialog__panel {
+    display: flex;
+    max-height: min(82dvh, 42rem);
+    flex-direction: column;
+}
+
+#reportedPostsSection .announcement-report-reasons-dialog__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--app-line);
+}
+
+#reportedPostsSection .announcement-report-reasons-dialog__header .announcement-report-label {
+    margin: 0 0 0.2rem;
+}
+
+#reportedPostsSection .announcement-report-reasons-dialog__header h2 {
+    margin: 0;
+    color: var(--gray-900);
+    font-size: 1.15rem;
+}
+
+#reportedPostsSection .announcement-report-reasons-dialog__close {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid var(--app-line);
+    border-radius: 0.75rem;
+    background: var(--surface-0);
+    color: var(--gray-600);
+    cursor: pointer;
+}
+
+#reportedPostsSection .announcement-report-reasons-dialog__body {
+    display: grid;
+    min-height: 0;
+    gap: 0.65rem;
+    padding: 1rem 1.25rem 1.25rem;
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+
+#reportedPostsSection .announcement-report-reason-detail {
+    padding: 0.85rem 0.95rem;
+    border: 1px solid var(--app-line);
+    border-radius: 0.8rem;
+    background: var(--app-panel, #f8fafc);
+}
+
+#reportedPostsSection .announcement-report-reason-detail__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+}
+
+#reportedPostsSection .announcement-report-reason-detail__meta strong {
+    min-width: 0;
+    color: var(--gray-800);
+    font-size: 0.84rem;
+    overflow-wrap: anywhere;
+}
+
+#reportedPostsSection .announcement-report-reason-detail__meta time {
+    flex: 0 0 auto;
+    color: var(--gray-500);
+    font-size: 0.72rem;
+}
+
+#reportedPostsSection .announcement-report-reason-detail p {
+    margin: 0;
+    color: var(--gray-700);
+    font-size: 0.86rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+#reportedPostsSection .announcement-report-post-dialog__body {
+    display: block;
+    padding: 0;
+}
+
+#reportedPostsSection .announcement-report-post-preview {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    min-height: clamp(26rem, calc(80vh - 5.6rem), 42rem);
+    padding: 1.7rem 1.5rem 1.55rem;
+    box-shadow: none;
+    transform: none;
+}
+
+#reportedPostsSection .announcement-report-post-preview:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+#reportedPostsSection .announcement-report-post-preview .announcement-content {
+    min-height: 0;
+    padding: 1.05rem 1.15rem;
+}
+
+#reportedPostsSection .announcement-report-post-preview .announcement-copy {
+    max-width: none;
+    margin: 0;
+}
+
+#reportedPostsSection .announcement-report-post-preview .announcement-body {
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 45rem) {
+    #reportedPostsSection .announcement-report-case__details {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) auto;
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+
+    #reportedPostsSection .announcement-report-post {
+        padding-right: 2.5rem;
+    }
+
+    #reportedPostsSection .announcement-report-post-preview {
+        padding: 0.95rem;
+    }
+
+    #reportedPostsSection .announcement-report-post__body {
+        -webkit-line-clamp: 4;
+    }
+
+    #reportedPostsSection .announcement-reporters {
+        padding-top: 0.7rem;
+        padding-left: 0;
+        border-top: 1px solid var(--app-line);
+        border-left: 0;
+    }
+
+    #reportedPostsSection .announcement-reporters__header {
+        margin-bottom: 0;
+    }
+
+    #reportedPostsSection .announcement-report-reasons-dialog {
+        position: fixed;
+        inset: auto 0 0;
+        width: 100%;
+        max-height: min(86dvh, 46rem);
+        margin: 0;
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+        border-radius: 1rem 1rem 0 0;
+        animation: report-reasons-sheet-in 180ms ease-out both;
+        transform: none;
+    }
+
+    #reportedPostsSection .announcement-report-reasons-dialog__panel {
+        max-height: min(86dvh, 46rem);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    #reportedPostsSection .announcement-report-reasons-dialog__header {
+        padding: 0.9rem 1rem;
+    }
+
+    #reportedPostsSection .announcement-report-reasons-dialog__body {
+        padding: 0.85rem 1rem 1rem;
+    }
+}
+
+@keyframes report-reasons-sheet-in {
+    from { opacity: 0; transform: translateY(1.5rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #reportedPostsSection .announcement-report-post,
+    #reportedPostsSection .announcement-report-reasons-dialog {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Compact the grade-encoding workspace on phones while keeping grade fields
+   easy to tap and the sheet horizontally scrollable. */
+@media screen and (max-width: 48rem) {
+    body.class-records-page #mainContent > .card > .card-header {
+        gap: 0.65rem;
+        padding: 0.75rem !important;
+    }
+
+    body.class-records-page #mainContent > .card > .card-body {
+        padding: 0.65rem !important;
+    }
+
+    body.class-records-page .cr-context {
+        gap: 0.55rem;
+        margin-bottom: 0.75rem !important;
+        padding: 0.65rem 0.7rem !important;
+        border-radius: 0.7rem !important;
+    }
+
+    body.class-records-page .cr-context > div {
+        gap: 0.15rem !important;
+    }
+
+    body.class-records-page .cr-context .form-control,
+    body.class-records-page .cr-grade-controls #selPeriod,
+    body.class-records-page .cr-grade-controls .choices__inner {
+        min-height: 42px;
+        font-size: 0.88rem;
+    }
+
+    body.class-records-page .cr-grade-controls {
+        grid-template-columns: minmax(0, 1fr) 42px !important;
+        gap: 0.5rem;
+        margin-bottom: 0.65rem !important;
+    }
+
+    body.class-records-page .cr-period-field .form-label {
+        margin-bottom: 0.2rem;
+        font-size: 0.68rem;
+    }
+
+    body.class-records-page .cr-grade-primary-actions {
+        display: flex !important;
+        grid-column: 1 / -1;
+        grid-row: 3;
+        justify-content: flex-end;
+        gap: 0.45rem;
+    }
+
+    body.class-records-page .cr-grade-actions-menu,
+    body.class-records-page .cr-grade-actions-menu .cr-more-toggle {
+        width: 42px;
+        min-width: 42px;
+        height: 42px;
+    }
+
+    body.class-records-page .cr-grade-controls #btnSave {
+        grid-column: auto;
+        width: auto !important;
+        min-width: 0 !important;
+        min-height: 42px;
+        padding: 0.55rem 0.8rem;
+        font-size: 0.84rem;
+    }
+
+    body.class-records-page .cr-period-admin-control {
+        gap: 0.25rem;
+    }
+
+    body.class-records-page .cr-period-admin-control .btn {
+        min-height: 40px;
+        padding: 0.45rem 0.65rem;
+        font-size: 0.8rem;
+    }
+
+    body.class-records-page #metricsGrades {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+        margin-bottom: 0.65rem !important;
+    }
+
+    body.class-records-page .cr-metric {
+        padding: 0.6rem 0.65rem;
+        border-radius: 0.65rem;
+    }
+
+    body.class-records-page .cr-metric .k,
+    body.class-records-page .cr-metric .s {
+        font-size: 0.66rem;
+        line-height: 1.25;
+    }
+
+    body.class-records-page .cr-metric .v {
+        font-size: 1.15rem;
+        line-height: 1.2;
+    }
+
+    body.class-records-page #cr-roster-search,
+    body.class-records-page #cr-observed-search {
+        min-height: 40px;
+        padding: 0.45rem 0.65rem;
+        font-size: 0.84rem;
+    }
+
+    body.class-records-page .cr-gender-filter {
+        gap: 0.35rem !important;
+    }
+
+    body.class-records-page .cr-gender-filter .btn,
+    body.class-records-page .cr-tabs .btn {
+        min-height: 40px;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.78rem;
+    }
+
+    body.class-records-page .cr-grade-sheet-wrap,
+    body.class-records-page .cr-observed-table-wrap {
+        --cr-learner-width: clamp(128px, 34vw, 156px);
+        border-radius: 0.65rem !important;
+    }
+
+    body.class-records-page #tblGrades,
+    body.class-records-page #tblObservedValues {
+        font-size: 0.68rem;
+    }
+
+    body.class-records-page #tblGrades th,
+    body.class-records-page #tblGrades td,
+    body.class-records-page #tblObservedValues th,
+    body.class-records-page #tblObservedValues td {
+        padding-top: 0.3rem;
+        padding-bottom: 0.3rem;
+    }
+
+    body.class-records-page .cr-learner-name {
+        font-size: 0.72rem;
+    }
+
+    body.class-records-page .cr-learner-meta {
+        font-size: 0.58rem;
+    }
+
+    body.class-records-page #tblGrades th:nth-child(2),
+    body.class-records-page #tblGrades td:nth-child(2) {
+        width: 90px;
+        min-width: 90px;
+        max-width: 90px;
+    }
+
+    body.class-records-page #tblGrades th:nth-child(3),
+    body.class-records-page #tblGrades td:nth-child(3) {
+        width: 76px;
+        min-width: 76px;
+        max-width: 76px;
+    }
+
+    body.class-records-page #tblGrades td:nth-child(2) > .cr-grade-input,
+    body.class-records-page #tblGrades td.cr-subject-grade-cell > .cr-grade-input {
+        width: 68px !important;
+        min-width: 68px !important;
+        max-width: 68px !important;
+        height: 38px;
+        min-height: 38px;
+        padding: 0.3rem 0.2rem;
+        font-size: 16px;
+    }
+
+    body.class-records-page #tblGrades th.cr-subject-header,
+    body.class-records-page #tblGrades td.cr-subject-grade-cell {
+        width: 86px;
+        min-width: 86px;
+        max-width: 86px;
+    }
+
+    body.class-records-page #tblGrades th.cr-subject-header .cr-subject-label {
+        font-size: 0.62rem;
+        line-height: 1.1;
+    }
+
+    body.class-records-page #tblObservedValues th.cr-observed-statement,
+    body.class-records-page #tblObservedValues td.cr-observed-value-cell {
+        width: 126px;
+        min-width: 126px;
+        max-width: 126px;
+    }
+
+    body.class-records-page #tblObservedValues td.cr-observed-value-cell > .cr-observed-select {
+        width: 70px;
+        min-width: 70px;
+        max-width: 70px;
+        height: 38px;
+        min-height: 38px;
+        padding: 0.3rem 0.4rem;
+        font-size: 0.78rem;
+    }
+
+    body.class-records-page .cr-observed-statement {
+        font-size: 0.66rem;
+        line-height: 1.2;
+    }
+
+    body.class-records-page .cr-observed-core {
+        font-size: 0.58rem;
+        line-height: 1.1;
+    }
+}
+
+@media screen and (max-width: 22.5rem) {
+    body.class-records-page #metricsGrades {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Fit Honors Rank Reports controls and all table columns to phone screens. */
+@media screen and (max-width: 48rem) {
+    body.class-records-page #tabHonors .cr-honors-controls {
+        gap: 0.55rem;
+        margin-bottom: 0.7rem !important;
+    }
+
+    body.class-records-page #tabHonors .cr-honors-controls .form-label {
+        margin-bottom: 0.2rem;
+        font-size: 0.66rem;
+    }
+
+    body.class-records-page #tabHonors .cr-honors-controls .form-control,
+    body.class-records-page #tabHonors .cr-honors-controls .choices__inner {
+        min-height: 40px;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.84rem;
+    }
+
+    body.class-records-page #tabHonors .cr-honors-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+        margin-top: 0.1rem;
+    }
+
+    body.class-records-page #btnHonExport {
+        width: auto;
+        min-height: 42px;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.82rem;
+    }
+
+    body.class-records-page .cr-honors-table-wrap {
+        overflow-x: hidden;
+        border-radius: 0.65rem !important;
+    }
+
+    body.class-records-page #tblHonors {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+        font-size: 0.7rem;
+    }
+
+    body.class-records-page #tblHonors th,
+    body.class-records-page #tblHonors td {
+        min-width: 0;
+        padding: 0.45rem 0.3rem;
+        line-height: 1.25;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        vertical-align: middle;
+    }
+
+    body.class-records-page #tblHonors th {
+        font-size: 0.62rem;
+        letter-spacing: 0.015em;
+    }
+
+    body.class-records-page #tblHonors th:nth-child(1),
+    body.class-records-page #tblHonors td:nth-child(1) {
+        width: 46% !important;
+    }
+
+    body.class-records-page #tblHonors th:nth-child(2),
+    body.class-records-page #tblHonors td:nth-child(2) {
+        width: 20% !important;
+    }
+
+    body.class-records-page #tblHonors th:nth-child(3),
+    body.class-records-page #tblHonors td:nth-child(3) {
+        width: 34% !important;
+        text-align: center;
+    }
+
+    body.class-records-page #tblHonors th:nth-child(4),
+    body.class-records-page #tblHonors td:nth-child(4) {
+        width: 31% !important;
+        text-align: center;
+    }
+
+    body.class-records-page #tblHonors:has(th:nth-child(4)) th:nth-child(1),
+    body.class-records-page #tblHonors:has(th:nth-child(4)) td:nth-child(1) {
+        width: 34% !important;
+    }
+
+    body.class-records-page #tblHonors:has(th:nth-child(4)) th:nth-child(3),
+    body.class-records-page #tblHonors:has(th:nth-child(4)) td:nth-child(3) {
+        width: 15% !important;
+    }
+
+    body.class-records-page .cr-honors-learner-name {
+        font-size: 0.72rem;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
+
+    body.class-records-page .cr-honors-learner-lrn {
+        margin-top: 0.12rem;
+        font-size: 0.58rem;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
+
+    body.class-records-page #tblHonors .tx-badge {
+        display: inline-block;
+        max-width: 100%;
+        padding: 0.25rem 0.35rem;
+        font-size: 0.62rem;
+        line-height: 1.2;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    body.class-records-page .cr-honors-empty-state {
+        gap: 0.4rem;
+        min-height: 12rem;
+        padding: 1rem 0.65rem;
+    }
+
+    body.class-records-page .cr-honors-empty-icon {
+        width: 5rem;
+        height: 5rem;
+    }
+
+    body.class-records-page .cr-honors-empty-state h3 {
+        font-size: 0.9rem;
+    }
+
+    body.class-records-page .cr-honors-empty-state p {
+        font-size: 0.76rem;
+        line-height: 1.35;
+    }
+}
+
+/* -------------------------------------------------------------------------
+ * Mobile system pass
+ * -------------------------------------------------------------------------
+ * The pages above intentionally keep their own module markup. These rules
+ * standardise the small-screen decisions that should be shared everywhere:
+ * keep the shell stable, keep controls readable, and let data retain its
+ * meaning when a table needs horizontal space.
+ */
+
+:root {
+    --mobile-gutter: clamp(0.75rem, 3.5vw, 1.25rem);
+    --mobile-control-height: 44px;
+    --mobile-radius: 10px;
+}
+
+@media (max-width: 1024px) {
+    .main-content,
+    .main-content.expanded {
+        padding-inline: var(--mobile-gutter);
+    }
+
+    .page-header > *,
+    .table-header-section > *,
+    .card-header > *,
+    .modal-header > *,
+    .modal-footer > * {
+        min-width: 0;
+    }
+
+    .page-title,
+    .card-title,
+    .modal-title {
+        overflow-wrap: anywhere;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        min-width: 320px;
+    }
+
+    .topbar {
+        padding-inline: var(--mobile-gutter);
+    }
+
+    .topbar-left {
+        flex: 1 1 auto;
+    }
+
+    .topbar-right {
+        flex: 0 0 auto;
+    }
+
+    .notification-dropdown {
+        position: fixed;
+        top: calc(var(--topbar-height) + 0.5rem);
+        right: var(--mobile-gutter);
+        width: min(360px, calc(100vw - (var(--mobile-gutter) * 2)));
+        max-width: none;
+    }
+
+    .user-dropdown {
+        max-width: min(260px, calc(100vw - (var(--mobile-gutter) * 2)));
+    }
+
+    .main-content,
+    .main-content.expanded {
+        padding-top: 1rem;
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    }
+
+    .page-header {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .page-header > div:first-child {
+        width: 100%;
+    }
+
+    .page-header > .btn,
+    .page-header > .button,
+    .page-header > a.btn {
+        align-self: stretch;
+        width: 100%;
+    }
+
+    .card,
+    .card-overflow-visible {
+        border-radius: var(--mobile-radius);
+    }
+
+    .card-header,
+    .card-body {
+        min-width: 0;
+    }
+
+    .btn,
+    .action-btn,
+    .pagination-btn,
+    .modal-close,
+    .icon-btn {
+        min-height: var(--mobile-control-height);
+    }
+
+    .btn {
+        white-space: nowrap;
+    }
+
+    .form-control,
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    select,
+    textarea {
+        min-height: var(--mobile-control-height);
+        min-width: 0;
+    }
+
+    .table-header-section {
+        padding: 0.9rem;
+        gap: 0.75rem;
+    }
+
+    .table-header-section .search-box,
+    .table-header-section .search-input,
+    .table-header-section > .btn,
+    .table-header-section > button {
+        width: 100%;
+        max-width: none;
+    }
+
+    .table-container,
+    .table-responsive,
+    [class*="table-wrap"],
+    [class*="table-wrapper"] {
+        overscroll-behavior-x: contain;
+        scrollbar-color: #aebfd0 transparent;
+    }
+
+    .data-table th,
+    .data-table td {
+        overflow-wrap: anywhere;
+        vertical-align: middle;
+    }
+
+    .pagination-section {
+        align-items: stretch;
+    }
+
+    .pagination-info {
+        line-height: 1.4;
+    }
+
+    /* Filter and form groups become a clear reading order on a phone. */
+    .form-row,
+    .form-grid,
+    .section-fields,
+    .risk-filter-grid,
+    .analytics-filter-grid,
+    .cc-form-grid,
+    .ss-panel-fields,
+    .settings-control-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .risk-filter-grid,
+    .analytics-filter-grid {
+        gap: 0.75rem;
+    }
+
+    body.risk-assessment-page .risk-filter-grid,
+    body.risk-analytics-page .risk-filter-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body.attendance-page .att-filters.attendance-filter-grid,
+    body.class-records-page .cr-filters,
+    body.class-records-page .cr-observed-tools {
+        grid-template-columns: minmax(0, 1fr) !important;
+        display: grid;
+    }
+
+    body.analytics-modern .analytics-filter-grid,
+    body.analytics-modern .summary-cards,
+    body.analytics-modern .charts-row,
+    body.analytics-modern .dashboard-row {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body.analytics-modern .analytics-filter-grid {
+        padding: 0.9rem;
+    }
+
+    body.analytics-modern .chart-card,
+    body.analytics-modern .performance-card,
+    body.analytics-modern .alerts-card,
+    body.analytics-modern.analytics-overview .chart-card {
+        min-height: 0;
+    }
+
+    body.analytics-modern .chart-card .card-body,
+    body.analytics-modern .performance-card .card-body {
+        min-height: 0;
+    }
+
+    body.analytics-modern canvas,
+    body.analytics-modern.analytics-overview canvas {
+        display: block;
+        width: 100% !important;
+        height: 250px !important;
+        max-width: 100%;
+    }
+
+    /* Action groups stack only when they perform an operation. Filter tabs
+       remain a single horizontally scrollable row for quick switching. */
+    .form-actions,
+    .modal-footer,
+    .setup-actions,
+    .cc-form-actions,
+    .cc-panel-actions,
+    .sf10-preview-toolbar,
+    .ss-action-bar,
+    .setup-toolbar,
+    .sm-toolbar,
+    .sm-filter-bar,
+    .header-right,
+    .risk-action-buttons,
+    body.analytics-modern .analytics-filter-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .form-actions > .btn,
+    .modal-footer > .btn,
+    .setup-actions > .btn,
+    .cc-form-actions > .btn,
+    .cc-panel-actions > .btn,
+    .sf10-preview-toolbar > .btn,
+    .ss-action-bar > .btn,
+    .setup-toolbar > .btn,
+    .sm-toolbar > .btn,
+    .sm-filter-bar > .btn,
+    .header-right > .btn,
+    .risk-action-buttons > .btn,
+    body.analytics-modern .analytics-filter-actions > .btn {
+        width: 100%;
+    }
+
+    .cr-tabs,
+    .cr-gender-filter,
+    .queue-tabs,
+    .gm-period-tabs,
+    .liswiz-top-tabs {
+        max-width: 100%;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        scrollbar-width: none;
+    }
+
+    .cr-tabs::-webkit-scrollbar,
+    .cr-gender-filter::-webkit-scrollbar,
+    .queue-tabs::-webkit-scrollbar,
+    .gm-period-tabs::-webkit-scrollbar,
+    .liswiz-top-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .cr-tabs > *,
+    .cr-gender-filter > *,
+    .queue-tabs > *,
+    .gm-period-tabs > *,
+    .liswiz-top-tabs > * {
+        flex: 0 0 auto;
+    }
+
+    body.report-cards-page .rc-main,
+    body.sf10-page .sf10-shell {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body.report-cards-page .rc-controls {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body.report-cards-page .rc-controls .btn,
+    body.sf10-page #sf10PrintBtn {
+        width: 100%;
+    }
+
+    body.class-records-page .cr-grade-sheet-wrap,
+    body.class-records-page .cr-observed-table-wrap,
+    body.class-records-page .cr-honors-table-wrap,
+    body.report-cards-page .rc-grade-table-wrap {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+    }
+
+    /* Prevent a canvas, preview, or long code-like value from widening the
+       page while keeping its parent available for intentional scrolling. */
+    .chart-card,
+    .chart-card .card-body,
+    .sf10-preview-frame,
+    .announcement-content,
+    .announcement-message-canvas {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .announcement-content,
+    .announcement-message-canvas,
+    .field-help,
+    .error-message {
+        overflow-wrap: anywhere;
+    }
+
+    .modal {
+        align-items: flex-end;
+        padding: max(0.5rem, env(safe-area-inset-top)) var(--mobile-gutter) max(0.5rem, env(safe-area-inset-bottom));
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: none;
+        max-height: calc(100dvh - 1rem);
+        margin: 0;
+        border-radius: 12px;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding-inline: 1rem;
+    }
+
+    .modal-footer {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.6rem;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 560px) {
+    .main-content,
+    .main-content.expanded {
+        padding-inline: 0.65rem;
+    }
+
+    .page-title {
+        font-size: clamp(1.25rem, 6vw, 1.45rem);
+    }
+
+    .card-header,
+    .card-body,
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding-inline: 0.85rem;
+    }
+
+    .summary-card .card-content {
+        padding: 0.9rem;
+    }
+
+    .card-value {
+        font-size: 1.55rem;
+    }
+
+    body.analytics-modern .analytics-filter-actions {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body.analytics-modern canvas,
+    body.analytics-modern.analytics-overview canvas {
+        height: 220px !important;
+    }
+}
+
+/* -------------------------------------------------------------------------
+ * Responsive foundation
+ * -------------------------------------------------------------------------
+ * One shared token layer for the on-screen application. Official report and
+ * print geometry keeps its own rules; this layer standardises the app shell,
+ * controls, responsive grids, tables, and dialogs.
+ */
+@media screen {
+    :root {
+        --space-1: 0.25rem;
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-5: 1.5rem;
+        --space-6: 2rem;
+        --space-7: 3rem;
+
+        --text-body: 1rem;
+        --text-small: clamp(0.875rem, 0.82rem + 0.15vw, 1rem);
+        --text-label: clamp(0.9375rem, 0.88rem + 0.15vw, 1rem);
+        --text-h3: clamp(1.125rem, 1rem + 0.35vw, 1.35rem);
+        --text-h2: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
+        --text-h1: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+
+        --radius-sm: 0.375rem;
+        --radius-md: 0.625rem;
+        --radius-lg: 0.875rem;
+        --radius-pill: 999rem;
+        --shadow-soft: 0 0.125rem 0.5rem rgba(35, 76, 106, 0.08);
+        --shadow-panel: 0 0.75rem 2rem rgba(35, 76, 106, 0.12);
+
+        --surface-app: #f1f3f4;
+        --surface-panel: #f8fbfe;
+        --surface-muted: #f3f4f6;
+        --line-subtle: #d7dce1;
+        --text-strong: #111827;
+        --text-muted: #4b5563;
+        --accent-primary: #0055a4;
+        --accent-focus: rgba(0, 85, 164, 0.24);
+
+        --container-content: 90rem;
+        --container-reading: 65ch;
+        --content-gutter: clamp(0.75rem, 4vw, 1.5rem);
+        --sidebar-width: 18.75rem;
+        --topbar-height: 4rem;
+        --touch-target: 2.75rem;
+        --control-min-height: 2.75rem;
+        --control-font-size: 1rem;
+    }
+
+    html {
+        font-size: 100%;
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        min-width: 20rem;
+        min-height: 100dvh;
+        overflow-x: clip;
+        overflow-wrap: anywhere;
+        font-size: var(--text-body);
+    }
+
+    :where(main, header, footer, nav, section, article, aside, form,
+        .main-content, .page-header, .card, .card-header, .card-body,
+        .form-row, .form-grid, .table-container, .table-responsive,
+        .modal-content, .rr-dialog) {
+        min-width: 0;
+    }
+
+    :where(img, svg, video, canvas, iframe) {
+        max-width: 100%;
+    }
+
+    :where(button, a, input, select, textarea) {
+        font: inherit;
+    }
+
+    :where(button, .btn, .action-btn, .pagination-btn, .icon-btn,
+        .modal-close, .rr-close, .menu-toggle, .notification-btn, .user-btn) {
+        min-width: var(--touch-target);
+        min-height: var(--touch-target);
+    }
+
+    :where(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+        select, textarea) {
+        min-height: var(--control-min-height);
+        max-width: 100%;
+        font-size: var(--control-font-size);
+    }
+
+    :where(a, button, input, select, textarea):focus-visible {
+        outline: 0.1875rem solid var(--accent-focus);
+        outline-offset: 0.125rem;
+    }
+
+    :where(.page-title, .card-title, .modal-title, h1, h2, h3, p, td, th,
+        label, a, span) {
+        overflow-wrap: anywhere;
+    }
+
+    .main-content,
+    .main-content.expanded {
+        width: 100%;
+        max-width: var(--container-content);
+        margin-inline: auto;
+        padding-inline: var(--content-gutter);
+    }
+
+    .page-header {
+        flex-wrap: wrap;
+        gap: var(--space-4);
+    }
+
+    .page-title {
+        max-width: var(--container-reading);
+        font-size: var(--text-h1);
+        line-height: 1.2;
+        text-wrap: balance;
+    }
+
+    .page-subtitle {
+        max-width: var(--container-reading);
+        line-height: 1.5;
+    }
+
+    .summary-cards {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    }
+
+    .charts-row,
+    .dashboard-row {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    }
+
+    .form-row,
+    .form-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    }
+
+    :where(.table-container, .table-responsive, [class*="table-wrap"],
+        [class*="table-wrapper"], [class*="table-scroll"], [class*="sheet-wrap"],
+        [class*="spreadsheet"]) {
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+    }
+
+    table {
+        max-width: 100%;
+    }
+
+    :where(th, td) {
+        overflow-wrap: anywhere;
+    }
+
+    :where(.modal, .rr-modal) {
+        min-height: 100dvh;
+    }
+
+    :where(.modal-content, .rr-dialog) {
+        max-height: min(42rem, calc(100dvh - (2 * var(--content-gutter))));
+    }
+
+    :where(.modal-content, .rr-dialog) > :where(.modal-body, .rr-form) {
+        min-height: 0;
+        overflow: auto;
+    }
+
+    .recovery-layout,
+    .signup-split {
+        min-height: 100dvh;
+    }
+
+}
+
+@media screen and (max-width: 35rem) {
+    .signup-split-body .signup-split {
+        width: 100vw;
+        max-width: 100vw;
+    }
+
+    .signup-split-body,
+    .signup-split,
+    .signup-left,
+    .signup-right,
+    .signup-container,
+    .left-inner {
+        min-width: 0;
+        inline-size: 100%;
+        max-width: 100%;
+        max-inline-size: 100vw;
+    }
+
+    .signup-split-body .left-inner {
+        width: 100%;
+    }
+
+    .signup-split-body .left-inner > h1,
+    .signup-split-body .right-logo {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .signup-split-body .signup-left h1 {
+        display: block;
+        align-self: stretch;
+        width: min(100%, calc(100vw - (2 * var(--content-gutter))));
+        max-width: calc(100vw - (2 * var(--content-gutter)));
+        min-width: 0;
+        inline-size: min(100%, calc(100vw - (2 * var(--content-gutter))));
+        font-size: clamp(1.5rem, 7vw, 2rem);
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    .signup-split-body .signup-right,
+    .signup-split-body .signup-right .signup-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .signup-split-body .signup-left,
+    .signup-split-body .signup-right {
+        width: 100vw;
+        max-width: 100vw;
+        inline-size: 100vw;
+        max-inline-size: 100vw;
+    }
+
+    .signup-split-body .signup-right .signup-card,
+    .signup-split-body .signup-right .login-form,
+    .signup-split-body .signup-right .form-group,
+    .signup-split-body .signup-right .password-wrapper,
+    .signup-split-body .signup-right .login-options,
+    .signup-split-body .signup-right .form-control,
+    .signup-split-body .signup-right .btn-primary {
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .signup-split-body .signup-right .login-options {
+        justify-content: flex-start;
+    }
+
+    .signup-split-body .right-logo .deped-logo-text {
+        width: min(10rem, 55vw);
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 48rem) {
+    .topbar {
+        min-height: var(--topbar-height);
+        padding-inline: var(--content-gutter);
+    }
+
+    .main-content,
+    .main-content.expanded {
+        padding-top: var(--space-4);
+        padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+    }
+
+    .page-header {
+        align-items: flex-start;
+    }
+
+    .page-header > .btn,
+    .page-header > a.btn,
+    .page-header > button {
+        width: 100%;
+    }
+
+    .summary-cards,
+    .charts-row,
+    .dashboard-row,
+    .form-row,
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .form-actions,
+    .modal-footer,
+    .decision-actions,
+    .rr-form-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .form-actions > .btn,
+    .modal-footer > .btn,
+    .decision-actions > .button,
+    .rr-form-actions > .btn {
+        width: 100%;
+    }
+
+    .notification,
+    .audit-dropdown {
+        min-width: 0;
+        width: min(26rem, calc(100vw - (2 * var(--content-gutter))));
+        max-width: calc(100vw - (2 * var(--content-gutter)));
+    }
+
+    .modal,
+    .rr-modal {
+        align-items: flex-end;
+        padding: max(var(--space-2), env(safe-area-inset-top))
+            var(--content-gutter)
+            max(var(--space-2), env(safe-area-inset-bottom));
+    }
+
+    .modal-content,
+    .rr-dialog {
+        width: 100%;
+        max-width: none;
+        max-height: calc(100dvh - var(--space-2));
+        margin: 0;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .modal-close,
+    .rr-close {
+        flex: 0 0 var(--touch-target);
+    }
+
+    .rr-toolbar,
+    .rr-card-head,
+    .rr-toolbar-fields,
+    .rr-form-grid,
+    .rr-doc-row {
+        grid-template-columns: minmax(0, 1fr);
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .rr-toolbar-fields {
+        display: grid;
+    }
+
+    .rr-toolbar > .btn,
+    .rr-toolbar > button {
+        width: 100%;
+    }
+
+    .rr-span-2 {
+        grid-column: auto;
+    }
+
+    .recovery-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .school-panel,
+    .form-panel,
+    .signup-left,
+    .signup-right {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .recovery-card,
+    .signup-container,
+    .signup-card {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media screen and (min-width: 30rem) {
+    :root {
+        --content-gutter: clamp(1rem, 3.25vw, 1.5rem);
+    }
+}
+
+.school-name-break {
+    display: none;
+}
+
+@media screen and (max-width: 35rem) {
+    .signup-split-body .school-name-break {
+        display: block;
+    }
+}
+
+@media screen and (min-width: 48rem) {
+    .summary-cards {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    }
+
+    .charts-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-row {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    .form-actions,
+    .modal-footer,
+    .decision-actions,
+    .rr-form-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (min-width: 64rem) {
+    .page-header {
+        gap: var(--space-6);
+    }
+}
+
+@media screen and (min-width: 80rem) {
+    :root {
+        --content-gutter: 1.5rem;
+    }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* -------------------------------------------------------------------------
+ * Announcement composer cleanup
+ * -------------------------------------------------------------------------
+ * Keep the background picker quiet, touchable, and comfortable on narrow
+ * screens after the optional font and pin controls have been removed.
+ */
+.announcement-background-control {
+    width: min(30rem, calc(100% - 1.5rem));
+    max-height: min(70dvh, 30rem);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+}
+
+.announcement-background-control .announcement-background-heading {
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+}
+
+.announcement-background-control .announcement-background-presets {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+}
+
+.announcement-background-control .announcement-background-preset {
+    min-height: var(--touch-target);
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    gap: var(--space-2);
+}
+
+.announcement-background-control .announcement-background-preset > span:last-child {
+    font-size: var(--text-small);
+    line-height: 1.2;
+}
+
+.announcement-background-control .announcement-background-swatch {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-basis: 2.25rem;
+}
+
+.announcement-message-canvas {
+    min-height: clamp(18rem, 42dvh, 22rem);
+    margin-inline: var(--space-3);
+    border-radius: var(--radius-lg);
+}
+
+.announcement-message-canvas .composer-title-input,
+.announcement-message-canvas .composer-textarea {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.announcement-message-canvas .composer-textarea {
+    font-size: clamp(1rem, 0.92rem + 1.2vw, 1.25rem);
+    line-height: 1.55;
+}
+
+.announcement-content {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border-radius: var(--radius-lg);
+}
+
+.announcement-content .announcement-copy {
+    max-width: var(--container-reading);
+    min-width: 0;
+    margin-inline: auto;
+    font-size: var(--text-body);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+@media screen and (max-width: 48rem) {
+    .announcement-background-control {
+        width: calc(100% - 1rem);
+        max-height: min(70dvh, 32rem);
+    }
+
+    .announcement-message-canvas {
+        margin-inline: var(--space-3);
+    }
+}
+
+@media screen and (max-width: 30rem) {
+    .announcement-background-control .announcement-background-heading {
+        display: block;
+    }
+
+    .announcement-background-control .announcement-background-value {
+        display: block;
+        margin-top: var(--space-1);
+    }
+
+    .announcement-background-control .announcement-background-presets {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .announcement-message-canvas {
+        margin-inline: var(--space-2);
+    }
+}
+
+/* -------------------------------------------------------------------------
+ * Mobile density pass
+ * -------------------------------------------------------------------------
+ * Keep the shared shell calm and compact on phones. Control hit areas stay
+ * at the existing accessible size; only visual padding, headings, and card
+ * rhythm are reduced.
+ */
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) {
+        --content-gutter: clamp(0.75rem, 3.2vw, 1rem);
+        --mobile-heading-size: clamp(1.25rem, 4.5vw, 1.45rem);
+        --mobile-card-padding: 0.875rem;
+        --mobile-section-gap: 0.75rem;
+    }
+
+    html:not([data-security-view]) .main-content,
+    html:not([data-security-view]) .main-content.expanded {
+        padding-top: 0.875rem;
+        padding-right: var(--content-gutter);
+        padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+        padding-left: var(--content-gutter);
+    }
+
+    html:not([data-security-view]) .page-header {
+        gap: 0.5rem;
+        margin-bottom: var(--mobile-section-gap);
+    }
+
+    html:not([data-security-view]) .page-title {
+        font-size: var(--mobile-heading-size);
+        line-height: 1.2;
+    }
+
+    html:not([data-security-view]) .page-subtitle {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    html:not([data-security-view]) .card {
+        border-radius: 0.75rem;
+    }
+
+    html:not([data-security-view]) .card-header {
+        gap: 0.625rem;
+        padding: 0.75rem var(--mobile-card-padding);
+    }
+
+    html:not([data-security-view]) .card-body {
+        padding: var(--mobile-card-padding);
+    }
+
+    html:not([data-security-view]) .card-title {
+        font-size: 1rem;
+        line-height: 1.3;
+    }
+
+    html:not([data-security-view]) .summary-cards,
+    html:not([data-security-view]) .charts-row,
+    html:not([data-security-view]) .dashboard-row,
+    html:not([data-security-view]) .quick-actions {
+        gap: 0.625rem;
+    }
+
+    html:not([data-security-view]) .summary-card .card-content {
+        padding: var(--mobile-card-padding);
+    }
+
+    html:not([data-security-view]) .card-value {
+        font-size: 1.4rem;
+    }
+
+    html:not([data-security-view]) .card-icon {
+        width: 2.75rem;
+        height: 2.75rem;
+        font-size: 1.2rem;
+    }
+
+    html:not([data-security-view]) .table-header-section {
+        gap: 0.625rem;
+        padding: 0.75rem;
+    }
+
+    html:not([data-security-view]) .form-section {
+        padding: 0.75rem;
+        margin-bottom: var(--mobile-section-gap);
+    }
+
+    html:not([data-security-view]) .section-fields,
+    html:not([data-security-view]) .form-row,
+    html:not([data-security-view]) .form-grid,
+    html:not([data-security-view]) .risk-filter-grid,
+    html:not([data-security-view]) .analytics-filter-grid,
+    html:not([data-security-view]) .cc-form-grid,
+    html:not([data-security-view]) .ss-panel-fields,
+    html:not([data-security-view]) .settings-control-grid {
+        gap: 0.625rem;
+    }
+
+    html:not([data-security-view]) .data-table th,
+    html:not([data-security-view]) .data-table td {
+        padding: 0.625rem 0.55rem;
+    }
+
+    html:not([data-security-view]) .pagination-section {
+        gap: 0.625rem;
+        padding: 0.75rem 0.875rem;
+    }
+
+    html:not([data-security-view]) .modal-header,
+    html:not([data-security-view]) .modal-body,
+    html:not([data-security-view]) .modal-footer {
+        padding-right: var(--mobile-card-padding);
+        padding-left: var(--mobile-card-padding);
+    }
+
+    html:not([data-security-view]) .modal-footer {
+        gap: 0.625rem;
+    }
+
+    html:not([data-security-view]) .form-actions,
+    html:not([data-security-view]) .modal-footer,
+    html:not([data-security-view]) .setup-actions,
+    html:not([data-security-view]) .cc-form-actions,
+    html:not([data-security-view]) .cc-panel-actions,
+    html:not([data-security-view]) .sf10-preview-toolbar,
+    html:not([data-security-view]) .ss-action-bar,
+    html:not([data-security-view]) .setup-toolbar,
+    html:not([data-security-view]) .sm-toolbar,
+    html:not([data-security-view]) .sm-filter-bar,
+    html:not([data-security-view]) .header-right,
+    html:not([data-security-view]) .risk-action-buttons {
+        gap: 0.625rem;
+    }
+
+    html:not([data-security-view]) .btn {
+        min-height: var(--mobile-control-height);
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 22.5rem) {
+    html:not([data-security-view]) .page-title {
+        font-size: 1.2rem;
+    }
+
+    html:not([data-security-view]) .card-header,
+    html:not([data-security-view]) .card-body,
+    html:not([data-security-view]) .summary-card .card-content {
+        padding-right: 0.75rem;
+        padding-left: 0.75rem;
+    }
+}
+
+/* Mobile modal sheets: keep dialog behavior consistent with announcement
+   actions and the announcement composer across every source-tree module. */
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) body:has(
+        .modal.show,
+        .modal.active,
+        .rr-modal:not([hidden]),
+        .gm-modal.open,
+        .setup-modal.show,
+        .settings-modal.show,
+        .co-teacher-modal:not([hidden]),
+        .sf10-history-modal:not([hidden]),
+        .announcement-feedback-modal.is-open,
+        .session-expired-overlay.show,
+        dialog[open],
+        .password-policy-modal-overlay
+    ) {
+        overflow: hidden;
+    }
+
+    html:not([data-security-view]) .modal.show,
+    html:not([data-security-view]) .modal.active {
+        align-items: flex-end !important;
+        justify-content: stretch !important;
+        padding: 0 !important;
+    }
+
+    html:not([data-security-view]) .modal.show > .modal-content,
+    html:not([data-security-view]) .modal.active > .modal-content {
+        position: relative;
+        align-self: flex-end;
+        width: 100% !important;
+        max-width: none !important;
+        max-height: min(92dvh, 52rem) !important;
+        margin: 0 !important;
+        overflow: hidden;
+        border-radius: 18px 18px 0 0 !important;
+        animation: mobile-polish-modal-sheet-in 220ms cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    html:not([data-security-view]) .modal.show > .modal-content:not(.announcement-composer)::before,
+    html:not([data-security-view]) .modal.active > .modal-content:not(.announcement-composer)::before,
+    html:not([data-security-view]) .rr-modal:not([hidden]) .rr-dialog::before,
+    html:not([data-security-view]) .gm-modal.open .gm-modal-card::before,
+    html:not([data-security-view]) .setup-modal.show .setup-modal-content::before,
+    html:not([data-security-view]) .settings-modal.show .settings-modal-card::before,
+    html:not([data-security-view]) .co-teacher-modal:not([hidden]) .co-teacher-dialog::before,
+    html:not([data-security-view]) .sf10-history-modal:not([hidden]) .sf10-history-dialog::before,
+    html:not([data-security-view]) .announcement-feedback-modal.is-open .announcement-feedback-dialog::before,
+    html:not([data-security-view]) .session-expired-overlay.show .session-expired-panel::before,
+    html:not([data-security-view]) dialog.learner-import-guide[open]::before,
+    html:not([data-security-view]) dialog.mf-confirm[open]::before,
+    html:not([data-security-view]) .password-policy-modal-overlay .password-policy-modal::before,
+    html:not([data-security-view]) .swal2-container:has(.swal2-popup:not(.swal2-toast)) .swal2-popup:not(.swal2-toast)::before {
+        content: "";
+        position: absolute;
+        top: 0.55rem;
+        left: 50%;
+        width: 2.75rem;
+        height: 0.22rem;
+        border-radius: 999px;
+        background: rgba(100, 116, 139, 0.42);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    html:not([data-security-view]) .modal.show > .modal-content:not(.announcement-composer) .modal-header,
+    html:not([data-security-view]) .modal.active > .modal-content:not(.announcement-composer) .modal-header,
+    html:not([data-security-view]) .rr-modal:not([hidden]) .rr-dialog-head,
+    html:not([data-security-view]) .gm-modal.open .gm-modal-header,
+    html:not([data-security-view]) .setup-modal.show .setup-modal-header,
+    html:not([data-security-view]) .settings-modal.show .settings-modal-head,
+    html:not([data-security-view]) .co-teacher-modal:not([hidden]) .co-teacher-modal-head,
+    html:not([data-security-view]) .sf10-history-modal:not([hidden]) .sf10-history-head,
+    html:not([data-security-view]) .announcement-feedback-modal.is-open .announcement-feedback-dialog__header,
+    html:not([data-security-view]) .session-expired-overlay.show .session-expired-panel,
+    html:not([data-security-view]) dialog.learner-import-guide[open] .learner-import-guide-header,
+    html:not([data-security-view]) dialog.mf-confirm[open] .mf-confirm-header,
+    html:not([data-security-view]) .password-policy-modal-overlay .password-policy-modal {
+        padding-top: 1.35rem;
+    }
+
+    html:not([data-security-view]) .rr-modal:not([hidden]),
+    html:not([data-security-view]) .gm-modal.open,
+    html:not([data-security-view]) .setup-modal.show,
+    html:not([data-security-view]) .settings-modal.show,
+    html:not([data-security-view]) .co-teacher-modal:not([hidden]),
+    html:not([data-security-view]) .sf10-history-modal:not([hidden]),
+    html:not([data-security-view]) .announcement-feedback-modal.is-open,
+    html:not([data-security-view]) .session-expired-overlay.show,
+    html:not([data-security-view]) .cc-modal.show,
+    html:not([data-security-view]) .password-policy-modal-overlay {
+        align-items: flex-end !important;
+        justify-items: stretch !important;
+        place-items: end stretch !important;
+        justify-content: stretch !important;
+        padding: 0 !important;
+    }
+
+    html:not([data-security-view]) .rr-modal:not([hidden]) .rr-dialog,
+    html:not([data-security-view]) .gm-modal.open .gm-modal-card,
+    html:not([data-security-view]) .setup-modal.show .setup-modal-content,
+    html:not([data-security-view]) .settings-modal.show .settings-modal-card,
+    html:not([data-security-view]) .co-teacher-modal:not([hidden]) .co-teacher-dialog,
+    html:not([data-security-view]) .sf10-history-modal:not([hidden]) .sf10-history-dialog,
+    html:not([data-security-view]) .announcement-feedback-modal.is-open .announcement-feedback-dialog,
+    html:not([data-security-view]) .session-expired-overlay.show .session-expired-panel,
+    html:not([data-security-view]) dialog.learner-import-guide[open],
+    html:not([data-security-view]) dialog.mf-confirm[open],
+    html:not([data-security-view]) .password-policy-modal-overlay .password-policy-modal {
+        position: relative;
+        align-self: flex-end;
+        width: 100% !important;
+        max-width: none !important;
+        max-height: min(92dvh, 52rem) !important;
+        margin: 0 !important;
+        border-radius: 18px 18px 0 0 !important;
+        animation: mobile-polish-modal-sheet-in 220ms cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    html:not([data-security-view]) .rr-modal:not([hidden]) .rr-dialog,
+    html:not([data-security-view]) .gm-modal.open .gm-modal-card,
+    html:not([data-security-view]) .setup-modal.show .setup-modal-content,
+    html:not([data-security-view]) .settings-modal.show .settings-modal-card,
+    html:not([data-security-view]) .co-teacher-modal:not([hidden]) .co-teacher-dialog,
+    html:not([data-security-view]) .sf10-history-modal:not([hidden]) .sf10-history-dialog,
+    html:not([data-security-view]) .announcement-feedback-modal.is-open .announcement-feedback-dialog,
+    html:not([data-security-view]) .session-expired-overlay.show .session-expired-panel,
+    html:not([data-security-view]) dialog.learner-import-guide[open],
+    html:not([data-security-view]) dialog.mf-confirm[open],
+    html:not([data-security-view]) .password-policy-modal-overlay .password-policy-modal {
+        overflow: hidden;
+    }
+
+    html:not([data-security-view]) .rr-modal:not([hidden]) .rr-form,
+    html:not([data-security-view]) .gm-modal.open .gm-modal-body,
+    html:not([data-security-view]) .setup-modal.show .setup-modal-body,
+    html:not([data-security-view]) .settings-modal.show .settings-modal-body,
+    html:not([data-security-view]) .co-teacher-modal:not([hidden]) .co-teacher-modal-subjects,
+    html:not([data-security-view]) .sf10-history-modal:not([hidden]) .sf10-history-body,
+    html:not([data-security-view]) .announcement-feedback-modal.is-open .announcement-feedback-dialog > form,
+    html:not([data-security-view]) .session-expired-overlay.show .session-expired-panel,
+    html:not([data-security-view]) dialog.learner-import-guide[open] .learner-import-guide-body,
+    html:not([data-security-view]) dialog.mf-confirm[open] .mf-confirm-header {
+        min-height: 0;
+    }
+
+    html:not([data-security-view]) .rr-modal:not([hidden]) .rr-form,
+    html:not([data-security-view]) .gm-modal.open .gm-modal-body,
+    html:not([data-security-view]) .setup-modal.show .setup-modal-body,
+    html:not([data-security-view]) .settings-modal.show .settings-modal-body,
+    html:not([data-security-view]) .co-teacher-modal:not([hidden]) .co-teacher-modal-subjects,
+    html:not([data-security-view]) .sf10-history-modal:not([hidden]) .sf10-history-body,
+    html:not([data-security-view]) .announcement-feedback-modal.is-open .announcement-feedback-dialog > form,
+    html:not([data-security-view]) dialog.learner-import-guide[open] .learner-import-guide-body {
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    html:not([data-security-view]) .cc-modal.show > .cc-modal-dialog,
+    html:not([data-security-view]) #ccAddSubjectModal.show > .modal-dialog {
+        align-self: flex-end;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+    }
+
+    html:not([data-security-view]) .cc-modal.show .cc-modal-dialog,
+    html:not([data-security-view]) #ccAddSubjectModal.show .modal-content {
+        position: relative;
+        max-height: min(92dvh, 52rem) !important;
+        border-radius: 18px 18px 0 0 !important;
+        animation: mobile-polish-modal-sheet-in 220ms cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    html:not([data-security-view]) .cc-modal.show .cc-modal-dialog::before,
+    html:not([data-security-view]) #ccAddSubjectModal.show .modal-content::before {
+        content: "";
+        position: absolute;
+        top: 0.55rem;
+        left: 50%;
+        width: 2.75rem;
+        height: 0.22rem;
+        border-radius: 999px;
+        background: rgba(100, 116, 139, 0.42);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    html:not([data-security-view]) .announcement-feedback-modal.is-open .announcement-feedback-dialog,
+    html:not([data-security-view]) .swal2-container:has(.swal2-popup:not(.swal2-toast)) .swal2-popup.swal2-show:not(.swal2-toast) {
+        transform: translateY(0) !important;
+    }
+
+    html:not([data-security-view]) .swal2-container:has(.swal2-popup:not(.swal2-toast)) {
+        align-items: flex-end !important;
+        padding: 0 !important;
+    }
+
+    html:not([data-security-view]) .swal2-container:has(.swal2-popup:not(.swal2-toast)) .swal2-popup:not(.swal2-toast) {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        border-radius: 18px 18px 0 0 !important;
+    }
+
+    html:not([data-security-view]) .swal2-container:has(.swal2-popup:not(.swal2-toast)) .swal2-popup.swal2-show:not(.swal2-toast) {
+        animation: mobile-polish-modal-sheet-in 220ms cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    html:not([data-security-view]) .swal2-container:has(.swal2-popup:not(.swal2-toast)) .swal2-popup.swal2-hide:not(.swal2-toast) {
+        animation: mobile-polish-swal-dismiss 160ms ease-in both !important;
+        pointer-events: none;
+    }
+
+    /* Native dialogs need an explicit bottom inset in Chrome's top layer. */
+    html:not([data-security-view]) dialog.learner-import-guide[open],
+    html:not([data-security-view]) dialog.mf-confirm[open] {
+        position: fixed !important;
+        inset: auto 0 0 0 !important;
+        height: auto !important;
+    }
+
+    html:not([data-security-view]) dialog.learner-import-guide[open] {
+        max-height: min(84dvh, 42rem) !important;
+    }
+
+    html:not([data-security-view]) body.risk-assessment-page .modal.show > .risk-mechanics-modal {
+        max-height: min(84dvh, 42rem) !important;
+    }
+}
+
+@keyframes mobile-polish-modal-sheet-in {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes mobile-polish-swal-dismiss {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:not([data-security-view]) .modal.show > .modal-content,
+    html:not([data-security-view]) .modal.active > .modal-content,
+    html:not([data-security-view]) .rr-modal:not([hidden]) .rr-dialog,
+    html:not([data-security-view]) .gm-modal.open .gm-modal-card,
+    html:not([data-security-view]) .setup-modal.show .setup-modal-content,
+    html:not([data-security-view]) .settings-modal.show .settings-modal-card,
+    html:not([data-security-view]) .co-teacher-modal:not([hidden]) .co-teacher-dialog,
+    html:not([data-security-view]) .sf10-history-modal:not([hidden]) .sf10-history-dialog,
+    html:not([data-security-view]) .announcement-feedback-modal.is-open .announcement-feedback-dialog,
+    html:not([data-security-view]) .session-expired-overlay.show .session-expired-panel,
+    html:not([data-security-view]) .cc-modal.show .cc-modal-dialog,
+    html:not([data-security-view]) #ccAddSubjectModal.show .modal-content,
+    html:not([data-security-view]) dialog.learner-import-guide[open],
+    html:not([data-security-view]) dialog.mf-confirm[open],
+    html:not([data-security-view]) .password-policy-modal-overlay .password-policy-modal,
+    html:not([data-security-view]) .swal2-container:has(.swal2-popup:not(.swal2-toast)) .swal2-popup:not(.swal2-toast) {
+        animation: none !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* Final posts-feed reading values: this comes after the shared announcement
+   canvas defaults so the compact mobile message box remains intentional. */
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) .announcement-dashboard .announcement-content,
+    html:not([data-security-view]) .profile-posts .announcement-content {
+        padding: 0.8rem 0.9rem !important;
+        border-radius: 0.7rem;
+        line-height: 1.5;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-content .announcement-copy,
+    html:not([data-security-view]) .profile-posts .announcement-content .announcement-copy {
+        max-width: none;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-action-menu,
+    html:not([data-security-view]) .profile-posts .announcement-action-menu {
+        min-height: 0;
+    }
+
+    /* Keep the create-post sheet useful without making the writing canvas
+       occupy most of a phone screen. */
+    html:not([data-security-view]) #createAnnouncementModal .announcement-message-canvas {
+        min-height: min(15rem, 38dvh) !important;
+        margin-right: 0.75rem;
+        margin-left: 0.75rem;
+        border-radius: 0.75rem;
+    }
+
+    html:not([data-security-view]) #createAnnouncementModal .announcement-message-canvas .composer-title-group {
+        padding: 0.8rem 0.9rem 0.15rem;
+    }
+
+    html:not([data-security-view]) #createAnnouncementModal .announcement-message-canvas .composer-content-group {
+        min-height: 0;
+        padding: 0.2rem 0.9rem 2.5rem;
+    }
+
+    html:not([data-security-view]) #createAnnouncementModal .announcement-message-canvas .composer-textarea {
+        min-height: 8rem !important;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    html:not([data-security-view]) #createAnnouncementModal .composer-author {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    html:not([data-security-view]) #createAnnouncementModal .composer-footer {
+        padding-top: 0.65rem;
+    }
+}
+
+/* Shared mobile quick header: dashboard priority pages stay visible while
+   the remaining role-scoped operations continue in a horizontal rail. */
+html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-nav {
+    display: none;
+}
+
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) {
+        --topbar-height: calc(7rem + env(safe-area-inset-top));
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .topbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: 3.6rem 3rem;
+        align-items: center;
+        height: var(--topbar-height);
+        min-height: var(--topbar-height);
+        padding: env(safe-area-inset-top) var(--content-gutter) 0.4rem;
+        gap: 0;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .topbar-left {
+        grid-column: 1;
+        grid-row: 1;
+        min-width: 0;
+        height: 100%;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .topbar .logo {
+        gap: 0.55rem;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .topbar-right {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .topbar .notification-menu {
+        display: none;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-nav {
+        --quick-priority-count: 5;
+        grid-column: 1 / -1;
+        grid-row: 2;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        width: 100%;
+        min-width: 0;
+        padding: 0.25rem 0 0.15rem;
+        border-top: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+        touch-action: pan-x;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link {
+        display: inline-flex;
+        flex: 0 0 auto;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.14rem;
+        width: 3.6rem;
+        min-width: 3.6rem;
+        min-height: 2.8rem;
+        padding: 0.25rem 0.15rem;
+        border: 1px solid transparent;
+        border-radius: 0.65rem;
+        color: var(--gray-600);
+        text-decoration: none;
+        font-size: 0.5rem;
+        font-weight: 650;
+        line-height: 1.05;
+        text-align: center;
+        white-space: normal;
+        transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link--priority {
+        width: calc((100% - ((var(--quick-priority-count) - 1) * 0.35rem)) / var(--quick-priority-count));
+        min-width: calc((100% - ((var(--quick-priority-count) - 1) * 0.35rem)) / var(--quick-priority-count));
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link > i {
+        display: block;
+        width: 2rem;
+        height: 2rem;
+        flex: 0 0 2rem;
+        color: var(--deped-blue);
+        font-size: 1.35rem;
+        line-height: 2rem;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link > span {
+        display: none;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link:hover,
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link:focus-visible,
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link.is-current {
+        border-color: rgba(0, 85, 164, 0.16);
+        background: rgba(0, 85, 164, 0.07);
+        color: var(--deped-blue);
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link:active {
+        transform: scale(0.96);
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link--notifications {
+        color: #8c5a32;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link--notifications > i {
+        color: #b36b2c;
+    }
+}
+
+@media screen and (max-width: 22.5rem) {
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) {
+        --topbar-height: calc(7rem + env(safe-area-inset-top));
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link {
+        width: 3.25rem;
+        min-width: 3.25rem;
+        padding-inline: 0.1rem;
+        font-size: 0.5rem;
+    }
+
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link--priority {
+        width: calc((100% - ((var(--quick-priority-count) - 1) * 0.35rem)) / var(--quick-priority-count));
+        min-width: calc((100% - ((var(--quick-priority-count) - 1) * 0.35rem)) / var(--quick-priority-count));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:not([data-security-view]) :is(body.announcement-dashboard, body.mobile-quick-header-page) .mobile-dashboard-quick-link {
+        transition: none;
+    }
+}
+
+/* Mobile account control: the profile toggle lives in the sidebar instead of
+   competing with the compact topbar. Desktop keeps the original topbar menu. */
+html:not([data-security-view]) .sidebar-profile-toggle {
+    display: none;
+}
+
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) .topbar .user-menu {
+        display: none;
+    }
+
+    html:not([data-security-view]) .sidebar-branding {
+        display: none;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-toggle {
+        position: relative;
+        display: block;
+        padding: 0.85rem 0.75rem 0.7rem;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-button {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-width: 0;
+        min-height: 3.7rem;
+        gap: 0.7rem;
+        padding: 0.6rem 3rem 0.6rem 0.7rem;
+        border: 1px solid var(--gray-200, #e5e7eb);
+        border-radius: 0.75rem;
+        background: var(--surface-0, #fff);
+        color: var(--gray-900, #111827);
+        text-align: left;
+        cursor: pointer;
+        transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-button:hover,
+    html:not([data-security-view]) .sidebar-profile-button:focus-visible,
+    html:not([data-security-view]) .sidebar-profile-toggle.is-open .sidebar-profile-button {
+        border-color: rgba(0, 85, 164, 0.25);
+        background: #f8fbff;
+        box-shadow: 0 4px 12px rgba(35, 76, 106, 0.08);
+        outline: none;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.55rem;
+        height: 2.55rem;
+        flex: 0 0 2.55rem;
+        border-radius: 50%;
+        background: var(--deped-green-dark, #8bc244);
+        color: #fff;
+        font-size: 0.82rem;
+        font-weight: 750;
+        line-height: 1;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-copy {
+        display: flex;
+        flex: 1 1 auto;
+        min-width: 0;
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-name,
+    html:not([data-security-view]) .sidebar-profile-role {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-name {
+        color: var(--gray-900, #111827);
+        font-size: 0.92rem;
+        font-weight: 750;
+        line-height: 1.2;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-role {
+        color: var(--gray-500, #6b7280);
+        font-size: 0.72rem;
+        line-height: 1.2;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-chevron {
+        position: absolute;
+        top: 50%;
+        right: 0.85rem;
+        color: var(--gray-500, #6b7280);
+        font-size: 0.8rem;
+        transform: translateY(-50%);
+        transition: transform 180ms ease, color 180ms ease;
+        pointer-events: none;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-toggle.is-open .sidebar-profile-chevron {
+        color: var(--deped-blue, #0055a4);
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    html:not([data-security-view]) .sidebar-profile-dropdown {
+        position: absolute;
+        top: calc(100% - 0.25rem);
+        right: 0.75rem;
+        left: 0.75rem;
+        z-index: 4;
+        width: auto;
+        min-width: 0;
+        max-height: 0;
+        margin: 0;
+        padding: 0.35rem;
+        overflow: hidden;
+        border-radius: 0.75rem;
+        box-shadow: 0 14px 28px rgba(15, 42, 61, 0.16);
+        opacity: 0;
+        transform: translateY(-0.4rem) scale(0.98);
+        transform-origin: top center;
+        transition: max-height 220ms ease, opacity 180ms ease, transform 220ms ease, visibility 180ms ease;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-dropdown.show {
+        max-height: min(24rem, calc(100dvh - 9rem));
+        overflow-y: auto;
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    html:not([data-security-view]) .sidebar-profile-dropdown a {
+        min-height: 2.75rem;
+        padding: 0.65rem 0.75rem;
+        font-size: 0.84rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:not([data-security-view]) .sidebar-profile-button,
+    html:not([data-security-view]) .sidebar-profile-chevron,
+    html:not([data-security-view]) .sidebar-profile-dropdown {
+        transition: none;
+    }
+}
+
+/* The mobile account options use the same bottom-sheet interaction as post
+   actions: fixed to the viewport, dimmed backdrop, and a slide-up entrance. */
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) body.sidebar-profile-sheet-open {
+        overflow: hidden;
+    }
+
+    html:not([data-security-view]) body.sidebar-profile-sheet-open::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 1790;
+        background: rgba(15, 23, 42, 0.3);
+        pointer-events: auto;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-dropdown {
+        position: fixed;
+        top: auto;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1800;
+        width: 100%;
+        max-width: none;
+        max-height: min(76dvh, 34rem);
+        margin: 0;
+        padding: 1.35rem max(0.75rem, env(safe-area-inset-right)) max(0.55rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+        overflow-y: auto;
+        overflow-x: hidden;
+        border: 1px solid var(--gray-200, #e5e7eb);
+        border-bottom: 0;
+        border-radius: 1.1rem 1.1rem 0 0;
+        box-shadow: 0 -12px 28px rgba(15, 42, 61, 0.18);
+        transform: translateY(100%);
+        transform-origin: bottom center;
+        transition: opacity 180ms ease, transform 220ms cubic-bezier(.16, 1, .3, 1), visibility 180ms ease;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-dropdown::before {
+        content: "";
+        position: absolute;
+        top: 0.55rem;
+        left: 50%;
+        width: 2.75rem;
+        height: 0.22rem;
+        border-radius: 999px;
+        background: rgba(100, 116, 139, 0.42);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-dropdown.show {
+        max-height: min(76dvh, 34rem);
+        overflow-y: auto;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    html:not([data-security-view]) .sidebar-profile-dropdown a {
+        min-height: 3.25rem;
+        padding: 0.8rem 1rem;
+        border-radius: 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-dropdown a + a {
+        border-top: 1px solid var(--app-line, #e5e7eb);
+        border-radius: 0;
+    }
+
+    html:not([data-security-view]) .sidebar-profile-dropdown hr {
+        margin: 0.25rem 0 0.35rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:not([data-security-view]) .sidebar-profile-dropdown {
+        transition: none;
+    }
+}
+
+/* Shared profile directory search. The topbar control stays compact, while
+ * the actual search opens in a focused, app-wide surface. */
+html:not([data-security-view]) .global-profile-search-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--gray-200, #e5e7eb);
+    border-radius: 0.6rem;
+    background: var(--surface-0, #fff);
+    color: var(--gray-700, #4b5563);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+html:not([data-security-view]) .global-profile-search-trigger > i {
+    font-size: 1.3rem;
+    line-height: 1;
+}
+
+html:not([data-security-view]) .global-profile-search-trigger:hover,
+html:not([data-security-view]) .global-profile-search-trigger:focus-visible {
+    border-color: rgba(0, 85, 164, 0.24);
+    background: var(--deped-blue-light, #e1f3fe);
+    color: var(--deped-blue, #0055a4);
+}
+
+html:not([data-security-view]) .global-profile-search-trigger:active {
+    transform: scale(0.97);
+}
+
+html:not([data-security-view]) .global-profile-search {
+    position: fixed;
+    inset: 0;
+    z-index: 1900;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    background: rgba(15, 23, 42, 0.34);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 180ms ease, visibility 180ms ease, transform 220ms cubic-bezier(.16, 1, .3, 1);
+}
+
+html:not([data-security-view]) .global-profile-search.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+html:not([data-security-view]) .global-profile-search__panel {
+    display: flex;
+    flex-direction: column;
+    width: min(100%, 44rem);
+    height: min(80dvh, 44rem);
+    min-height: 20rem;
+    overflow: hidden;
+    border: 1px solid var(--gray-200, #e5e7eb);
+    border-radius: 1rem;
+    background: var(--surface-0, #fff);
+    box-shadow: 0 24px 70px rgba(15, 42, 61, 0.2);
+}
+
+html:not([data-security-view]) .global-profile-search__header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.85rem;
+    border-bottom: 1px solid var(--gray-200, #e5e7eb);
+}
+
+html:not([data-security-view]) .global-profile-search__back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--gray-700, #4b5563);
+    cursor: pointer;
+}
+
+html:not([data-security-view]) .global-profile-search__back:hover,
+html:not([data-security-view]) .global-profile-search__back:focus-visible {
+    background: var(--gray-100, #f7f6f3);
+    color: var(--deped-blue, #0055a4);
+}
+
+html:not([data-security-view]) .global-profile-search__field {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 0.85rem;
+    border: 1px solid var(--gray-200, #e5e7eb);
+    border-radius: 999px;
+    background: var(--gray-100, #f7f6f3);
+    color: var(--gray-500, #787774);
+}
+
+html:not([data-security-view]) .global-profile-search__field:focus-within {
+    border-color: rgba(0, 85, 164, 0.35);
+    background: var(--surface-0, #fff);
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+}
+
+html:not([data-security-view]) .global-profile-search__field input {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--gray-900, #2f3437);
+    font: inherit;
+    font-size: 0.95rem;
+}
+
+html:not([data-security-view]) .global-profile-search__field input::placeholder {
+    color: var(--gray-500, #787774);
+}
+
+html:not([data-security-view]) .global-profile-search__results {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0.65rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+html:not([data-security-view]) .global-profile-search__message {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    color: var(--gray-500, #787774);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+html:not([data-security-view]) .global-profile-search__message--error {
+    color: #b42318;
+}
+
+html:not([data-security-view]) .global-profile-result {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    min-height: 4rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 0.75rem;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 160ms ease;
+}
+
+html:not([data-security-view]) .global-profile-result:hover,
+html:not([data-security-view]) .global-profile-result:focus-visible {
+    background: var(--gray-100, #f7f6f3);
+}
+
+html:not([data-security-view]) .global-profile-result__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 2.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid rgba(0, 85, 164, 0.14);
+    border-radius: 50%;
+    background: var(--deped-blue-light, #e1f3fe);
+    color: var(--deped-blue, #0055a4);
+    font-size: 0.8rem;
+    font-weight: 750;
+}
+
+html:not([data-security-view]) .global-profile-result__avatar.gender-female {
+    background: #fce7f3;
+    color: #9d174d;
+}
+
+html:not([data-security-view]) .global-profile-result__avatar.gender-male {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+html:not([data-security-view]) .global-profile-result__copy {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+html:not([data-security-view]) .global-profile-result__name,
+html:not([data-security-view]) .global-profile-result__meta {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+html:not([data-security-view]) .global-profile-result__name {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    color: var(--gray-900, #2f3437);
+    font-size: 0.92rem;
+    line-height: 1.3;
+}
+
+html:not([data-security-view]) .global-profile-result__name-text {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+html:not([data-security-view]) .global-profile-result__name .developer-approved-badge {
+    width: clamp(17px, 1.2em, 24px);
+    height: clamp(17px, 1.2em, 24px);
+    margin-left: 0.45em;
+}
+
+html:not([data-security-view]) .global-profile-result__meta {
+    color: var(--gray-500, #787774);
+    font-size: 0.78rem;
+    line-height: 1.3;
+}
+
+html:not([data-security-view]) .global-profile-result__arrow {
+    flex: 0 0 auto;
+    color: var(--gray-400, #9ca3af);
+    font-size: 0.75rem;
+}
+
+html:not([data-security-view]) body.global-profile-search-open {
+    overflow: hidden;
+}
+
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) .global-profile-search-trigger {
+        width: 44px;
+        padding: 0;
+        border-color: transparent;
+        background: transparent;
+    }
+
+    html:not([data-security-view]) .global-profile-search-trigger__label {
+        display: none;
+    }
+
+    html:not([data-security-view]) .global-profile-search-trigger > i {
+        font-size: 1.5rem;
+    }
+
+    html:not([data-security-view]) .global-profile-search {
+        place-items: stretch;
+        padding: 0;
+        background: var(--surface-0, #fff);
+        transform: translateY(100%);
+    }
+
+    html:not([data-security-view]) .global-profile-search.is-open {
+        transform: translateY(0);
+    }
+
+    html:not([data-security-view]) .global-profile-search__panel {
+        width: 100%;
+        height: 100dvh;
+        min-height: 100dvh;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    html:not([data-security-view]) .global-profile-search__header {
+        padding: max(0.55rem, env(safe-area-inset-top)) 0.65rem 0.55rem;
+    }
+
+    html:not([data-security-view]) .global-profile-search__results {
+        padding: 0.5rem 0.65rem max(0.75rem, env(safe-area-inset-bottom));
+    }
+
+    html:not([data-security-view]) .global-profile-result {
+        gap: 0.6rem;
+        min-height: 3.55rem;
+        padding: 0.55rem 0.6rem;
+    }
+
+    html:not([data-security-view]) .global-profile-result__name {
+        font-size: 0.84rem;
+        line-height: 1.24;
+    }
+
+    html:not([data-security-view]) .global-profile-result__meta {
+        font-size: 0.72rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:not([data-security-view]) .global-profile-search,
+    html:not([data-security-view]) .global-profile-search-trigger,
+    html:not([data-security-view]) .global-profile-result {
+        transition: none;
+    }
+}
+
+/* The full notifications route is a compact mobile-only surface. Keep its
+ * desktop-only detail helpers hidden so the table does not duplicate content. */
+html:not([data-security-view]) body.notifications-page .notification-page-mobile-message,
+html:not([data-security-view]) body.notifications-page .notification-page-mobile-meta {
+    display: none;
+}
+
+html:not([data-security-view]) body.notifications-page.notifications-dialog-open {
+    overflow: hidden;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 2200;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(17, 24, 39, 0.34);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__panel {
+    position: relative;
+    width: min(420px, 100%);
+    padding: 1.35rem;
+    border: 1px solid var(--app-line, #d7dce1);
+    border-radius: 18px;
+    background: var(--surface-0, #ffffff);
+    box-shadow: 0 18px 44px rgba(17, 24, 39, 0.16);
+    color: var(--gray-900, #111827);
+    text-align: center;
+    transform: translateY(12px) scale(0.98);
+    transition: transform 180ms ease;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog.is-open .notifications-action-dialog__panel {
+    transform: translateY(0) scale(1);
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__icon {
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 0.8rem;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(0, 85, 164, 0.1);
+    color: var(--deped-blue, #0055a4);
+    font-size: 1.35rem;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog--success .notifications-action-dialog__icon {
+    background: rgba(22, 163, 74, 0.1);
+    color: #15803d;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog--error .notifications-action-dialog__icon {
+    background: rgba(220, 38, 38, 0.1);
+    color: #b91c1c;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__panel h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 750;
+    line-height: 1.25;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__panel p {
+    margin: 0.45rem 0 0;
+    color: var(--gray-600, #4b5563);
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+    margin-top: 1.15rem;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__actions.has-cancel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 0.75rem;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__button {
+    min-height: 2.75rem;
+    padding: 0.65rem 0.85rem;
+    border: 0;
+    border-radius: 0.65rem;
+    font: inherit;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__button--confirm {
+    background: var(--deped-blue, #0055a4);
+    color: #ffffff;
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__button--cancel {
+    background: var(--gray-100, #f3f4f6);
+    color: var(--gray-700, #374151);
+}
+
+html:not([data-security-view]) body.notifications-page .notifications-action-dialog__button:focus-visible {
+    outline: 3px solid rgba(0, 85, 164, 0.24);
+    outline-offset: 2px;
+}
+
+/* Notifications page: use the same source/details reading row as the
+ * dashboard's right-side notification rail on phones. */
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) body.notifications-page .main-content {
+        padding-top: 0.9rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .content-header {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 0.85rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .content-header h1 {
+        margin: 0;
+        font-size: clamp(1.25rem, 5vw, 1.5rem);
+        letter-spacing: -0.025em;
+    }
+
+    html:not([data-security-view]) body.notifications-page .content-header p {
+        margin-top: 0.2rem;
+        color: var(--gray-500);
+        font-size: 0.82rem;
+        line-height: 1.35;
+    }
+
+    html:not([data-security-view]) body.notifications-page .header-right {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        gap: 0.5rem !important;
+    }
+
+    html:not([data-security-view]) body.notifications-page .header-right .btn {
+        width: 100%;
+        min-width: 0;
+        justify-content: center;
+        padding-inline: 0.65rem;
+        font-size: 0.82rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .content-body {
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .table-controls {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.7rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .table-controls .search-box {
+        width: 100%;
+        max-width: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page #countInfo {
+        max-width: 7.5rem;
+        color: var(--gray-500);
+        font-size: 0.68rem;
+        line-height: 1.25;
+        text-align: right;
+        white-space: normal;
+    }
+
+    html:not([data-security-view]) body.notifications-page .table-container {
+        overflow: visible;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table {
+        display: block;
+        width: 100%;
+        border-collapse: separate;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table thead {
+        display: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody {
+        display: grid;
+        gap: 0.45rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas: "title actions";
+        gap: 0.25rem 0.65rem;
+        min-width: 0;
+        padding: 0.78rem 0.85rem;
+        border: 1px solid var(--app-line, #e5e7eb);
+        border-radius: 0.75rem;
+        background: var(--surface-0, #ffffff);
+        box-shadow: 0 2px 10px rgba(0, 85, 164, 0.035);
+        transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr[data-notification-id] {
+        cursor: pointer;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr[data-notification-id]:focus-visible {
+        outline: 3px solid rgba(0, 85, 164, 0.24);
+        outline-offset: 2px;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr.unread {
+        border-color: rgba(0, 85, 164, 0.24);
+        background: #f8fbff;
+        box-shadow: 0 3px 12px rgba(0, 85, 164, 0.06);
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr:hover,
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr:focus-within {
+        border-color: rgba(0, 85, 164, 0.28);
+        background: #fbfdff;
+        box-shadow: 0 4px 14px rgba(0, 85, 164, 0.07);
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody td {
+        display: block;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        color: var(--gray-600);
+        font-size: 0.8rem;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+        text-align: left;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody .notification-title-cell {
+        grid-area: title;
+        color: var(--gray-800);
+        font-size: 0.88rem;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-page-title-row {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr);
+        align-items: start;
+        gap: 0.7rem;
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-source-icon,
+    html:not([data-security-view]) body.notifications-page .notification-source-avatar {
+        display: inline-grid;
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+        place-items: center;
+        border-radius: 50%;
+        font-size: 1.45rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-source-avatar {
+        font-size: 1.2rem;
+        font-weight: 750;
+        letter-spacing: 0.04em;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-source-icon__image {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-page-title-copy {
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-page-title-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.45rem;
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-page-mobile-message {
+        display: block;
+        margin-top: 0.28rem;
+        color: var(--gray-600);
+        font-size: 0.78rem;
+        font-weight: 400;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-page-mobile-meta {
+        display: block;
+        margin-top: 0.35rem;
+        color: var(--gray-500);
+        font-size: 0.68rem;
+        font-weight: 500;
+        line-height: 1.25;
+        font-variant-numeric: tabular-nums;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-title-link {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-title-link:hover,
+    html:not([data-security-view]) body.notifications-page .notification-title-link:focus-visible {
+        color: var(--deped-blue);
+        text-decoration: underline;
+        text-underline-offset: 0.15em;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-page-indicator {
+        flex: 0 0 0.42rem;
+        width: 0.42rem;
+        height: 0.42rem;
+        border-radius: 50%;
+        background: transparent;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr.unread .notification-page-indicator {
+        background: var(--deped-blue);
+        box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody .notification-message-cell {
+        display: none;
+        color: var(--gray-600);
+        font-size: 0.78rem;
+        line-height: 1.4;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody .notification-time-cell {
+        display: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody .notification-status-cell {
+        display: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody .notification-actions-cell {
+        grid-area: actions;
+        align-self: center;
+        justify-self: end;
+        text-align: right;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-actions-cell .action-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.2rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-actions-cell .action-btn {
+        width: 2.35rem;
+        min-width: 2.35rem;
+        height: 2.35rem;
+        min-height: 2.35rem;
+        border: 0;
+        border-radius: 0.55rem;
+        background: transparent;
+        color: var(--gray-500);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-actions-cell .action-btn:hover,
+    html:not([data-security-view]) body.notifications-page .notification-actions-cell .action-btn:focus-visible {
+        background: var(--gray-100);
+        color: var(--deped-blue);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notification-actions-cell .action-btn.delete:hover,
+    html:not([data-security-view]) body.notifications-page .notification-actions-cell .action-btn.delete:focus-visible {
+        background: #fdf0f0;
+        color: #a33b3b;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr:has(.empty-state),
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr:has(.loading) {
+        display: block;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr:has(.empty-state) td,
+    html:not([data-security-view]) body.notifications-page .data-table tbody tr:has(.loading) td {
+        display: block;
+        padding: 2.75rem 1rem;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) body.notifications-page .notifications-action-dialog {
+        align-items: end;
+        justify-items: stretch;
+        padding: 0;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-action-dialog__panel {
+        width: 100%;
+        min-height: 15rem;
+        margin-bottom: 0.75rem;
+        padding: 1.75rem 1rem calc(1.35rem + env(safe-area-inset-bottom));
+        border-radius: 18px;
+        transform: translateY(100%);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-action-dialog__panel::before {
+        content: "";
+        position: absolute;
+        top: 0.55rem;
+        left: 50%;
+        width: 2.75rem;
+        height: 0.22rem;
+        border-radius: 999px;
+        background: rgba(100, 116, 139, 0.42);
+        transform: translateX(-50%);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-action-dialog.is-open .notifications-action-dialog__panel {
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:not([data-security-view]) body.notifications-page .notifications-action-dialog,
+    html:not([data-security-view]) body.notifications-page .notifications-action-dialog__panel {
+        transition: none;
+    }
+}
+
+@media screen and (max-width: 22.5rem) {
+    html:not([data-security-view]) body.notifications-page .table-controls {
+        grid-template-columns: 1fr;
+    }
+
+    html:not([data-security-view]) body.notifications-page #countInfo {
+        max-width: none;
+        text-align: left;
+    }
+}
+
+/* -------------------------------------------------------------------------
+ * Mobile notifications surface
+ * -------------------------------------------------------------------------
+ * The mobile route mirrors the desktop notification rail: one quiet reading
+ * list, a source mark on the left, compact details beside it, and small
+ * actions on the right. It intentionally avoids table chrome and extra count
+ * copy so the notifications remain the focus.
+ * ------------------------------------------------------------------------- */
+html:not([data-security-view]) body.notifications-page .notifications-mobile-page {
+    width: min(100%, 44rem);
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) body.notifications-page .main-content {
+        padding-top: 0.8rem;
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-page {
+        min-height: calc(100dvh - var(--topbar-height));
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        min-height: 3rem;
+        margin-bottom: 0.5rem;
+        padding: 0 0.1rem 0.65rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-heading h1 {
+        margin: 0;
+        color: var(--gray-900, #111827);
+        font-size: clamp(1.2rem, 5vw, 1.45rem);
+        font-weight: 750;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-mark-all {
+        display: inline-grid;
+        width: 2.65rem;
+        height: 2.65rem;
+        flex: 0 0 2.65rem;
+        place-items: center;
+        padding: 0;
+        border: 1px solid var(--gray-200, #e5e7eb);
+        border-radius: 0.7rem;
+        background: var(--surface-0, #ffffff);
+        color: var(--deped-blue, #0055a4);
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-mark-all:hover,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-mark-all:focus-visible {
+        border-color: rgba(0, 85, 164, 0.26);
+        background: var(--deped-blue-light, #e1f3fe);
+        outline: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-mark-all:active {
+        transform: scale(0.95);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-list {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-list.is-expanded {
+        /* Keep the document as the only scroll owner so the list can always
+         * return smoothly to the page header after older items are revealed. */
+        max-height: none;
+        overflow: visible;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-section {
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-section + .notifications-mobile-section {
+        margin-top: 0.7rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-section-title {
+        margin: 0 0 0.15rem;
+        padding: 0 0.1rem;
+        color: var(--gray-900, #111827);
+        font-size: 1.05rem;
+        font-weight: 750;
+        letter-spacing: -0.02em;
+        line-height: 1.25;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-section-items {
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.65rem;
+        min-width: 0;
+        padding: 0.85rem 0.2rem;
+        border-bottom: 1px solid var(--gray-100, #f3f4f6);
+        color: var(--gray-700, #374151);
+        cursor: pointer;
+        transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item.is-unread {
+        margin: 0.15rem -0.4rem;
+        padding-inline: 0.6rem;
+        border-bottom-color: transparent;
+        border-radius: 0.75rem;
+        background: #e8f1f9;
+        box-shadow: 0 4px 12px rgba(0, 85, 164, 0.1), 0 1px 2px rgba(0, 85, 164, 0.06);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item:hover,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item:focus-visible {
+        background: #fbfdff;
+        box-shadow: 0 5px 16px rgba(0, 85, 164, 0.11), 0 1px 3px rgba(0, 85, 164, 0.07);
+        outline: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item:focus-visible {
+        box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.14);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item-main {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr);
+        align-items: start;
+        gap: 0.75rem;
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item .notification-source-icon,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item .notification-source-avatar {
+        display: inline-grid;
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+        place-items: center;
+        border-radius: 50%;
+        font-size: 1.45rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item .notification-source-avatar {
+        font-size: 1.2rem;
+        font-weight: 750;
+        letter-spacing: 0.04em;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item .notification-source-icon__image {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item-copy {
+        display: grid;
+        align-content: center;
+        min-width: 0;
+        padding-top: 0.08rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item-title-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.45rem;
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item-title {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        color: var(--gray-900, #111827);
+        font-size: 0.9rem;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item:not(.is-unread) .notifications-mobile-item-title {
+        color: var(--gray-600, #4b5563);
+        font-weight: 550;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item-message {
+        margin: 0.3rem 0 0;
+        overflow-wrap: anywhere;
+        color: var(--gray-600, #4b5563);
+        font-size: 0.8rem;
+        line-height: 1.42;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item:not(.is-unread) .notifications-mobile-item-message {
+        color: var(--gray-500, #6b7280);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item-time {
+        display: block;
+        margin-top: 0.35rem;
+        color: var(--gray-500, #6b7280);
+        font-size: 0.68rem;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.2;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item:not(.is-unread) .notifications-mobile-item-time {
+        color: var(--gray-400, #9ca3af);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.15rem;
+        align-self: center;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-action {
+        display: grid;
+        width: 2.25rem;
+        height: 2.25rem;
+        min-width: 2.25rem;
+        place-items: center;
+        padding: 0;
+        border: 0;
+        border-radius: 0.6rem;
+        background: transparent;
+        color: var(--gray-400, #9ca3af);
+        cursor: pointer;
+        font-size: 0.78rem;
+        transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-action:hover,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-action:focus-visible {
+        background: var(--gray-100, #f3f4f6);
+        color: var(--deped-blue, #0055a4);
+        outline: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-action--remove:hover,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-action--remove:focus-visible {
+        background: #fdf0f0;
+        color: #a33b3b;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-action:active {
+        transform: scale(0.94);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-see-previous {
+        width: 100%;
+        min-height: 2.85rem;
+        margin: 1rem 0 0.35rem;
+        padding: 0.7rem 1rem;
+        border: 0;
+        border-radius: 0.8rem;
+        background: var(--deped-blue-light, #e1f3fe);
+        color: var(--deped-blue, #0055a4);
+        font: inherit;
+        font-size: 0.86rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-see-previous:hover,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-see-previous:focus-visible {
+        background: #cfe7fb;
+        color: var(--deped-blue-dark, #004482);
+        outline: none;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-see-previous:active {
+        transform: scale(0.98);
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-end-state {
+        display: grid;
+        place-items: center;
+        gap: 0.2rem;
+        margin: 1.25rem 0 0.35rem;
+        padding: 0.5rem 1rem 1rem;
+        color: var(--gray-500, #6b7280);
+        text-align: center;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-end-state video {
+        display: block;
+        width: 4rem;
+        height: 4rem;
+        margin-bottom: 0.2rem;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        box-shadow: none;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+        filter: saturate(.68) contrast(.84) brightness(1.06);
+        -webkit-mask-image: radial-gradient(ellipse at center, #000 46%, rgba(0, 0, 0, .9) 70%, transparent 100%);
+        mask-image: radial-gradient(ellipse at center, #000 46%, rgba(0, 0, 0, .9) 70%, transparent 100%);
+        opacity: .86;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-end-state strong {
+        color: var(--gray-700, #374151);
+        font-size: 0.82rem;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-end-state span {
+        font-size: 0.72rem;
+        line-height: 1.3;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-state {
+        display: grid;
+        place-items: center;
+        gap: 0.55rem;
+        min-height: 16rem;
+        padding: 2rem 1rem;
+        color: var(--gray-500, #6b7280);
+        font-size: 0.84rem;
+        line-height: 1.45;
+        text-align: center;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-state i {
+        color: var(--deped-blue, #0055a4);
+        font-size: 1.6rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-state__video {
+        display: block;
+        width: 5rem;
+        height: 5rem;
+        margin: 0 0 .15rem;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+        filter: saturate(.68) contrast(.84) brightness(1.06);
+        -webkit-mask-image: radial-gradient(ellipse at center, #000 46%, rgba(0, 0, 0, .9) 70%, transparent 100%);
+        mask-image: radial-gradient(ellipse at center, #000 46%, rgba(0, 0, 0, .9) 70%, transparent 100%);
+        opacity: .86;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-state strong {
+        color: var(--gray-800, #1f2937);
+        font-size: 0.95rem;
+    }
+
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-state--error i {
+        color: #b42318;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-item,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-action,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-mark-all,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-see-previous,
+    html:not([data-security-view]) body.notifications-page .notifications-mobile-end-state video {
+        transition: none;
+    }
+}
+
+.risk-mobile-proceed-wrap,
+.risk-mobile-change-selection {
+    display: none;
+}
+
+@media screen and (min-width: 45.001rem) {
+    body.risk-assessment-page .risk-row-details-dialog[open] {
+        position: fixed;
+        inset: 50% auto auto 50%;
+        width: min(42rem, calc(100vw - 3rem));
+        max-width: none;
+        max-height: min(82dvh, 44rem);
+        margin: 0;
+        padding: 0;
+        transform: translate(-50%, -50%);
+        overflow: hidden;
+        border: 0;
+        border-radius: 1rem;
+        color: #172033;
+        background: #fff;
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+    }
+
+    body.risk-assessment-page .risk-row-details-dialog::backdrop {
+        background: rgba(15, 23, 42, 0.48);
+        backdrop-filter: blur(2px);
+    }
+
+    body.risk-assessment-page .risk-row-details-panel {
+        max-height: min(82dvh, 44rem);
+        overflow: auto;
+        padding: 1.5rem;
+    }
+
+    body.risk-assessment-page .risk-row-details-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e8edf3;
+    }
+
+    body.risk-assessment-page .risk-row-details-eyebrow {
+        margin: 0 0 0.3rem;
+        color: #667085;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    body.risk-assessment-page .risk-row-details-header h2 {
+        margin: 0;
+        color: #172033;
+        font-size: 1.25rem;
+        line-height: 1.3;
+    }
+
+    body.risk-assessment-page .risk-row-details-close {
+        display: grid;
+        width: 2.25rem;
+        height: 2.25rem;
+        flex: 0 0 2.25rem;
+        place-items: center;
+        border: 0;
+        border-radius: 50%;
+        color: #475467;
+        background: #f2f4f7;
+        font-size: 1.45rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    body.risk-assessment-page .risk-row-details-content {
+        display: grid;
+        gap: 1rem;
+        margin: 0;
+        padding-top: 1.15rem;
+    }
+
+    body.risk-assessment-page .risk-row-detail-item dt {
+        margin: 0 0 0.25rem;
+        color: #667085;
+        font-size: 0.76rem;
+        font-weight: 700;
+    }
+
+    body.risk-assessment-page .risk-row-detail-item dd {
+        margin: 0;
+        color: #172033;
+        font-size: 0.95rem;
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+    }
+
+    body.risk-assessment-page .risk-empty-learners-video {
+        display: block;
+        width: clamp(8rem, 20vw, 11rem);
+        height: clamp(8rem, 20vw, 11rem);
+        object-fit: contain;
+        opacity: 0.82;
+        filter: saturate(0.64) contrast(0.82) brightness(1.07) blur(0.2px);
+        mix-blend-mode: multiply;
+        -webkit-mask-image: radial-gradient(ellipse at center, #000 48%, rgba(0, 0, 0, 0.9) 70%, transparent 100%);
+        mask-image: radial-gradient(ellipse at center, #000 48%, rgba(0, 0, 0, 0.9) 70%, transparent 100%);
+    }
+}
+
+@media screen and (max-width: 45rem) {
+    body.risk-assessment-page #mainContent {
+        padding: 0.75rem 0.65rem;
+    }
+
+    body.risk-assessment-page .page-header {
+        margin-bottom: 0.65rem;
+    }
+
+    body.risk-assessment-page .page-title {
+        font-size: 1.25rem;
+        line-height: 1.25;
+    }
+
+    body.risk-assessment-page .risk-assessment-card > .card-body {
+        padding: 0.65rem !important;
+    }
+
+    body.risk-assessment-page .risk-toolbar {
+        gap: 0.55rem;
+    }
+
+    body.risk-assessment-page .risk-filters {
+        padding: 0.65rem;
+        border-radius: 0.7rem;
+    }
+
+    body.risk-assessment-page .risk-filter-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 0.55rem;
+    }
+
+    body.risk-assessment-page .risk-filter-grid .form-label {
+        margin-bottom: 0.2rem;
+        font-size: 0.66rem;
+    }
+
+    body.risk-assessment-page .risk-filter-grid .form-control,
+    body.risk-assessment-page .risk-filter-grid .choices__inner,
+    body.risk-assessment-page .risk-filter-grid .search-input {
+        min-height: 42px;
+        padding: 0.45rem 0.65rem;
+        border-radius: 0.6rem;
+        font-size: 0.86rem;
+    }
+
+    body.risk-assessment-page .risk-include-low {
+        min-height: 40px;
+        gap: 0.45rem;
+        font-size: 0.78rem;
+    }
+
+    body.risk-assessment-page .risk-include-low input {
+        width: 17px;
+        height: 17px;
+    }
+
+    body.risk-assessment-page .risk-mobile-proceed-wrap {
+        display: grid;
+        margin-top: 0.65rem;
+    }
+
+    body.risk-assessment-page .risk-mobile-proceed {
+        width: 100%;
+        min-height: 44px;
+        border-radius: 0.65rem;
+        font-size: 0.86rem;
+    }
+
+    body.risk-assessment-page .risk-mobile-proceed:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
+    body.risk-assessment-page.risk-mobile-flow:not(.risk-mobile-ready) .risk-search-field,
+    body.risk-assessment-page.risk-mobile-flow:not(.risk-mobile-ready) #filterIncludeLowWrap,
+    body.risk-assessment-page.risk-mobile-flow:not(.risk-mobile-ready) .risk-action-stack,
+    body.risk-assessment-page.risk-mobile-flow:not(.risk-mobile-ready) .risk-context-line,
+    body.risk-assessment-page.risk-mobile-flow:not(.risk-mobile-ready) .table-container,
+    body.risk-assessment-page.risk-mobile-flow:not(.risk-mobile-ready) .pagination-section,
+    body.risk-assessment-page.risk-mobile-flow:not(.risk-mobile-ready) .risk-mobile-change-selection {
+        display: none !important;
+    }
+
+    body.risk-assessment-page.risk-mobile-flow.risk-mobile-ready #riskFilters .risk-filter-grid > .form-group:not(.risk-search-field),
+    body.risk-assessment-page.risk-mobile-flow.risk-mobile-ready #filterIncludeLowWrap {
+        display: none !important;
+    }
+
+    body.risk-assessment-page.risk-mobile-flow.risk-mobile-ready .risk-mobile-proceed-wrap {
+        display: none;
+    }
+
+    body.risk-assessment-page.risk-mobile-flow.risk-mobile-ready .risk-mobile-change-selection {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        min-height: 42px;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 0.65rem;
+        background: var(--surface-0);
+        color: var(--gray-700);
+        font: inherit;
+        font-size: 0.8rem;
+        font-weight: 650;
+    }
+
+    body.risk-assessment-page .risk-action-stack {
+        gap: 0.45rem;
+    }
+
+    body.risk-assessment-page .risk-action-buttons {
+        gap: 0.4rem !important;
+    }
+
+    body.risk-assessment-page .risk-action-buttons > button {
+        min-height: 40px !important;
+        padding: 0.45rem 0.55rem !important;
+        font-size: 0.72rem !important;
+    }
+
+    body.risk-assessment-page .risk-context-line {
+        margin: 0.55rem 0;
+        font-size: 0.72rem;
+    }
+
+    body.risk-assessment-page .table-container {
+        border-radius: 0.65rem;
+    }
+
+    body.risk-assessment-page #dataTable tbody tr.mf-record-row {
+        gap: 0.45rem;
+        padding: 0.7rem 0.75rem !important;
+        border-radius: 0.65rem;
+        border-bottom: 0 !important;
+        cursor: pointer;
+    }
+
+    body.risk-assessment-page #dataTable tbody tr.risk-detail-row:focus-visible {
+        outline: 2px solid #2563eb;
+        outline-offset: 2px;
+    }
+
+    body.risk-assessment-page #dataTable .mf-mobile-action-toggle,
+    body.risk-assessment-page #dataTable .mf-mobile-summary-cell {
+        display: none !important;
+    }
+
+    body.risk-assessment-page #dataTable .mf-primary-value,
+    body.risk-assessment-page #dataTable .risk-cell-primary {
+        font-size: 0.82rem;
+        line-height: 1.25;
+    }
+
+    body.risk-assessment-page #dataTable .mf-mobile-meta,
+    body.risk-assessment-page #dataTable .mf-meta-item,
+    body.risk-assessment-page #dataTable .risk-cell-meta {
+        font-size: 0.66rem;
+        line-height: 1.3;
+    }
+
+    body.risk-assessment-page #dataTable .risk-level-badge {
+        gap: 0.3rem;
+        padding: 0.25rem 0.45rem;
+        font-size: 0.7rem;
+    }
+
+    body.risk-assessment-page .pagination-section {
+        padding: 0.6rem 0.25rem;
+    }
+
+    body.risk-assessment-page .risk-row-details-dialog {
+        position: fixed;
+        inset: auto 0 0;
+        width: 100%;
+        max-width: none;
+        max-height: min(82dvh, 42rem);
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 1rem 1rem 0 0;
+        color: #172033;
+        background: #fff;
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+    }
+
+    body.risk-assessment-page .risk-row-details-dialog[open] {
+        animation: risk-row-sheet-enter 200ms ease-out both;
+    }
+
+    body.risk-assessment-page .risk-row-details-dialog::backdrop {
+        background: rgba(15, 23, 42, 0.48);
+        backdrop-filter: blur(2px);
+    }
+
+    body.risk-assessment-page .risk-row-details-panel {
+        max-height: min(82dvh, 42rem);
+        overflow: auto;
+        padding: 1.1rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
+    }
+
+    body.risk-assessment-page .risk-row-details-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding-bottom: 0.85rem;
+        border-bottom: 1px solid #e8edf3;
+    }
+
+    body.risk-assessment-page .risk-row-details-eyebrow {
+        margin: 0 0 0.2rem;
+        color: #667085;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    body.risk-assessment-page .risk-row-details-header h2 {
+        margin: 0;
+        color: #172033;
+        font-size: 1rem;
+        line-height: 1.3;
+    }
+
+    body.risk-assessment-page .risk-row-details-close {
+        display: grid;
+        width: 2rem;
+        height: 2rem;
+        flex: 0 0 2rem;
+        place-items: center;
+        border: 0;
+        border-radius: 50%;
+        color: #475467;
+        background: #f2f4f7;
+        font-size: 1.35rem;
+        line-height: 1;
+    }
+
+    body.risk-assessment-page .risk-row-details-content {
+        display: grid;
+        gap: 0.8rem;
+        margin: 0;
+        padding-top: 0.9rem;
+    }
+
+    body.risk-assessment-page .risk-row-detail-item dt {
+        margin: 0 0 0.2rem;
+        color: #667085;
+        font-size: 0.7rem;
+        font-weight: 700;
+    }
+
+    body.risk-assessment-page .risk-row-detail-item dd {
+        margin: 0;
+        color: #172033;
+        font-size: 0.83rem;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    body.risk-assessment-page #dataTable tbody tr.mf-state-row {
+        display: block !important;
+        width: 100%;
+        min-height: clamp(18rem, 42svh, 24rem);
+        padding: 0;
+        border: 0;
+    }
+
+    body.risk-assessment-page #dataTable tbody tr.mf-state-row > td {
+        display: flex !important;
+        width: 100%;
+        min-height: inherit;
+        align-items: center;
+        justify-content: center;
+        padding: 0 !important;
+        border: 0;
+        vertical-align: middle;
+    }
+
+    body.risk-assessment-page #dataTable tbody tr.mf-state-row .empty-state {
+        display: flex;
+        width: 100%;
+        min-height: inherit;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        padding: 1.25rem;
+        border-radius: 0.65rem;
+        background: #f8fafc;
+        text-align: center;
+    }
+
+    body.risk-assessment-page .risk-empty-learners-video {
+        display: block;
+        width: clamp(8rem, 20vw, 11rem);
+        height: clamp(8rem, 20vw, 11rem);
+        object-fit: contain;
+        opacity: 0.82;
+        filter: saturate(0.64) contrast(0.82) brightness(1.07) blur(0.2px);
+        mix-blend-mode: multiply;
+        -webkit-mask-image: radial-gradient(ellipse at center, #000 48%, rgba(0, 0, 0, 0.9) 70%, transparent 100%);
+        mask-image: radial-gradient(ellipse at center, #000 48%, rgba(0, 0, 0, 0.9) 70%, transparent 100%);
+    }
+
+    body.risk-assessment-page #dataTable tbody tr.mf-state-row .empty-state h3 {
+        margin: 0;
+        color: #344054;
+        font-size: 0.95rem;
+        font-weight: 650;
+    }
+
+    body.risk-assessment-page #dataTable tbody tr.mf-state-row .empty-state p {
+        max-width: 22rem;
+        margin: 0;
+        color: #667085;
+        font-size: 0.78rem;
+        line-height: 1.45;
+    }
+
+    @keyframes risk-row-sheet-enter {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+}
+
+body.risk-assessment-page .risk-row-detail-item {
+    min-width: 0;
+    padding: 0.95rem 1rem;
+    border: 1px solid #e7ecf2;
+    border-radius: 0.8rem;
+    background: #fbfcfe;
+}
+
+body.risk-assessment-page .risk-row-detail-item dt {
+    margin-bottom: 0.45rem;
+    color: #667085;
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.055em;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+body.risk-assessment-page .risk-row-detail-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 0.75rem;
+    background: #f5f9ff;
+}
+
+body.risk-assessment-page .risk-row-detail-section dt {
+    margin: 0;
+}
+
+body.risk-assessment-page .risk-row-detail-section dd {
+    color: #1d4e89;
+    font-weight: 700;
+    text-align: right;
+}
+
+body.risk-assessment-page .risk-row-detail-risk-level dd {
+    display: flex;
+    align-items: center;
+    min-height: 1.8rem;
+}
+
+body.risk-assessment-page .risk-row-detail-risk-level .risk-level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0.3rem 0.58rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 0.78rem;
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+body.risk-assessment-page .risk-row-detail-risk-level .risk-level-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: 0 0 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+body.risk-assessment-page .risk-row-detail-action {
+    border-color: #f2d5a7;
+    border-left: 1px solid #f2d5a7;
+    background: #fffaf1;
+}
+
+body.risk-assessment-page .risk-row-detail-action dd {
+    color: #56370d;
+    font-weight: 600;
+}
+
+body.risk-assessment-page .risk-indicator-list,
+body.risk-assessment-page .risk-indicator-subitems {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.risk-assessment-page .risk-indicator-item {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid #e7edf5;
+    border-left: 1px solid #e7edf5;
+    border-radius: 0.65rem;
+    background: #fff;
+}
+
+body.risk-assessment-page .risk-indicator-item strong {
+    color: #25364b;
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+body.risk-assessment-page .risk-indicator-note,
+body.risk-assessment-page .risk-indicator-subitems {
+    color: #596579;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+body.risk-assessment-page .risk-indicator-subitems {
+    gap: 0.3rem;
+    padding-top: 0.35rem;
+    border-top: 1px solid #edf1f5;
+}
+
+body.risk-assessment-page .risk-indicator-subitems li {
+    position: relative;
+    padding-left: 0.8rem;
+}
+
+body.risk-assessment-page .risk-indicator-subitems li::before {
+    position: absolute;
+    top: 0.58em;
+    left: 0.1rem;
+    width: 0.28rem;
+    height: 0.28rem;
+    border-radius: 50%;
+    background: #8b9aab;
+    content: '';
+}
+
+body.risk-assessment-page .risk-indicator-empty {
+    margin: 0;
+    color: #667085;
+    font-size: 0.85rem;
+}
+
+body.risk-assessment-page .risk-action-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+body.risk-assessment-page .risk-action-priority {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    padding: 0.2rem 0.48rem;
+    border-radius: 999px;
+    color: #8a4b08;
+    background: #ffedc2;
+    font-size: 0.68rem;
+    font-weight: 800;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+/* Give the risk table empty state a real canvas so its illustration centers
+   within the table on desktop as well as the stacked mobile layout. */
+body.risk-assessment-page #dataTable tbody tr.mf-state-row > td {
+    padding: 0 !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+body.risk-assessment-page #dataTable tbody tr.mf-state-row .empty-state {
+    display: flex;
+    width: 100%;
+    min-height: clamp(18rem, 42svh, 24rem);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    margin: 0;
+    text-align: center;
+}
+
+body.risk-assessment-page .risk-empty-learners-video {
+    align-self: center;
+    margin-inline: auto;
+}
+
+/* -------------------------------------------------------------------------
+ * Shared mobile density pass
+ * -------------------------------------------------------------------------
+ * Compact the reading surface across masterfiles, transactions, and utility
+ * pages while keeping controls large enough to operate comfortably by touch.
+ * Content is reflowed or scroll-contained; columns are not removed.
+ */
+@media screen and (max-width: 768px) {
+    :root {
+        --mobile-control-height: 40px;
+        --mobile-panel-padding: 0.75rem;
+    }
+
+    html {
+        font-size: 15px;
+    }
+
+    body {
+        font-size: 0.9rem;
+    }
+
+    .topbar {
+        height: calc(56px + env(safe-area-inset-top));
+        min-height: calc(56px + env(safe-area-inset-top));
+    }
+
+    .main-content,
+    .main-content.expanded {
+        padding: 0.75rem 0.65rem calc(1rem + env(safe-area-inset-bottom));
+    }
+
+    .page-header {
+        gap: 0.4rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .page-title {
+        font-size: 1.22rem;
+        line-height: 1.18;
+    }
+
+    .page-subtitle {
+        font-size: 0.78rem;
+        line-height: 1.35;
+    }
+
+    .card {
+        border-radius: 8px;
+    }
+
+    .card-header,
+    .card-body {
+        padding: var(--mobile-panel-padding);
+    }
+
+    .card-title {
+        font-size: 0.92rem;
+        line-height: 1.25;
+    }
+
+    .table-header-section {
+        gap: 0.5rem;
+        padding: 0.65rem var(--mobile-panel-padding);
+    }
+
+    .table-header-section .search-box {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: none;
+    }
+
+    .search-input {
+        min-height: var(--mobile-control-height);
+        padding: 0.48rem 0.6rem 0.48rem 2.2rem;
+        border-radius: 8px;
+        font-size: 0.82rem;
+    }
+
+    .search-box i {
+        left: 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    .btn {
+        min-height: var(--mobile-control-height);
+        padding: 0.48rem 0.65rem;
+        border-radius: 7px;
+        font-size: 0.8rem;
+        gap: 0.35rem;
+        line-height: 1.2;
+    }
+
+    .btn-sm {
+        min-height: 36px;
+        padding: 0.4rem 0.55rem;
+        font-size: 0.76rem;
+    }
+
+    .form-control,
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    select,
+    textarea {
+        min-height: var(--mobile-control-height);
+        padding: 0.48rem 0.6rem;
+        border-radius: 7px;
+        font-size: 0.82rem;
+    }
+
+    textarea,
+    textarea.form-control {
+        min-height: 72px;
+    }
+
+    .choices__inner {
+        min-height: var(--mobile-control-height);
+        padding: 0.42rem 0.6rem;
+        border-radius: 7px;
+        font-size: 0.82rem;
+    }
+
+    .choices__list--single {
+        padding: 0.15rem 1.35rem 0.15rem 0;
+    }
+
+    .choices__list--dropdown .choices__item,
+    .choices__list[aria-expanded] .choices__item {
+        padding: 0.58rem 0.65rem;
+        font-size: 0.8rem;
+        line-height: 1.25;
+    }
+
+    .form-group {
+        margin-bottom: 0.6rem;
+    }
+
+    .form-group > label,
+    .form-label {
+        margin-bottom: 0.2rem;
+        font-size: 0.72rem;
+        line-height: 1.25;
+    }
+
+    .form-section {
+        margin-bottom: 0.75rem;
+        padding: var(--mobile-panel-padding);
+        border-radius: 8px;
+    }
+
+    .section-title {
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.35rem;
+        font-size: 0.88rem;
+    }
+
+    .form-row,
+    .form-grid,
+    .section-fields {
+        gap: 0.55rem;
+    }
+
+    .data-table th {
+        padding: 0.55rem 0.45rem;
+        font-size: 0.68rem;
+    }
+
+    .data-table td {
+        padding: 0.6rem 0.45rem;
+        font-size: 0.76rem;
+        line-height: 1.3;
+    }
+
+    .status-badge {
+        padding: 0.24rem 0.45rem;
+        font-size: 0.66rem;
+    }
+
+    .action-buttons {
+        gap: 0.3rem;
+    }
+
+    .action-btn,
+    .pagination-btn {
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        min-height: 40px;
+    }
+
+    .pagination-section {
+        gap: 0.5rem;
+        padding: 0.65rem var(--mobile-panel-padding);
+    }
+
+    .pagination-info {
+        font-size: 0.72rem;
+        line-height: 1.3;
+    }
+
+    .pagination {
+        gap: 0.3rem;
+    }
+
+    .empty-state {
+        padding: 2rem 0.75rem;
+    }
+
+    .empty-state i {
+        margin-bottom: 0.55rem;
+        font-size: 1.65rem;
+    }
+
+    .empty-state h3 {
+        font-size: 0.92rem;
+    }
+
+    .empty-state p {
+        font-size: 0.78rem;
+        line-height: 1.4;
+    }
+
+    .modal {
+        padding: 0.5rem;
+    }
+
+    .modal-content {
+        max-height: calc(100dvh - 1rem);
+        border-radius: 10px;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: var(--mobile-panel-padding);
+    }
+
+    .modal-title {
+        font-size: 1rem;
+        line-height: 1.25;
+    }
+
+    .modal-close {
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        min-height: 40px;
+    }
+
+    .modal-footer {
+        flex-direction: row;
+        align-items: stretch;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .modal-footer .btn {
+        width: auto;
+        min-width: 0;
+        flex: 1 1 8rem;
+    }
+
+    .form-actions,
+    .page-actions,
+    .filter-actions,
+    .toolbar,
+    .filters,
+    .filter-row {
+        gap: 0.5rem;
+    }
+
+    .form-actions {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+    }
+
+    .form-actions .btn {
+        min-width: 0;
+        flex: 1 1 8rem;
+    }
+
+    /* Inline widths used by older transaction controls should not force a
+       narrow phone viewport wider than the page. */
+    input[style*="min-width"],
+    select[style*="min-width"],
+    textarea[style*="min-width"] {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    input[style*="max-width"],
+    select[style*="max-width"],
+    textarea[style*="max-width"] {
+        max-width: 100% !important;
+    }
+
+    .table-container,
+    .table-responsive,
+    [class*="table-wrap"],
+    [class*="table-wrapper"] {
+        scrollbar-width: thin;
+        scrollbar-color: #b8c7d8 transparent;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    html {
+        font-size: 14px;
+    }
+
+    .main-content,
+    .main-content.expanded {
+        padding-inline: 0.55rem;
+    }
+
+    .page-title {
+        font-size: 1.14rem;
+    }
+
+    .table-header-section,
+    .card-header,
+    .card-body,
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding-inline: 0.65rem;
+    }
+
+    .modal-footer .btn {
+        flex-basis: calc(50% - 0.25rem);
+    }
+}
+
+/* Final cross-page mobile boundary pass. Wide data remains readable inside
+   its own scroll region; page chrome, feeds, and controls stay inside the
+   viewport at every supported phone width. */
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) .main-content,
+    html:not([data-security-view]) .main-content > *,
+    html:not([data-security-view]) .page-header,
+    html:not([data-security-view]) .content-header,
+    html:not([data-security-view]) .card,
+    html:not([data-security-view]) .announcement-card,
+    html:not([data-security-view]) .announcement-reports-list,
+    html:not([data-security-view]) .profile-posts,
+    html:not([data-security-view]) .dashboard-feed-column {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) .announcement-reports-list,
+    html:not([data-security-view]) .profile-posts,
+    html:not([data-security-view]) .dashboard-feed-column {
+        margin-inline: auto;
+    }
+
+    html:not([data-security-view]) .mobile-dashboard-quick-nav,
+    html:not([data-security-view]) .table-container,
+    html:not([data-security-view]) .table-responsive,
+    html:not([data-security-view]) [class*="table-wrap"],
+    html:not([data-security-view]) [class*="table-wrapper"],
+    html:not([data-security-view]) .ss-panel-table {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    html:not([data-security-view]) .table-container,
+    html:not([data-security-view]) .table-responsive,
+    html:not([data-security-view]) [class*="table-wrap"],
+    html:not([data-security-view]) [class*="table-wrapper"],
+    html:not([data-security-view]) .ss-panel-table {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    html:not([data-security-view]) .table-container > table,
+    html:not([data-security-view]) .table-responsive > table,
+    html:not([data-security-view]) [class*="table-wrap"] > table,
+    html:not([data-security-view]) [class*="table-wrapper"] > table,
+    html:not([data-security-view]) .ss-panel-table table {
+        max-width: none;
+    }
+
+    html:not([data-security-view]) :where(h1, h2, h3, h4, p, label, small, .btn, .status-badge, .page-subtitle, .card-title) {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    html:not([data-security-view]) :where(input, select, textarea, button) {
+        max-width: 100%;
+    }
+}
+
+/* Shared MP4 empty-state treatment. The supplied icon videos have an opaque
+   white frame background, so blend and feather the media at the component
+   boundary instead of allowing a square white edge to sit on tinted cards. */
+.mp4-empty-state-video,
+.empty-state-video,
+.mf-empty-video,
+.analytics-empty-video,
+.context-empty-video {
+    display: block;
+    width: clamp(5.5rem, 18vw, 8.5rem);
+    height: clamp(5.5rem, 18vw, 8.5rem);
+    max-width: 100%;
+    margin-inline: auto;
+    object-fit: contain;
+    background: transparent;
+    border: 0;
+    mix-blend-mode: multiply;
+    filter: saturate(.82) contrast(.9) brightness(1.04);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 44%, rgba(0, 0, 0, .94) 66%, transparent 100%);
+    mask-image: radial-gradient(ellipse at center, #000 44%, rgba(0, 0, 0, .94) 66%, transparent 100%);
+}
+
+.mp4-empty-state-video--large,
+.empty-state-video--large {
+    width: clamp(8rem, 21vw, 11rem);
+    height: clamp(8rem, 21vw, 11rem);
+}
+
+/* Existing page-specific video sizes keep their dimensions, but share the
+   same edge treatment as newly added empty-state media. */
+.mp4-surface-blend {
+    background: transparent;
+    border: 0;
+    mix-blend-mode: multiply;
+    filter: saturate(.82) contrast(.9) brightness(1.04);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 44%, rgba(0, 0, 0, .94) 66%, transparent 100%);
+    mask-image: radial-gradient(ellipse at center, #000 44%, rgba(0, 0, 0, .94) 66%, transparent 100%);
+}
+
+.announcements-empty__icon > .empty-state-video {
+    width: 100%;
+    height: 100%;
+}
+
+.announcement-reports-empty__video {
+    width: clamp(6rem, 13vw, 8rem) !important;
+    height: clamp(6rem, 13vw, 8rem) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+}
+
+.announcement-reports-empty__video > .empty-state-video {
+    width: 100%;
+    height: 100%;
+}
+
+.cc-empty-icon > .empty-state-video {
+    width: 100%;
+    height: 100%;
+}
+
+.cc-empty-icon:has(> .empty-state-video) {
+    width: clamp(7rem, 18vw, 10rem);
+    height: clamp(7rem, 18vw, 10rem);
+    display: grid;
+    place-items: center;
+    font-size: 0;
+}
+
+.sm-empty-prompt:has(> .context-empty-video) {
+    display: grid;
+    justify-items: center;
+    gap: .45rem;
+}
+
+.sm-empty-prompt:has(> .context-empty-video) h3,
+.cs-grid-empty:has(> .context-empty-video) strong {
+    margin: 0;
+}
+
+/* Keep the generic masterfile table state composed on both the desktop table
+   canvas and the stacked mobile representation. */
+.mf-state-row .empty-state {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: .45rem;
+}
+
+.mf-state-row .mf-empty-video + h3,
+.mf-state-row .mf-empty-video + h3 + p {
+    margin-inline: auto;
+}
+
+.analytics-empty-state,
+.context-empty-state {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: .45rem;
+    min-height: 10rem;
+    padding: 1.25rem;
+    color: var(--gray-500, #667085);
+    text-align: center;
+}
+
+.analytics-empty-state > span,
+.context-empty-state > span {
+    max-width: 28rem;
+    line-height: 1.45;
+}
+
+@media screen and (max-width: 48rem) {
+    .mp4-empty-state-video,
+    .empty-state-video,
+    .mf-empty-video,
+    .analytics-empty-video,
+    .context-empty-video {
+        width: clamp(5.25rem, 28vw, 7rem);
+        height: clamp(5.25rem, 28vw, 7rem);
+    }
+
+    .mp4-empty-state-video--large,
+    .empty-state-video--large {
+        width: clamp(7rem, 34vw, 9rem);
+        height: clamp(7rem, 34vw, 9rem);
+    }
+}
+
+/* Search controls with a leading icon need a reserved text gutter after the
+   compact input rule above. Keep this shared so every page gets the same
+   phone and iPad behavior without changing plain search fields. */
+@media screen and (max-width: 64rem) {
+    .search-box > i + .search-input,
+    .gp-search-control > i + .search-input,
+    .co-search-box > i + .co-search-input,
+    .cs-search-box > i + .cs-search-input {
+        box-sizing: border-box;
+        padding-left: 2.75rem !important;
+        padding-inline-start: 2.75rem !important;
+    }
+
+    .search-box > i,
+    .gp-search-control > i,
+    .co-search-box > i,
+    .cs-search-box > i {
+        z-index: 1;
+        pointer-events: none;
+    }
+}
+
+/* Final mobile post reading values. Keep this after the shared compact rules
+   so profile cards, the main feed, and reported-post previews use the same
+   breathable message area. */
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) .announcement-dashboard .announcement-card,
+    html:not([data-security-view]) .profile-posts .announcement-card {
+        min-height: clamp(30rem, 68svh, 37rem) !important;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-body,
+    html:not([data-security-view]) .profile-posts .announcement-body,
+    #reportedPostsSection .announcement-report-post-preview .announcement-body {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-content,
+    html:not([data-security-view]) .profile-posts .announcement-content,
+    #reportedPostsSection .announcement-report-post-preview .announcement-content {
+        display: flex;
+        flex: 1 1 auto;
+        align-items: center;
+        justify-content: center;
+        min-height: 14rem !important;
+        padding: 1.25rem 1rem !important;
+        text-align: center;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .announcement-content .announcement-copy,
+    html:not([data-security-view]) .profile-posts .announcement-content .announcement-copy,
+    #reportedPostsSection .announcement-report-post-preview .announcement-copy {
+        width: 100%;
+        max-width: 32rem;
+        margin-inline: auto;
+        text-align: center;
+    }
+
+    #reportedPostsSection .announcement-report-post-preview {
+        min-height: clamp(28rem, 64svh, 34rem);
+    }
+}
+
+/* Reported-post review cards stay deliberately plain so long post text and
+   metadata remain readable instead of sitting beneath rounded overlays. */
+#reportedPostsSection .announcement-report-case,
+#reportedPostsSection .announcement-report-post-preview {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#reportedPostsSection .announcement-report-case.is-removed {
+    filter: none;
+}
+
+#reportedPostsSection .announcement-report-case.is-removed::after {
+    content: none;
+}
+
+#reportedPostsSection .announcement-report-case__details {
+    overflow: visible;
+}
+
+#reportedPostsSection .announcement-report-post {
+    overflow: visible;
+    border-radius: 0;
+    background: transparent;
+}
+
+#reportedPostsSection .announcement-report-post__byline {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 0 0 0.65rem;
+    color: var(--gray-600);
+    font-size: 0.74rem;
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+#reportedPostsSection .announcement-report-post__byline time {
+    color: var(--gray-500);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+#reportedPostsSection .announcement-report-post__body {
+    display: block;
+    max-height: none;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+}
+
+#reportedPostsSection .announcement-reporters {
+    border-radius: 0;
+}
+
+/* Keep every moderation view on one predictable activity timeline. */
+#reportedPostsSection .announcement-report-date-group {
+    display: grid;
+    gap: 0.7rem;
+}
+
+#reportedPostsSection .announcement-report-date-group + .announcement-report-date-group {
+    margin-top: 0.35rem;
+}
+
+#reportedPostsSection .announcement-report-date-heading {
+    margin: 0 0.15rem;
+    color: var(--gray-500);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+
+#reportedPostsSection .announcement-report-date-list {
+    display: grid;
+    gap: 1.15rem;
+}
+
+/* Match the full post canvas used by the dashboard and public profiles. The
+   review header stays compact, while the post itself keeps the same readable
+   vertical rhythm and optional message background. */
+#reportedPostsSection .announcement-report-post-dialog {
+    height: min(94dvh, 54rem);
+    max-height: calc(100dvh - 1rem);
+    overflow: hidden;
+}
+
+#reportedPostsSection .announcement-report-post-dialog .announcement-report-reasons-dialog__panel {
+    height: 100%;
+    max-height: none;
+    min-height: 0;
+}
+
+#reportedPostsSection .announcement-report-post-dialog .announcement-report-reasons-dialog__header {
+    flex: 0 0 auto;
+    padding: 0.85rem 1.25rem;
+}
+
+#reportedPostsSection .announcement-report-post-dialog__body {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0.75rem 1rem 1rem;
+    overflow: hidden;
+}
+
+#reportedPostsSection .announcement-report-post-preview {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    height: 100%;
+    margin-inline: auto;
+    max-height: none;
+    min-height: 0;
+    overflow: hidden;
+    padding: 1.25rem 1.35rem 1.1rem;
+}
+
+#reportedPostsSection .announcement-report-post-preview .announcement-header {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+}
+
+#reportedPostsSection .announcement-report-post-preview .announcement-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    margin-bottom: 1.35rem;
+    overflow: hidden;
+}
+
+#reportedPostsSection .announcement-report-post-preview .announcement-title {
+    margin-bottom: 0.9rem;
+}
+
+#reportedPostsSection .announcement-report-post-preview .announcement-content {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: hidden;
+    text-align: center;
+    line-height: 1.75;
+}
+
+#reportedPostsSection .announcement-report-post-preview .announcement-copy {
+    width: 100%;
+    max-width: 42rem;
+}
+
+#reportedPostsSection .announcement-report-post-preview .announcement-footer {
+    margin-top: auto;
+}
+
+@media screen and (max-width: 45rem) {
+    #reportedPostsSection .announcement-report-post-dialog {
+        inset: auto 0 0;
+        width: 100%;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+        border-radius: 1rem 1rem 0 0;
+        transform: none;
+    }
+
+    #reportedPostsSection .announcement-report-post-dialog .announcement-report-reasons-dialog__panel {
+        padding-bottom: 0;
+    }
+
+    #reportedPostsSection .announcement-report-post-dialog .announcement-report-reasons-dialog__header {
+        padding: 0.75rem 0.85rem;
+    }
+
+    #reportedPostsSection .announcement-report-post-dialog__body {
+        padding: 0.6rem 0.7rem calc(0.7rem + env(safe-area-inset-bottom));
+    }
+
+    #reportedPostsSection .announcement-report-post-preview {
+        padding: 0.95rem 0.85rem 0.85rem;
+    }
+
+    #reportedPostsSection .announcement-report-post-preview .announcement-header {
+        margin-bottom: 0.9rem;
+        padding-bottom: 0.75rem;
+    }
+
+    #reportedPostsSection .announcement-report-post-preview .announcement-body {
+        margin-bottom: 1rem;
+    }
+
+    #reportedPostsSection .announcement-report-post-preview .announcement-content {
+        min-height: 0 !important;
+        padding: 1.05rem 1rem !important;
+        line-height: 1.65;
+    }
+
+    #reportedPostsSection .announcement-report-post-preview .announcement-copy {
+        max-width: 32rem;
+    }
+}
+
+/* Keep every mobile post message centered inside its canvas. This final rule
+   intentionally matches the older dashboard selector that previously forced
+   the message area back to block/left/top alignment. */
+@media screen and (max-width: 48rem) {
+    html:not([data-security-view]) .announcement-dashboard .dashboard-feed-column .announcement-content,
+    html:not([data-security-view]) .profile-posts .announcement-content,
+    #reportedPostsSection .announcement-report-post-preview .announcement-content {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    html:not([data-security-view]) .announcement-dashboard .dashboard-feed-column .announcement-content .announcement-copy,
+    html:not([data-security-view]) .profile-posts .announcement-content .announcement-copy,
+    #reportedPostsSection .announcement-report-post-preview .announcement-copy {
+        width: 100%;
+        margin-inline: auto;
+        text-align: center;
+    }
+}

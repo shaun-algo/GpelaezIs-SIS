@@ -1,0 +1,2128 @@
+/* Report Cards (Student list UI) */
+
+.rc-page-intro {
+    margin-bottom: 0.25rem;
+}
+
+.rc-page-title {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.02em;
+}
+
+.rc-controls {
+    margin-top: 0.9rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+    background: var(--surface-0);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.rc-control-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 150px;
+}
+
+.rc-control-field label,
+.rc-list-search label {
+    color: var(--gray-600);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.rc-controls select,
+.rc-controls input {
+    width: auto;
+    min-height: var(--control-min-height);
+    padding: var(--control-padding-y) var(--control-padding-x);
+    border: 1px solid var(--gray-300);
+    border-radius: 0.5rem;
+    background: var(--surface-0);
+    color: var(--gray-900);
+    font-size: var(--control-font-size);
+}
+
+.rc-control-field select {
+    width: 100%;
+}
+
+.rc-controls input {
+    flex: 1;
+    min-width: 220px;
+}
+
+.rc-controls .btn {
+    min-height: var(--control-min-height);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    white-space: nowrap;
+}
+
+.rc-main {
+    margin-top: 0.9rem;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 0.9rem;
+}
+
+.rc-main.learner-view {
+    display: block;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    max-width: none;
+}
+
+.rc-student-list {
+    background: var(--surface-0);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.rc-list-header {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+
+.rc-list-search {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.65rem 0.75rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--surface-0);
+}
+
+.rc-list-search input {
+    width: 100%;
+    min-height: var(--control-min-height);
+    padding: var(--control-padding-y) var(--control-padding-x);
+    border: 1px solid var(--gray-300);
+    border-radius: 0.5rem;
+    background: var(--surface-0);
+    color: var(--gray-900);
+    font-size: var(--control-font-size);
+}
+
+.rc-student-items {
+    max-height: calc(100vh - 240px);
+    overflow: auto;
+}
+
+.rc-student-item {
+    display: flex;
+    gap: 0.7rem;
+    align-items: center;
+    padding: 0.75rem 0.9rem;
+    border-bottom: 1px solid var(--gray-100);
+    cursor: pointer;
+}
+
+.rc-student-item:hover {
+    background: var(--gray-50);
+}
+
+.rc-student-item.active {
+    background: rgba(0, 85, 164, 0.08);
+    border-left: 0 !important;
+    box-shadow: none !important;
+}
+
+.rc-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: var(--deped-blue);
+    background: var(--deped-blue-light);
+    flex: 0 0 auto;
+}
+
+.rc-stu-meta {
+    min-width: 0;
+    flex: 1;
+}
+
+.rc-stu-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rc-stu-lrn {
+    margin-top: 0.15rem;
+    font-size: 0.78rem;
+    color: var(--gray-500);
+}
+
+.rc-stu-gwa {
+    font-weight: 900;
+    font-size: 0.95rem;
+}
+
+.rc-gwa-pass { color: var(--color-success); }
+.rc-gwa-warn { color: var(--color-warning); }
+.rc-gwa-fail { color: var(--color-danger); }
+
+.rc-content {
+    background: var(--surface-0);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.rc-content.learner-view {
+    width: 100%;
+    max-width: none;
+    min-height: calc(100vh - var(--topbar-height) - 7rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "title filter"
+        "detail detail";
+    align-items: center;
+    column-gap: 1.25rem;
+    row-gap: 0.9rem;
+}
+
+.report-cards-page.rc-learner-mode .report-cards-main-content {
+    width: 100%;
+    max-width: none;
+    align-items: stretch;
+}
+
+.report-cards-page.rc-learner-mode .rc-page-intro,
+.report-cards-page.rc-learner-mode .rc-main,
+.report-cards-page.rc-learner-mode .rc-content,
+.report-cards-page.rc-learner-mode .learner-report-card-detail,
+.report-cards-page.rc-learner-mode .rc-learner-card-shell {
+    width: 100%;
+    max-width: none;
+}
+
+.report-cards-page.rc-learner-mode .rc-page-intro {
+    display: none;
+}
+
+.rc-learner-page-title {
+    grid-area: title;
+    margin: 0;
+}
+
+.report-cards-page.rc-learner-mode .rc-student-list,
+.report-cards-page.rc-learner-mode .rc-controls {
+    display: none !important;
+}
+
+/* Learners receive a view-only Grade 1 PACE preview or the existing numeric
+   grade view. The shared SF9 preview/print modal remains staff-only. */
+.report-cards-page.rc-learner-mode #sf9Modal {
+    display: none !important;
+}
+
+.report-cards-page.rc-learner-mode .rc-student-header {
+    width: 100%;
+}
+
+.report-cards-page.rc-learner-mode .rc-grades-section {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.rc-learner-pace-preview {
+    width: 100%;
+    margin-top: 1.25rem;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.875rem;
+    background: var(--surface-0);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.rc-learner-pace-preview__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: linear-gradient(135deg, rgba(239, 246, 255, .96), rgba(248, 250, 252, .98));
+}
+
+.rc-learner-pace-preview__eyebrow {
+    margin: 0 0 .25rem;
+    color: #2563eb;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.rc-learner-pace-preview h2 {
+    margin: 0;
+    color: #1e3a8a;
+    font-size: 1.08rem;
+}
+
+.rc-learner-pace-preview__intro {
+    max-width: 48rem;
+    margin: .35rem 0 0;
+    color: #475569;
+    font-size: .82rem;
+    line-height: 1.5;
+}
+
+.rc-learner-pace-preview__badge {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: .35rem;
+    padding: .42rem .65rem;
+    border: 1px solid rgba(37, 99, 235, .18);
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: .72rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.rc-learner-pace-preview__frame-wrap {
+    padding: .75rem;
+    background: #e5e7eb;
+}
+
+.rc-learner-pace-preview__frame {
+    display: block;
+    width: 100%;
+    height: min(78vh, 1080px);
+    min-height: 620px;
+    border: 1px solid #cbd5e1;
+    border-radius: .5rem;
+    background: #e5e7eb;
+}
+
+@media (max-width: 1024px) {
+    .rc-learner-pace-preview__header {
+        flex-direction: column;
+        gap: .7rem;
+    }
+
+    .rc-learner-pace-preview__frame-wrap {
+        padding: .5rem;
+    }
+
+    .rc-learner-pace-preview__frame {
+        height: calc(100svh - 245px);
+        min-height: 480px;
+    }
+}
+
+.rc-learner-filter-bar {
+    grid-area: filter;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.7rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.rc-content.learner-view > #rcStudentDetail {
+    grid-area: detail;
+    min-width: 0;
+}
+
+.rc-learner-filter-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--gray-600);
+    font-size: 0.85rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.rc-learner-filter-label i {
+    color: var(--deped-blue);
+}
+
+.rc-learner-filter-select {
+    min-width: 260px;
+    max-width: 420px;
+    width: min(420px, 100%);
+    min-height: var(--control-min-height);
+    padding: var(--control-padding-y) 2.35rem var(--control-padding-y) var(--control-padding-x);
+    border: 1px solid var(--gray-300);
+    border-radius: 0.5rem;
+    background: var(--surface-0);
+    color: var(--gray-900);
+    font-size: var(--control-font-size);
+}
+
+/* Phone and tablet report-card layouts share the compact, touch-first flow. */
+@media (max-width: 1024px) {
+    .rc-content.learner-view {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "title"
+            "filter"
+            "detail";
+    }
+
+    .rc-learner-filter-bar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .rc-learner-filter-select {
+        min-width: 0;
+        max-width: none;
+    }
+}
+
+.rc-empty {
+    padding: 2.25rem 1rem;
+    text-align: center;
+    color: var(--gray-500);
+}
+
+.rc-student-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.9rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    background: var(--gray-50);
+}
+
+.rc-student-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    min-width: 260px;
+}
+
+.rc-student-header-name {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: var(--gray-900);
+}
+
+.rc-student-header-sub {
+    margin-top: 0.25rem;
+    font-size: 0.82rem;
+    color: var(--gray-600);
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.rc-chip {
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--gray-200);
+    background: var(--surface-0);
+}
+
+.rc-grade-table-wrap {
+    margin-top: 0.9rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.rc-grade-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.rc-grade-table thead th {
+    background: var(--gray-50);
+    color: var(--gray-600);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.6rem 0.7rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.rc-grade-table td {
+    padding: 0.65rem 0.7rem;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-900);
+}
+
+.rc-grade-table tbody tr:hover td {
+    background: var(--gray-50);
+}
+
+.rc-grade-table td.center,
+.rc-grade-table th.center {
+    text-align: center;
+}
+
+.rc-pill {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border: 1px solid var(--gray-200);
+}
+
+.rc-pill.pass {
+    color: #065F46;
+    background: #D1FAE5;
+    border-color: #A7F3D0;
+}
+
+.rc-pill.fail {
+    color: #991B1B;
+    background: #FEE2E2;
+    border-color: #FECACA;
+}
+
+/* Additional classes for the new interface */
+.rc-student-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: #fff;
+}
+
+.rc-student-avatar-large {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.rc-student-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.rc-student-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-900);
+}
+
+.rc-student-name-large {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.2;
+}
+
+.rc-student-meta {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-top: 4px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.rc-student-section {
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-700);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.rc-student-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.rc-student-gwa {
+    font-size: 13px;
+    font-weight: 700;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.rc-empty-message {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 0.45rem;
+    min-height: 220px;
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 0.9rem;
+}
+
+.rc-empty-video {
+    display: block;
+    width: clamp(7.5rem, 42vw, 10.5rem);
+    height: clamp(7.5rem, 42vw, 10.5rem);
+    margin-bottom: 0.15rem;
+    object-fit: contain;
+    mix-blend-mode: darken;
+}
+
+.rc-empty-message p {
+    margin: 0;
+}
+
+.rc-error {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: #991B1B;
+    font-size: 0.9rem;
+}
+
+.rc-descriptive-note {
+    border: 1px solid rgba(37, 99, 235, .18);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-top: 18px;
+    background: rgba(239, 246, 255, .8);
+    color: #1e3a8a;
+}
+
+.rc-descriptive-note h3 {
+    margin: 0 0 6px;
+    color: #1e40af;
+}
+
+.rc-descriptive-note p {
+    margin: 0;
+    line-height: 1.55;
+}
+
+.rc-descriptive-values {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.125rem;
+    padding: 1rem;
+    border: 1px solid rgba(37, 99, 235, .18);
+    border-radius: 0.875rem;
+    background: rgba(239, 246, 255, .72);
+    color: #1e3a8a;
+}
+
+.rc-descriptive-values__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.rc-descriptive-values__eyebrow {
+    margin: 0 0 0.2rem;
+    color: #2563eb;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.rc-descriptive-values h3,
+.rc-descriptive-values h4 {
+    margin: 0;
+}
+
+.rc-descriptive-values h3 {
+    color: #1e40af;
+    font-size: 1.05rem;
+}
+
+.rc-descriptive-values__legend {
+    display: inline-flex;
+    min-width: 2.75rem;
+    min-height: 2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.rc-descriptive-values__intro {
+    margin: 0;
+    color: #334155;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.rc-descriptive-values__period {
+    display: grid;
+    gap: 0.55rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(37, 99, 235, .14);
+}
+
+.rc-descriptive-values__period h4 {
+    color: #1e40af;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.rc-descriptive-values__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.rc-descriptive-values__item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 0.6rem 0.65rem;
+    border: 1px solid rgba(148, 163, 184, .32);
+    border-radius: 0.6rem;
+    background: rgba(255, 255, 255, .78);
+}
+
+.rc-descriptive-values__label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: #475569;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.rc-descriptive-values__code {
+    display: inline-grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 0.55rem;
+    background: #1d4ed8;
+    color: #fff;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1024px) {
+    .rc-descriptive-values {
+        margin-top: 0.9rem;
+        padding: 0.85rem;
+        border-radius: 0.75rem;
+    }
+
+    .rc-descriptive-values__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.rc-grades-section {
+    margin-top: 1.25rem;
+    background: var(--surface-0);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.rc-grades-section h3 {
+    margin: 0;
+    padding: 1rem;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-900);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.rc-grades-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.rc-grades-table th {
+    background: var(--gray-50);
+    color: var(--gray-600);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--gray-200);
+    text-align: center;
+}
+
+.rc-grades-table th:first-child {
+    text-align: left;
+}
+
+.rc-grades-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-900);
+    vertical-align: middle;
+}
+
+.rc-grades-table tr:last-child td {
+    border-bottom: none;
+}
+
+.rc-grades-table tr:hover td {
+    background: var(--gray-50);
+}
+
+.rc-grades-table tr.grade-row-pass td,
+.rc-grades-table tr.grade-row-fail td {
+    font-weight: 700;
+}
+
+.rc-grades-table tr.grade-row-pass {
+    box-shadow: inset 0 0 0 2px #16A34A;
+    border-radius: 10px;
+}
+
+.rc-grades-table tr.grade-row-pass:hover td {
+    background: #ECFDF5;
+}
+
+.rc-grades-table tr.grade-row-fail {
+    box-shadow: inset 0 0 0 2px #DC2626;
+    border-radius: 10px;
+}
+
+.rc-grades-table tr.grade-row-fail:hover td {
+    background: #FEF2F2;
+}
+
+.rc-grades-table tr.grade-row-pass-partial td,
+.rc-grades-table tr.grade-row-fail-partial td {
+    font-weight: 700;
+}
+
+.rc-grades-table tr.grade-row-pass-partial {
+    box-shadow: inset 0 0 0 2px rgba(22, 163, 74, 0.55);
+    border-radius: 10px;
+}
+
+.rc-grades-table tr.grade-row-pass-partial:hover td {
+    background: #F0FDF4;
+}
+
+.rc-grades-table tr.grade-row-fail-partial {
+    box-shadow: inset 0 0 0 2px rgba(220, 38, 38, 0.55);
+    border-radius: 10px;
+}
+
+.rc-grades-table tr.grade-row-fail-partial:hover td {
+    background: #FFF1F2;
+}
+
+.subject-name {
+    font-weight: 500;
+}
+
+.grade-cell {
+    text-align: center;
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.grade-cell .grade-text {
+    font-family: inherit;
+    font-weight: 700;
+}
+
+.grade-cell .grade-text-pass {
+    color: #16A34A;
+}
+
+.grade-cell .grade-text-fail {
+    color: #DC2626;
+}
+
+.grade-cell .grade-text-empty {
+    color: var(--gray-400);
+    font-weight: 600;
+}
+
+.grade-cell.final {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.remark-cell {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.remark-cell.pass {
+    color: #065F46;
+    background: #D1FAE5;
+}
+
+.remark-cell.fail {
+    color: #991B1B;
+    background: #FEE2E2;
+}
+
+/* GWA Status Classes */
+.gwa-outstanding { color: #065F46; }
+.gwa-very-satisfactory { color: #065F46; }
+.gwa-satisfactory { color: #1E40AF; }
+.gwa-fairly-satisfactory { color: #B45309; }
+.gwa-did-not-meet { color: #991B1B; }
+
+/* Avatar color classes */
+.av-blue { background: #DBEAFE; color: #1E40AF; }
+.av-green { background: #DCFCE7; color: #166534; }
+.av-amber { background: #FEF3C7; color: #92400E; }
+.av-rose { background: #FCE7F3; color: #9D174D; }
+.av-purple { background: #EDE9FE; color: #5B21B6; }
+.av-teal { background: #CCFBF1; color: #0F766E; }
+
+@media (max-width: 1100px) {
+    .rc-main {
+        grid-template-columns: 1fr;
+    }
+    .rc-student-items {
+        max-height: 320px;
+    }
+}
+
+/* Keep the on-screen grade summary readable without making the page wider. */
+body.report-cards-page .rc-main,
+body.report-cards-page .rc-content,
+body.report-cards-page .rc-grades-section {
+    min-width: 0;
+}
+
+body.report-cards-page .rc-grades-section,
+body.report-cards-page.rc-learner-mode .rc-grades-section {
+    overflow: hidden !important;
+}
+
+body.report-cards-page .rc-grades-table {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0 !important;
+    table-layout: fixed;
+}
+
+/* Official previews: keep fixed forms centered and fit them inside the frame. */
+.sf9-preview-scroll {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    min-height: 0;
+    padding: 0.75rem;
+    border: 1px solid #dce3eb;
+    border-radius: 0.65rem;
+    background: #eef1f5;
+    overscroll-behavior: contain;
+}
+
+.sf9-remarks-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin: 0 0 0.7rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #cfe2f2;
+    border-radius: 0.55rem;
+    background: #f3f9fd;
+    color: #315b78;
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.sf9-remarks-hint i {
+    flex: 0 0 auto;
+    margin-top: 0.1rem;
+    color: #0f4f82;
+}
+
+.sf9-remarks-hint[hidden] {
+    display: none;
+}
+
+.sf9-preview-frame {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 78vh;
+    min-height: 480px;
+    border: 0;
+    background: #e6e9ee;
+}
+
+@media (max-width: 1024px) {
+    body.report-cards-page .rc-content {
+        padding: 0.75rem;
+    }
+
+    body.report-cards-page #sf9Modal {
+        padding: 0.5rem;
+    }
+
+    body.report-cards-page #sf9Modal .modal-content {
+        max-height: calc(100svh - 1rem);
+        border-radius: 0.7rem;
+    }
+
+    body.report-cards-page #sf9Modal .modal-body {
+        min-height: 0;
+        padding: 0.4rem;
+        overflow: hidden;
+    }
+
+    .sf9-preview-scroll {
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 0.35rem;
+        background: #eef1f5;
+    }
+
+    .sf9-preview-frame {
+        width: 100%;
+        min-width: 0;
+        height: calc(100svh - 190px);
+        min-height: 280px;
+    }
+
+    body.report-cards-page .rc-student-header {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.8rem;
+    }
+
+    body.report-cards-page .rc-student-avatar-large {
+        grid-row: span 2;
+        margin-bottom: 0;
+    }
+
+    body.report-cards-page .rc-student-name-large {
+        min-width: 0;
+        font-size: 1.05rem;
+        overflow-wrap: anywhere;
+    }
+
+    body.report-cards-page .rc-student-actions {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    body.report-cards-page .rc-learner-actions {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body.report-cards-page .rc-student-actions .btn {
+        width: 100%;
+        min-width: 0;
+        padding-inline: 0.55rem;
+    }
+
+    body.report-cards-page .rc-grades-section {
+        margin-top: 0.75rem;
+        border-radius: 0.65rem;
+    }
+
+    body.report-cards-page .rc-grades-section h3 {
+        padding: 0.8rem;
+    }
+
+    body.report-cards-page .rc-grades-table {
+        display: block;
+    }
+
+    body.report-cards-page .rc-grades-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    body.report-cards-page .rc-grades-table tbody {
+        display: grid;
+        gap: 0.6rem;
+        padding: 0.65rem;
+    }
+
+    body.report-cards-page .rc-grades-table tbody tr {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 0.6rem 0.7rem;
+        border: 1px solid var(--gray-200);
+        border-radius: 0.6rem;
+        background: var(--surface-0);
+    }
+
+    body.report-cards-page .rc-grades-table tbody tr td {
+        display: grid;
+        grid-template-columns: minmax(4.5rem, 30%) minmax(0, 1fr);
+        gap: 0.55rem;
+        align-items: center;
+        min-width: 0;
+        padding: 0.4rem 0;
+        border-bottom: 1px solid var(--gray-100);
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
+
+    body.report-cards-page .rc-grades-table tbody tr td::before {
+        content: attr(data-label);
+        color: var(--gray-500);
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    body.report-cards-page .rc-grades-table tbody tr td.subject-name {
+        display: block;
+        padding: 0.1rem 0 0.55rem;
+        border-bottom-color: var(--gray-200);
+        text-align: left;
+        font-weight: 700;
+    }
+
+    body.report-cards-page .rc-grades-table tbody tr td.subject-name::before {
+        display: block;
+        margin-bottom: 0.15rem;
+    }
+
+    body.report-cards-page .rc-grades-table tbody tr td:last-child {
+        border-bottom: 0;
+    }
+
+    body.report-cards-page .rc-grades-table tbody tr td.rc-error {
+        display: block !important;
+        grid-template-columns: none;
+        padding: 1rem 0;
+        border-bottom: 0;
+        text-align: center;
+    }
+
+    body.report-cards-page .rc-grades-table tbody tr td.rc-error::before {
+        display: none;
+    }
+
+    body.report-cards-page .rc-gwa {
+        padding: 0.8rem;
+        border-top: 1px solid var(--gray-200);
+    }
+}
+
+/* Subject grades preview refinement: contained, breathable, and easy to scan. */
+body.report-cards-page .rc-grades-section {
+    width: 100%;
+    max-width: 1080px;
+    margin: 1.5rem auto 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    overflow: visible !important;
+}
+
+body.report-cards-page .rc-grades-section h3 {
+    margin: 0;
+    padding: 0 0 0.75rem;
+    border: 0;
+    color: var(--gray-900);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+body.report-cards-page .rc-grades-table-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    background: var(--surface-0);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    -webkit-overflow-scrolling: touch;
+}
+
+body.report-cards-page .rc-grades-table {
+    width: 100%;
+    min-width: 720px !important;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+    line-height: 1.35;
+}
+
+body.report-cards-page .rc-grades-table th,
+body.report-cards-page .rc-grades-table td {
+    padding: 0.75rem 0.85rem;
+}
+
+body.report-cards-page .rc-grades-table th {
+    background: var(--gray-50);
+    color: var(--gray-600);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+}
+
+body.report-cards-page .rc-grades-table th:first-child,
+body.report-cards-page .rc-grades-table td:first-child {
+    width: 34%;
+    text-align: left;
+}
+
+body.report-cards-page .rc-grades-table th:nth-last-child(2),
+body.report-cards-page .rc-grades-table td:nth-last-child(2) {
+    width: 12%;
+}
+
+body.report-cards-page .rc-grades-table th:last-child,
+body.report-cards-page .rc-grades-table td:last-child {
+    width: 14%;
+}
+
+body.report-cards-page .rc-grades-table td {
+    color: var(--gray-800);
+    vertical-align: middle;
+}
+
+body.report-cards-page .rc-grades-table td.subject-name {
+    color: var(--gray-900);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+body.report-cards-page .rc-grades-table td.subject-name--component {
+    padding-left: 1.5rem;
+    color: var(--gray-600);
+    font-style: italic;
+    font-weight: 500;
+}
+
+body.report-cards-page .rc-grades-table td.grade-cell {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+body.report-cards-page .rc-grades-table td.grade-cell.final {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+body.report-cards-page .rc-grades-table td.grade-cell.final .grade-text,
+body.report-cards-page .rc-grades-table td.grade-cell.final .grade-text-empty {
+    display: inline-grid;
+    min-width: 2.75rem;
+    min-height: 1.8rem;
+    place-items: center;
+    line-height: 1;
+}
+
+body.report-cards-page .rc-grades-table tr.grade-row-pass,
+body.report-cards-page .rc-grades-table tr.grade-row-fail,
+body.report-cards-page .rc-grades-table tr.grade-row-pass-partial,
+body.report-cards-page .rc-grades-table tr.grade-row-fail-partial {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+body.report-cards-page .rc-grades-table .remark-cell {
+    padding: 0.75rem 0.65rem;
+    background: transparent;
+    border-radius: 0;
+    text-align: center;
+    white-space: nowrap;
+}
+
+body.report-cards-page .rc-remark-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 4.2rem;
+    padding: 0.28rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+}
+
+body.report-cards-page .remark-cell.pass .rc-remark-badge {
+    color: #065F46;
+    background: #D1FAE5;
+}
+
+body.report-cards-page .remark-cell.fail .rc-remark-badge {
+    color: #991B1B;
+    background: #FEE2E2;
+}
+
+body.report-cards-page .rc-gwa {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(4.5rem, 0.65fr) minmax(5rem, 0.75fr);
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+    padding: 0.85rem 0.15rem 0;
+    border-top: 1px solid var(--gray-200);
+    color: var(--gray-700);
+    font-size: 0.84rem;
+}
+
+body.report-cards-page .rc-gwa-copy {
+    display: grid;
+    gap: 0.12rem;
+    min-width: 0;
+}
+
+body.report-cards-page .rc-gwa-label {
+    color: var(--gray-900);
+    font-size: 0.86rem;
+}
+
+body.report-cards-page .rc-gwa-value {
+    color: var(--gray-900);
+    font-size: 1.35rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+}
+
+body.report-cards-page .rc-mobile-grades {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    body.report-cards-page .rc-grades-section {
+        max-width: none;
+        margin-top: 0.9rem;
+    }
+
+    body.report-cards-page .rc-grades-section h3 {
+        padding: 0 0 0.65rem;
+    }
+
+    body.report-cards-page .rc-grades-table-wrap {
+        display: none;
+    }
+
+    body.report-cards-page .rc-mobile-grades {
+        display: block;
+        width: 100%;
+    }
+
+    body.report-cards-page .rc-mobile-grade-list {
+        display: grid;
+        gap: 0.55rem;
+    }
+
+    body.report-cards-page .rc-mobile-grade-item {
+        border: 1px solid var(--gray-200);
+        border-radius: 0.7rem;
+        background: var(--surface-0);
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    body.report-cards-page .rc-mobile-grade-item.grade-row-pass {
+        border-color: rgba(22, 163, 74, 0.35);
+    }
+
+    body.report-cards-page .rc-mobile-grade-item.grade-row-fail {
+        border-color: rgba(220, 38, 38, 0.35);
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 5.2rem 5.2rem 1.2rem;
+        align-items: center;
+        gap: 0.55rem;
+        min-height: 58px;
+        padding: 0.8rem 0.85rem;
+        color: var(--gray-900);
+        cursor: pointer;
+        list-style: none;
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary::-webkit-details-marker {
+        display: none;
+    }
+
+    body.report-cards-page .rc-mobile-grade-chevron {
+        display: inline-grid;
+        grid-column: 4;
+        place-items: center;
+        width: 1.4rem;
+        height: 1.4rem;
+        flex: 0 0 1.4rem;
+        color: #94a3b8;
+        transition: transform 180ms ease;
+    }
+
+    body.report-cards-page .rc-mobile-grade-chevron svg {
+        display: block;
+        width: 1.15rem;
+        height: 1.15rem;
+    }
+
+    body.report-cards-page .rc-mobile-grade-item[open] .rc-mobile-grade-chevron {
+        transform: rotate(180deg);
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary:focus-visible {
+        outline: 3px solid rgba(0, 85, 164, 0.22);
+        outline-offset: -3px;
+    }
+
+    body.report-cards-page .rc-mobile-grade-subject {
+        display: grid;
+        grid-column: 1;
+        align-self: center;
+        min-width: 0;
+        gap: 0.18rem;
+    }
+
+    body.report-cards-page .rc-mobile-grade-subject-name {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        font-size: 0.86rem;
+        font-weight: 800;
+        line-height: 1.25;
+    }
+
+    body.report-cards-page .rc-mobile-grade-subject-name.is-component {
+        color: var(--gray-600);
+        font-size: 0.8rem;
+        font-style: italic;
+        font-weight: 600;
+    }
+
+    body.report-cards-page .rc-mobile-grade-final {
+        display: grid;
+        grid-column: 2;
+        width: 5.2rem;
+        min-width: 5.2rem;
+        justify-self: center;
+        justify-items: center;
+        flex: 0 0 auto;
+        color: var(--gray-900);
+        font-size: 0.9rem;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        text-align: center;
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary-remark-cell {
+        display: grid;
+        grid-column: 3;
+        min-width: 0;
+        place-items: center;
+        text-align: center;
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary-remark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 5.2rem;
+        min-width: 5.2rem;
+        min-height: 1.15rem;
+        padding: 0.12rem 0.32rem;
+        border-radius: 0.3rem;
+        font-size: 0.5rem;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary-remark.is-empty {
+        color: var(--gray-400);
+        background: var(--gray-100);
+    }
+
+    body.report-cards-page .rc-mobile-grade-list-heading {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 5.2rem 5.2rem 1.2rem;
+        gap: 0.55rem;
+        padding: 0 0.85rem 0.35rem;
+        color: var(--gray-500);
+        font-size: 0.58rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        line-height: 1.2;
+        text-transform: uppercase;
+    }
+
+    body.report-cards-page .rc-mobile-grade-list-heading span:not(:first-child) {
+        text-align: center;
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary-remark.pass {
+        color: #065f46;
+        background: #d1fae5;
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary-remark.fail {
+        color: #991b1b;
+        background: #fee2e2;
+    }
+
+    body.report-cards-page .rc-mobile-grade-details {
+        display: grid;
+        gap: 0.7rem;
+        padding: 0 0.85rem 0.85rem;
+        border-top: 1px solid var(--gray-100);
+        background: var(--gray-50);
+    }
+
+    body.report-cards-page .rc-mobile-term-grid {
+        display: grid;
+        grid-template-columns: repeat(var(--rc-term-count, 4), minmax(0, 1fr));
+        gap: 0.3rem;
+        padding-top: 0.75rem;
+    }
+
+    body.report-cards-page .rc-mobile-term-card {
+        display: grid;
+        gap: 0.25rem;
+        min-width: 0;
+        padding: 0.55rem 0.25rem;
+        border: 1px solid var(--gray-200);
+        border-radius: 0.55rem;
+        background: var(--surface-0);
+        text-align: center;
+    }
+
+    body.report-cards-page .rc-mobile-term-label {
+        overflow-wrap: anywhere;
+        color: var(--gray-500);
+        font-size: 0.55rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        line-height: 1.2;
+        text-transform: uppercase;
+    }
+
+    body.report-cards-page .rc-mobile-term-card strong {
+        color: var(--gray-900);
+        font-size: 0.9rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    body.report-cards-page .rc-mobile-grade-remark {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding-top: 0.15rem;
+        color: var(--gray-600);
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    body.report-cards-page .rc-mobile-grade-remark .rc-remark-badge {
+        min-width: 3.6rem;
+        padding-inline: 0.4rem;
+        font-size: 0.58rem;
+        text-transform: none;
+    }
+
+    body.report-cards-page .rc-mobile-grade-remark .rc-remark-badge.pass {
+        color: #065F46;
+        background: #D1FAE5;
+    }
+
+    body.report-cards-page .rc-mobile-grade-remark .rc-remark-badge.fail {
+        color: #991B1B;
+        background: #FEE2E2;
+    }
+
+    body.report-cards-page .rc-mobile-term-empty,
+    body.report-cards-page .rc-mobile-grades-empty {
+        padding: 0.9rem 0;
+        color: var(--gray-500);
+        font-size: 0.78rem;
+        text-align: center;
+    }
+
+    body.report-cards-page .rc-gwa {
+        grid-template-columns: minmax(0, 1fr) minmax(4.5rem, 0.65fr) minmax(5rem, 0.75fr);
+        padding-inline: 0;
+    }
+
+    body.report-cards-page .rc-gwa-value {
+        font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 360px) {
+    body.report-cards-page .rc-mobile-term-grid {
+        gap: 0.2rem;
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary,
+    body.report-cards-page .rc-mobile-grade-list-heading {
+        grid-template-columns: minmax(0, 1fr) 4.6rem 4.6rem 1.2rem;
+        gap: 0.3rem;
+    }
+
+    body.report-cards-page .rc-mobile-grade-final {
+        width: 4.6rem;
+        min-width: 4.6rem;
+    }
+
+    body.report-cards-page .rc-mobile-grade-summary-remark {
+        width: 4.6rem;
+        min-width: 4.6rem;
+        font-size: 0.46rem;
+    }
+
+    body.report-cards-page .rc-mobile-term-card {
+        padding-inline: 0.15rem;
+    }
+
+    body.report-cards-page .rc-mobile-term-label {
+        font-size: 0.5rem;
+        letter-spacing: 0.02em;
+    }
+
+    body.report-cards-page .rc-mobile-term-card strong {
+        font-size: 0.84rem;
+    }
+}
+
+/* Mobile subject labels stay compact; MAPEH components remain nested under one parent. */
+@media (max-width: 1024px) {
+    body.report-cards-page .rc-mobile-grade-subject-name {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    body.report-cards-page .rc-mobile-mapeh-components {
+        display: grid;
+        gap: 0.45rem;
+        margin-top: 0.7rem;
+        padding-top: 0.7rem;
+        border-top: 1px solid var(--gray-200);
+    }
+
+    body.report-cards-page .rc-mobile-mapeh-component {
+        border-color: var(--gray-200);
+        background: var(--surface-0);
+        box-shadow: none;
+    }
+
+    body.report-cards-page .rc-mobile-mapeh-component .rc-mobile-grade-summary {
+        min-height: 44px;
+        padding: 0.6rem 0.65rem;
+    }
+
+    body.report-cards-page .rc-mobile-mapeh-component .rc-mobile-grade-subject-name {
+        font-size: 0.78rem;
+    }
+
+    body.report-cards-page .rc-mobile-mapeh-component .rc-mobile-grade-details {
+        padding: 0 0.65rem 0.65rem;
+        background: transparent;
+    }
+
+    body.report-cards-page .rc-mobile-mapeh-component .rc-mobile-term-grid {
+        padding-top: 0.6rem;
+    }
+}
+
+/* The mobile learner layer stays mounted for a stable first paint, but is
+   hidden outside phone layouts and becomes interactive only in its open state. */
+body.report-cards-page .rc-mobile-preview {
+    display: none;
+}
+
+/* Mobile report-card flow: two cards on the page, learner details in a bottom sheet. */
+@media (max-width: 1024px) {
+    body.report-cards-page:not(.rc-learner-mode) .rc-page-intro {
+        display: none;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-controls {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.65rem;
+        margin-top: 0;
+        padding: 0.85rem;
+        border-radius: 1rem;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-control-field {
+        min-width: 0;
+        gap: 0.28rem;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-control-field:first-child {
+        grid-column: 1 / -1;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-control-field label,
+    body.report-cards-page:not(.rc-learner-mode) .rc-list-header,
+    body.report-cards-page:not(.rc-learner-mode) .rc-list-search label {
+        font-size: 0.64rem;
+        letter-spacing: 0.08em;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-controls select {
+        width: 100%;
+        min-width: 0;
+        min-height: 2.65rem;
+        padding-inline: 0.65rem 1.9rem;
+        font-size: 0.8rem;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-controls > .btn {
+        width: 100%;
+        min-width: 0;
+        min-height: 2.7rem;
+        padding-inline: 0.45rem;
+        font-size: 0.72rem;
+        line-height: 1.2;
+        white-space: normal;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-main {
+        display: block !important;
+        margin-top: 0.75rem;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-desktop-learner-preview {
+        display: none !important;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-mobile-learners-card {
+        width: 100%;
+        border-radius: 1rem;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-list-header {
+        padding: 0.9rem 1rem 0.5rem;
+        border-bottom: 0;
+        background: var(--surface-0);
+        color: var(--gray-500);
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-list-search {
+        padding: 0.25rem 1rem 0.85rem;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-list-search input {
+        min-height: 2.65rem;
+        font-size: 0.84rem;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-student-items {
+        max-height: none;
+        overflow: visible;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-student-item {
+        min-height: 4.45rem;
+        padding: 0.75rem 1rem;
+        gap: 0.7rem;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-student-item:last-child {
+        border-bottom: 0;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-student-name {
+        overflow-wrap: anywhere;
+        white-space: normal;
+        font-size: 0.88rem;
+        line-height: 1.25;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-stu-section {
+        margin-top: 0.22rem;
+        color: var(--gray-500);
+        font-size: 0.72rem;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-student-item-chevron {
+        flex: 0 0 auto;
+        color: var(--gray-400);
+        font-size: 0.75rem;
+    }
+
+    body.report-cards-page:not(.rc-learner-mode) .rc-empty-message {
+        min-height: 10rem;
+    }
+
+    body.report-cards-page .rc-mobile-preview {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        contain: layout paint;
+        transition: opacity 180ms ease-out, visibility 0s linear 220ms;
+    }
+
+    body.report-cards-page .rc-mobile-preview.is-open {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        transition-delay: 0s;
+    }
+
+    body.report-cards-page .rc-mobile-preview-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.48);
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        transition: opacity 180ms ease-out;
+    }
+
+    body.report-cards-page .rc-mobile-preview.is-open .rc-mobile-preview-backdrop {
+        opacity: 1;
+    }
+
+    body.report-cards-page .rc-mobile-preview-sheet {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        max-height: min(88svh, 48rem);
+        flex-direction: column;
+        overflow: hidden;
+        padding: 0.55rem 1rem calc(1rem + env(safe-area-inset-bottom));
+        border-radius: 1.25rem 1.25rem 0 0;
+        background: var(--surface-0);
+        box-shadow: 0 -12px 35px rgba(15, 23, 42, 0.22);
+        transform: translate3d(0, 1rem, 0);
+        opacity: 0;
+        will-change: transform;
+        transition: transform 220ms cubic-bezier(0.22, 0.8, 0.24, 1), opacity 180ms ease-out;
+    }
+
+    body.report-cards-page .rc-mobile-preview.is-open .rc-mobile-preview-sheet {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+
+    body.report-cards-page .rc-mobile-preview-handle {
+        width: 2.6rem;
+        height: 0.25rem;
+        flex: 0 0 auto;
+        margin: 0 auto 0.75rem;
+        border-radius: 999px;
+        background: var(--gray-300);
+    }
+
+    body.report-cards-page .rc-mobile-preview-header {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.7rem;
+        padding-bottom: 0.85rem;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    body.report-cards-page .rc-mobile-preview-header .rc-student-avatar-large {
+        width: 3rem;
+        height: 3rem;
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    body.report-cards-page .rc-mobile-preview-identity {
+        min-width: 0;
+    }
+
+    body.report-cards-page .rc-mobile-preview-eyebrow {
+        margin: 0 0 0.16rem;
+        color: var(--gray-500);
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    body.report-cards-page .rc-mobile-preview-identity h2 {
+        margin: 0;
+        color: var(--gray-900);
+        font-size: 1rem;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+    }
+
+    body.report-cards-page .rc-mobile-preview-section {
+        margin: 0.25rem 0 0;
+        color: var(--gray-600);
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    body.report-cards-page .rc-mobile-preview-close {
+        display: inline-grid;
+        width: 2rem;
+        height: 2rem;
+        place-items: center;
+        border: 0;
+        border-radius: 999px;
+        background: var(--gray-100);
+        color: var(--gray-600);
+        font-size: 1.45rem;
+        line-height: 1;
+    }
+
+    body.report-cards-page .rc-mobile-preview-body {
+        min-height: 0;
+        flex: 1 1 auto;
+        overflow-y: auto;
+        padding: 0.85rem 0 0.5rem;
+        overscroll-behavior: contain;
+    }
+
+    body.report-cards-page .rc-mobile-preview-loading,
+    body.report-cards-page .rc-mobile-preview-error,
+    body.report-cards-page .rc-mobile-preview-note {
+        display: grid;
+        gap: 0.45rem;
+        padding: 1.25rem 0.5rem;
+        color: var(--gray-600);
+        font-size: 0.82rem;
+        line-height: 1.45;
+        text-align: center;
+    }
+
+    body.report-cards-page .rc-mobile-preview-error {
+        color: #991b1b;
+    }
+
+    body.report-cards-page .rc-mobile-preview-note strong {
+        color: var(--gray-900);
+        font-size: 0.9rem;
+    }
+
+    body.report-cards-page .rc-mobile-preview-grades {
+        display: grid;
+        gap: 0.55rem;
+    }
+
+    body.report-cards-page .rc-mobile-preview-section-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding-bottom: 0.35rem;
+    }
+
+    body.report-cards-page .rc-mobile-preview-section-heading h3 {
+        margin: 0;
+        color: var(--gray-900);
+        font-size: 0.92rem;
+    }
+
+    body.report-cards-page .rc-mobile-preview-section-heading span {
+        color: var(--gray-500);
+        font-size: 0.64rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    body.report-cards-page .rc-mobile-preview-grade-list {
+        display: grid;
+        gap: 0.38rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    body.report-cards-page .rc-mobile-preview-grade-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        min-height: 2.65rem;
+        padding: 0.55rem 0.7rem;
+        border: 1px solid var(--gray-200);
+        border-radius: 0.65rem;
+        background: var(--gray-50);
+    }
+
+    body.report-cards-page .rc-mobile-preview-grade-row.is-component {
+        padding-left: 1.2rem;
+        background: var(--surface-0);
+    }
+
+    body.report-cards-page .rc-mobile-preview-grade-subject {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        color: var(--gray-800);
+        font-size: 0.79rem;
+        font-weight: 700;
+    }
+
+    body.report-cards-page .rc-mobile-preview-grade-subject.is-component {
+        color: var(--gray-600);
+        font-size: 0.74rem;
+        font-weight: 600;
+    }
+
+    body.report-cards-page .rc-mobile-preview-grade-value {
+        flex: 0 0 auto;
+        font-size: 0.86rem;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+    }
+
+    body.report-cards-page .rc-mobile-preview-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.55rem;
+        padding: 0.7rem 0;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    body.report-cards-page .rc-mobile-preview-actions .btn {
+        width: 100%;
+        min-width: 0;
+        min-height: 2.7rem;
+        padding-inline: 0.45rem;
+        font-size: 0.75rem;
+    }
+
+    body.report-cards-page .rc-mobile-preview-actions .btn[hidden] {
+        display: none;
+    }
+
+    body.report-cards-page .rc-mobile-preview-actions .btn:only-child {
+        grid-column: 1 / -1;
+    }
+
+    body.report-cards-page.rc-mobile-preview-open {
+        overflow: hidden;
+    }
+}
+
+@keyframes rc-mobile-preview-rise {
+    from { transform: translateY(1.25rem); opacity: 0.7; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes rc-mobile-preview-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.report-cards-page .rc-mobile-preview,
+    body.report-cards-page .rc-mobile-preview-backdrop,
+    body.report-cards-page .rc-mobile-preview-sheet {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Last-resort visual guard for fast taps or stale event handlers: only one
+   report-card preview layer may be visible on a phone-sized viewport. */
+@supports selector(body:has(.rc-mobile-preview.is-open)) {
+    @media (max-width: 1024px) {
+        body.report-cards-page:has(#sf9Modal.show) .rc-mobile-preview.is-open,
+        body.report-cards-page:has(#sf9Modal.active) .rc-mobile-preview.is-open {
+            display: none !important;
+        }
+
+        body.report-cards-page:has(.rc-mobile-preview.is-open) #sf9Modal:not(.show):not(.active) {
+            display: none !important;
+        }
+    }
+}

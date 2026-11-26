@@ -1,0 +1,144 @@
+.returnee-review-page .page-subtitle { margin: 4px 0 0; color: var(--gray-600); font-size: 12px; }
+.rr-card { margin-bottom: 14px; padding: 14px; border: 1px solid var(--gray-200); border-radius: 9px; background: var(--surface-0); }
+.rr-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 12px; }
+.rr-toolbar-fields { display: grid; grid-template-columns: minmax(180px, 220px) minmax(220px, 360px); gap: 10px; flex: 1; }
+.rr-toolbar label, .rr-form-grid label { display: grid; gap: 5px; color: var(--gray-600); font-size: 11px; font-weight: 800; }
+.rr-toolbar input, .rr-toolbar select, .rr-form-grid input, .rr-form-grid select, .rr-form-grid textarea { width: 100%; min-height: 36px; padding: 7px 9px; border: 1px solid var(--gray-300); border-radius: 6px; background: var(--surface-0); color: var(--gray-900); font: inherit; font-size: 12px; }
+.rr-form-grid textarea { resize: vertical; }
+.rr-card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+.rr-card-head h2 { margin: 0; font-size: 15px; color: var(--gray-900); }
+.rr-card-head p { margin: 3px 0 0; color: var(--gray-600); font-size: 11px; }
+.rr-policy-note { color: var(--gray-600); font-size: 11px; }
+.rr-table-wrap { overflow-x: auto; border: 1px solid var(--gray-200); border-radius: 7px; }
+.rr-table { width: 100%; min-width: 780px; border-collapse: collapse; font-size: 12px; }
+.rr-table th, .rr-table td { padding: 10px; border-bottom: 1px solid var(--gray-200); text-align: left; vertical-align: top; }
+.rr-table th { background: var(--gray-50); color: var(--gray-600); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+.rr-table tr:last-child td { border-bottom: 0; }
+.rr-learner strong, .rr-target strong { display: block; color: var(--gray-900); }
+.rr-learner span, .rr-target span, .rr-evidence span { display: block; margin-top: 3px; color: var(--gray-600); font-size: 11px; }
+.rr-status { display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 8px; font-size: 10px; font-weight: 800; white-space: nowrap; }
+.rr-status--pending { background: #fff7ed; color: #9a3412; }.rr-status--needs, .rr-status--needs-information { background: #fefce8; color: #854d0e; }.rr-status--verified { background: #ecfdf3; color: #166534; }.rr-status--rejected { background: #fef2f2; color: #991b1b; }
+.rr-status--enrolled { background: #ecfdf3; color: #166534; }.rr-status--dropped, .rr-status--transferred { background: #fff7ed; color: #9a3412; }.rr-status--completed { background: #eff6ff; color: #1d4ed8; }
+.rr-source-chip { display: inline-flex; padding: 4px 8px; border-radius: 999px; background: #fff7ed; color: #9a3412; font-size: 10px; font-weight: 800; white-space: nowrap; }
+.rr-doc-summary { color: var(--gray-700); font-size: 11px; line-height: 1.4; }.rr-empty { padding: 28px !important; text-align: center !important; color: var(--gray-600); }
+.rr-modal { position: fixed; inset: 0; z-index: 1200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }.rr-modal[hidden] { display: none; }
+.rr-dialog { width: min(880px, 100%); max-height: 92vh; overflow: auto; border-radius: 12px; background: var(--surface-0); box-shadow: 0 22px 70px rgba(15, 23, 42, .24); }
+.rr-dialog-head { display: flex; justify-content: space-between; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--gray-200); }.rr-dialog-head h2 { margin: 0; font-size: 18px; color: var(--gray-900); }.rr-dialog-head p { margin: 4px 0 0; color: var(--gray-600); font-size: 11px; }.rr-close { border: 0; background: transparent; color: var(--gray-600); font-size: 24px; cursor: pointer; }
+.rr-form { display: grid; gap: 14px; padding: 16px 18px 18px; }.rr-case-summary { padding: 10px; border: 1px solid #bfdbfe; border-radius: 7px; background: #eff6ff; color: #1e3a8a; font-size: 12px; line-height: 1.45; }.rr-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }.rr-span-2 { grid-column: span 2; }.rr-check { display: flex !important; grid-template-columns: auto 1fr; align-items: center; grid-template-columns: 18px 1fr; min-height: 36px; }.rr-check input { width: 16px; min-height: 16px; }.rr-section-title { margin-bottom: 8px; color: var(--gray-800); font-size: 12px; font-weight: 900; }.rr-documents, .rr-prior { padding-top: 2px; }.rr-doc-row { display: grid; grid-template-columns: minmax(170px, 1fr) 150px minmax(160px, 1fr); gap: 7px; align-items: center; padding: 7px 0; border-top: 1px solid var(--gray-200); font-size: 11px; }.rr-doc-row label { color: var(--gray-700); font-weight: 700; }.rr-doc-row select, .rr-doc-row input { min-height: 32px; padding: 5px 7px; border: 1px solid var(--gray-300); border-radius: 5px; background: var(--surface-0); color: var(--gray-900); font: inherit; }.rr-prior-list { display: grid; gap: 5px; max-height: 130px; overflow: auto; }.rr-prior-row { display: flex; flex-wrap: wrap; gap: 7px; padding: 6px 8px; border-radius: 5px; background: var(--gray-50); color: var(--gray-700); font-size: 11px; }.rr-form-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding-top: 4px; border-top: 1px solid var(--gray-200); }.rr-form-actions span { margin-right: auto; color: var(--gray-600); font-size: 11px; }
+@media (max-width: 700px) { .rr-toolbar, .rr-card-head { align-items: stretch; flex-direction: column; }.rr-toolbar-fields, .rr-form-grid { grid-template-columns: 1fr; }.rr-span-2 { grid-column: span 1; }.rr-toolbar .btn { width: 100%; }.rr-doc-row { grid-template-columns: 1fr; gap: 4px; }.rr-form-actions { flex-wrap: wrap; }.rr-form-actions span { width: 100%; margin-right: 0; }.rr-form-actions .btn { flex: 1 1 120px; } }
+
+@media screen {
+    .returnee-review-page .page-subtitle {
+        margin-top: var(--space-1);
+        font-size: var(--text-small);
+    }
+
+    .rr-card {
+        margin-bottom: var(--space-4);
+        padding: var(--space-4);
+        border-radius: var(--radius-md);
+    }
+
+    .rr-toolbar {
+        display: flex;
+        align-items: flex-end;
+        gap: var(--space-4);
+    }
+
+    .rr-toolbar-fields {
+        grid-template-columns: minmax(11rem, 14rem) minmax(14rem, 22rem);
+        gap: var(--space-3);
+    }
+
+    .rr-toolbar label,
+    .rr-form-grid label {
+        gap: var(--space-2);
+        font-size: var(--text-label);
+    }
+
+    .rr-toolbar input,
+    .rr-toolbar select,
+    .rr-form-grid input,
+    .rr-form-grid select,
+    .rr-form-grid textarea {
+        min-height: var(--control-min-height);
+        padding: var(--space-3) var(--space-3);
+        font-size: var(--control-font-size);
+    }
+
+    .rr-card-head {
+        gap: var(--space-4);
+        margin-bottom: var(--space-3);
+    }
+
+    .rr-card-head h2 {
+        font-size: var(--text-h3);
+    }
+
+    .rr-card-head p,
+    .rr-policy-note,
+    .rr-doc-summary {
+        font-size: var(--text-small);
+    }
+
+    .rr-table-wrap {
+        border-radius: var(--radius-sm);
+    }
+
+    .rr-table {
+        min-width: 48.75rem;
+        font-size: var(--text-small);
+    }
+
+    .rr-table th,
+    .rr-table td {
+        padding: var(--space-3);
+    }
+
+    .rr-modal {
+        padding: var(--content-gutter);
+    }
+
+    .rr-dialog {
+        width: min(55rem, 100%);
+        max-height: min(42rem, calc(100dvh - (2 * var(--content-gutter))));
+        border-radius: var(--radius-lg);
+    }
+
+    .rr-dialog-head {
+        gap: var(--space-4);
+        padding: var(--space-4) var(--space-5);
+    }
+
+    .rr-dialog-head h2 {
+        font-size: var(--text-h2);
+    }
+
+    .rr-close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: var(--touch-target);
+        min-height: var(--touch-target);
+    }
+
+    .rr-form {
+        gap: var(--space-4);
+        padding: var(--space-5);
+    }
+}
+
+@media screen and (max-width: 48rem) {
+    .rr-toolbar {
+        align-items: stretch;
+    }
+
+    .rr-card-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .rr-policy-note {
+        max-width: 100%;
+    }
+}

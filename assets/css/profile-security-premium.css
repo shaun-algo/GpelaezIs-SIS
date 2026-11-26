@@ -1,0 +1,514 @@
+/* Password Security visual refinement. Behaviour and state classes stay in JS. */
+:root {
+    --security-ink: #172b4d;
+    --security-muted: #62748a;
+    --security-line: #dce6f0;
+    --security-blue: #0055a4;
+    --security-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.security-session-pending body,
+html.password-focus body { background: var(--app-canvas); }
+html:is(.security-session-pending, .password-focus) #mainContent { place-items: start center; }
+html:is(.security-session-pending, .password-focus) .security-layout { padding-top: 0; }
+
+.security-caution { padding-top: 0; margin-bottom: 1.25rem; }
+.security-caution-bounce { filter: drop-shadow(0 8px 18px rgba(24, 95, 165, 0.14)); }
+.page-header { margin-bottom: 1.5rem; }
+.page-title { color: var(--security-ink); font-size: clamp(1.4rem, 3vw, 1.8rem); letter-spacing: -0.02em; font-weight: 700; }
+
+.password-policy-alert {
+    border: 0;
+    border-radius: 8px;
+    background: #fffbeb;
+    color: #78350f;
+    box-shadow: var(--shadow-sm);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding: 1rem 1.25rem;
+}
+
+.password-panel { display: none; }
+
+.profile-info-card {
+    border: 1px solid rgba(203, 213, 225, 0.78);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 18px 50px rgba(15, 45, 79, 0.07);
+    overflow: hidden;
+}
+.profile-info-card .card-body { padding: clamp(1.5rem, 4vw, 2.5rem); }
+.form-section-title {
+    color: var(--security-ink);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+.security-layout .form-row { gap: 1.25rem; }
+.security-layout .form-group { margin-bottom: 1.25rem; }
+.security-layout .form-group > label,
+.security-layout .field-actions label { color: #40566e; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; display: block; }
+.security-layout .form-control {
+    min-height: 48px;
+    border: 1px solid #cbd8e5;
+    border-radius: 8px;
+    background: #fff;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.95rem;
+    transition: border-color 180ms var(--security-ease), box-shadow 180ms var(--security-ease), background-color 180ms var(--security-ease);
+}
+.security-layout .form-control:hover { border-color: #9fb5ca; }
+.security-layout .form-control:focus { border-color: var(--security-blue); box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.12); outline: none; }
+.security-layout .form-control.read-only,
+.security-layout .form-control:disabled { background: #f3f6f9 !important; color: #63758a; }
+.password-hint { color: var(--security-muted); max-width: 52ch; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.4; }
+
+/* Form styling for password focus mode - no card container */
+html.password-focus .security-layout #passwordForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+html.password-focus .security-layout .form-group {
+    margin-bottom: 0;
+}
+.security-divider { background: var(--security-line); margin: 1.6rem 0; }
+.field-actions .hint { color: #7b8da1; }
+.mask-btn { min-height: 32px; border-color: #cbd8e5; border-radius: 8px; background: #f7fafc; transition: border-color 160ms var(--security-ease), color 160ms var(--security-ease), background-color 160ms var(--security-ease); }
+.mask-btn:hover { background: #edf5fc; }
+.password-form-actions { gap: 0.75rem; margin-top: 1.5rem; }
+.password-form-actions .btn,
+.security-actions .btn { min-height: 44px; border-radius: 8px; font-weight: 600; transition: transform 160ms var(--security-ease), box-shadow 160ms var(--security-ease), background-color 160ms var(--security-ease); }
+.password-form-actions .btn:hover,
+.security-actions .btn:hover { transform: translateY(-1px); }
+.password-form-actions .btn:active,
+.security-actions .btn:active { transform: scale(0.98); }
+.security-layout :is(button, input, select, textarea):focus-visible { outline: 2px solid rgba(0, 85, 164, 0.26); outline-offset: 2px; }
+
+/* Single column layout for password focus mode */
+html.password-focus .security-layout .form-row {
+    grid-template-columns: minmax(0, 1fr);
+}
+html.password-focus .security-layout .form-group {
+    margin-bottom: 1.25rem;
+}
+
+/* SweetAlert2 warning used when a user skips a temporary password. */
+.swal2-container.password-skip-backdrop { backdrop-filter: blur(10px); }
+.swal2-popup.password-skip-large {
+    border: 1px solid #f1c8c8;
+    border-radius: 12px;
+    padding: clamp(1.5rem, 4vw, 2rem);
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.2);
+}
+.password-skip-large .swal2-title { color: #542021; font-size: clamp(1.3rem, 3vw, 1.6rem); letter-spacing: -0.02em; font-weight: 700; margin-bottom: 0.5rem; }
+.password-skip-large .swal2-html-container { color: #536579; font-size: 0.95rem; line-height: 1.6; margin-top: 0.5rem; }
+.password-skip-large .swal2-actions { gap: 0.75rem; margin-top: 1.5rem; }
+.password-skip-large .swal2-styled { min-height: 44px; border-radius: 8px; padding: 0.75rem 1.25rem; font-weight: 600; transition: transform 160ms var(--security-ease), box-shadow 160ms var(--security-ease); }
+.password-skip-large .swal2-styled:hover { transform: translateY(-1px); }
+.password-skip-large .swal2-cancel { background: #eef2f6 !important; color: #40566e !important; }
+
+/* Keep the no-SweetAlert fallback visually aligned with the primary modal. */
+.password-skip-modal { border-radius: 12px; box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28); }
+.password-skip-modal__actions .btn { min-height: 44px; border-radius: 10px; font-weight: 750; }
+
+@media (max-width: 720px) {
+    html:is(.security-session-pending, .password-focus) .security-layout { padding-top: 1.5rem; }
+    .password-panel .card-body,
+    .profile-info-card .card-body { padding: 1.1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .password-form-actions .btn,
+    .security-actions .btn,
+    .security-layout .form-control,
+    .mask-btn,
+    .password-skip-large .swal2-styled { transition: none; }
+    .password-form-actions .btn:hover,
+    .security-actions .btn:hover,
+    .password-skip-large .swal2-styled:hover { transform: none; }
+}
+
+/* The profile overflow menu uses one route with a focused view query. */
+html[data-security-view="password"] .profile-info-card {
+    display: none;
+}
+
+html[data-security-view="profile-info"] #passwordForm,
+html[data-security-view="profile-info"] #passwordPolicyAlert {
+    display: none !important;
+}
+
+html[data-security-view="profile-info"] .profile-info-card {
+    display: block;
+}
+
+html[data-security-view="profile-info"] #saveBtn {
+    display: inline-flex;
+}
+
+html[data-security-view="profile-info"] .security-layout {
+    max-width: 980px;
+}
+
+html[data-security-view="profile-info"] .page-header {
+    margin-bottom: 1.25rem;
+}
+
+html[data-security-view="profile-info"] .profile-header-left {
+    gap: 0;
+}
+
+html[data-security-view="profile-info"] .profile-info-card .card-body {
+    padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+html[data-security-view="profile-info"] .profile-info-card .card-tools {
+    top: 1rem;
+    right: 1rem;
+}
+
+html[data-security-view="profile-info"] .form-section-title {
+    margin-bottom: 1.1rem;
+    color: var(--security-ink);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+}
+
+@media (max-width: 720px) {
+    html[data-security-view="profile-info"] .profile-info-card .card-tools {
+        top: 0.75rem;
+        right: 0.75rem;
+    }
+}
+
+/* Password security wizard: separate each sensitive action into a focused,
+   reversible step while keeping one final submit for the existing API. */
+html[data-security-view="password"] #passwordPolicyAlert {
+    width: min(100%, 720px);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+html[data-security-view="password"] .page-header {
+    width: min(100%, 720px);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+html[data-security-view="password"] .security-layout {
+    width: min(100%, 720px);
+}
+
+.security-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 40px;
+    padding: 0.45rem 0.15rem;
+    color: var(--security-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 180ms var(--security-ease), transform 180ms var(--security-ease);
+}
+
+.security-back-link:hover {
+    color: var(--security-blue);
+    transform: translateX(-2px);
+}
+
+.security-back-link:focus-visible {
+    outline: 2px solid var(--security-blue);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.password-wizard {
+    display: block;
+    width: min(100%, 720px);
+    margin: 2rem auto 2.5rem;
+    padding: clamp(1.25rem, 4vw, 2rem);
+    border: 1px solid var(--security-line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 18px 50px rgba(15, 45, 79, 0.07);
+}
+
+html.password-focus .security-layout #passwordForm.password-wizard {
+    display: block;
+}
+
+.password-wizard-intro {
+    margin-bottom: 1.5rem;
+}
+
+.password-wizard-kicker {
+    display: block;
+    margin-bottom: 0.55rem;
+    color: var(--security-blue);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.security-page-kicker {
+    margin-bottom: 0;
+    font-size: clamp(1.35rem, 3vw, 1.8rem);
+    line-height: 1.15;
+}
+
+.password-wizard-intro h2 {
+    margin: 0;
+    color: var(--security-ink);
+    font-size: clamp(1.35rem, 3vw, 1.8rem);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+}
+
+.password-wizard-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin: 0 0 1.75rem;
+    padding: 0;
+    list-style: none;
+}
+
+.password-wizard-step-indicator {
+    display: block;
+    height: 2px;
+    min-width: 0;
+    padding: 0;
+    border-top: 2px solid var(--security-line);
+    transition: border-color 180ms var(--security-ease);
+}
+
+.password-wizard-step-indicator.is-active {
+    border-color: var(--security-blue);
+    color: var(--security-blue);
+}
+
+.password-wizard-step-indicator.is-complete {
+    border-color: #4b8a65;
+    color: #39714f;
+}
+
+.password-wizard-status {
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--security-line);
+    border-radius: 9px;
+    background: #f7fafc;
+    color: var(--security-muted);
+    font-size: 0.84rem;
+    line-height: 1.45;
+}
+
+.password-wizard-status[hidden],
+.password-wizard-panel[hidden] {
+    display: none !important;
+}
+
+.password-wizard-status--error {
+    border-color: #efc7c9;
+    background: #fff5f5;
+    color: #9b2c2c;
+}
+
+.password-wizard-status--success {
+    border-color: #b8dec4;
+    background: #f1fbf4;
+    color: #27633d;
+}
+
+.password-wizard-panel-heading {
+    display: block;
+    margin-bottom: 1.5rem;
+}
+
+.password-wizard-panel-heading h2 {
+    margin: 0;
+    color: var(--security-ink);
+    font-size: 1.08rem;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+}
+
+.password-wizard-panel-heading p {
+    margin: 0.35rem 0 0;
+    color: var(--security-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.password-wizard-panel-heading .password-wizard-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    margin: 0.75rem 0 0;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid #f1c453;
+    border-radius: 8px;
+    background: #fffbeb;
+    color: #78350f;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.password-wizard-field {
+    margin-bottom: 1rem;
+}
+
+.password-wizard-field > label {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: #40566e;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.password-input-wrap {
+    position: relative;
+}
+
+.password-input-wrap .form-control {
+    padding-right: 4.5rem;
+}
+
+.password-visibility-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.55rem;
+    min-height: 32px;
+    padding: 0.35rem 0.55rem;
+    transform: translateY(-50%);
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--security-blue);
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background-color 160ms var(--security-ease), color 160ms var(--security-ease);
+}
+
+.password-visibility-toggle:hover,
+.password-visibility-toggle[aria-pressed="true"] {
+    background: #edf5fc;
+    color: #00447f;
+}
+
+.password-visibility-toggle:focus-visible {
+    outline: 2px solid var(--security-blue);
+    outline-offset: 2px;
+}
+
+.password-requirements {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0 0 1.6rem;
+    padding: 0;
+    list-style: none;
+}
+
+.password-requirements li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--security-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+}
+
+.password-requirements li i {
+    color: #a7b4c1;
+    font-size: 0.58rem;
+}
+
+.password-requirements li.is-valid {
+    color: #39714f;
+}
+
+.password-requirements li.is-valid i {
+    color: #39714f;
+}
+
+.password-wizard-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+}
+
+.password-wizard-actions--split {
+    justify-content: space-between;
+}
+
+.password-wizard-actions .btn {
+    min-height: 44px;
+    min-width: 112px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+html.password-focus .password-wizard {
+    width: 100%;
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    box-shadow: 0 18px 50px rgba(15, 45, 79, 0.08);
+}
+
+html.password-focus .security-back-link {
+    display: none;
+}
+
+@media (max-width: 560px) {
+    .password-wizard {
+        margin-top: 1.25rem;
+        padding: 1rem;
+        border-radius: 14px;
+    }
+
+    .password-wizard-steps {
+        gap: 0.35rem;
+    }
+
+    .password-wizard-step-indicator {
+        height: 2px;
+    }
+
+    .password-wizard-panel-heading {
+        margin-bottom: 1.25rem;
+    }
+
+    .password-wizard-panel-heading h2 {
+        font-size: 1rem;
+    }
+
+    .password-wizard-actions,
+    .password-wizard-actions--split {
+        justify-content: stretch;
+    }
+
+    .password-wizard-actions .btn {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .security-back-link,
+    .password-wizard-step-indicator,
+    .password-visibility-toggle {
+        transition: none;
+    }
+
+    .security-back-link:hover {
+        transform: none;
+    }
+}

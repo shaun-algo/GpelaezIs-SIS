@@ -1,0 +1,156 @@
+.mf-confirm {
+    box-sizing: border-box;
+    width: min(520px, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    margin: auto;
+    padding: 0;
+    overflow: auto;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    background: #fff;
+    color: #2f3437;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+}
+
+.mf-confirm::backdrop {
+    background: rgba(17, 17, 17, .36);
+}
+
+.mf-confirm-header {
+    padding: 1.75rem 2rem 1.5rem;
+}
+
+.mf-confirm-kicker {
+    margin: 0 0 .65rem;
+    color: #787774;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.mf-confirm[data-intent="archive"] .mf-confirm-kicker {
+    color: #956400;
+}
+
+.mf-confirm[data-intent="restore"] .mf-confirm-kicker {
+    color: #346538;
+}
+
+.mf-confirm[data-intent="delete"] .mf-confirm-kicker {
+    color: #9f2f2d;
+}
+
+.mf-confirm h2 {
+    margin: 0;
+    color: #111;
+    font-size: 1.35rem;
+    font-weight: 650;
+    letter-spacing: 0;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+}
+
+.mf-confirm #mfConfirmMessage {
+    margin: .95rem 0 0;
+    color: #787774;
+    font-size: .98rem;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+}
+
+.mf-confirm-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+    padding: 1.25rem 2rem;
+    border-top: 1px solid #eaeaea;
+    background: #fbfbfa;
+}
+
+.mf-confirm button {
+    min-height: 48px;
+    padding: .75rem 1rem;
+    border: 1px solid #eaeaea;
+    border-radius: 6px;
+    background: #fff;
+    color: #2f3437;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 650;
+    transition: background-color 180ms cubic-bezier(.16, 1, .3, 1), border-color 180ms cubic-bezier(.16, 1, .3, 1), transform 180ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.mf-confirm button:hover {
+    background: #f7f6f3;
+    border-color: #ddd9d0;
+}
+
+.mf-confirm .mf-confirm-primary {
+    border-color: #0055a4;
+    background: #0055a4;
+    color: #fff;
+}
+
+.mf-confirm .mf-confirm-primary:hover {
+    background: #004687;
+    border-color: #004687;
+}
+
+.mf-confirm[data-intent="restore"] .mf-confirm-primary {
+    border-color: #346538;
+    background: #346538;
+}
+
+.mf-confirm[data-intent="restore"] .mf-confirm-primary:hover {
+    border-color: #294f2c;
+    background: #294f2c;
+}
+
+.mf-confirm[data-intent="delete"] .mf-confirm-primary {
+    border-color: #9f2f2d;
+    background: #9f2f2d;
+}
+
+.mf-confirm[data-intent="delete"] .mf-confirm-primary:hover {
+    border-color: #7f2524;
+    background: #7f2524;
+}
+
+.mf-confirm button:active {
+    transform: scale(.98);
+}
+
+.mf-confirm button:focus-visible {
+    outline: 3px solid rgba(31, 108, 159, .24);
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .mf-confirm {
+        width: calc(100vw - 1rem);
+        max-height: calc(100dvh - 1rem);
+    }
+
+    .mf-confirm-header {
+        padding: 1.4rem 1.25rem 1.25rem;
+    }
+
+    .mf-confirm-actions {
+        padding: 1rem 1.25rem 1.25rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mf-confirm button {
+        transition: none;
+    }
+
+    .mf-confirm button:active {
+        transform: none;
+    }
+}

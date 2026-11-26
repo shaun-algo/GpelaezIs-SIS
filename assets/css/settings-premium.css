@@ -1,0 +1,2918 @@
+/* Settings workspace visual layer
+ * A quiet, Masterfiles-inspired index-and-detail layout for local preferences.
+ */
+:root {
+    --settings-ink: #2f3437;
+    --settings-muted: #787774;
+    --settings-line: #eaeaea;
+    --settings-surface: #fbfdff;
+    --settings-blue: #0055a4;
+    --settings-blue-soft: #e8f2ff;
+    --settings-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body.settings-page {
+    background: var(--app-canvas);
+    color: var(--settings-ink);
+    overflow-x: hidden;
+}
+
+body.settings-page #mainContent {
+    width: 100%;
+    max-width: 1180px;
+    margin-inline: auto;
+    padding: clamp(1.25rem, 2.5vw, 2.5rem);
+}
+
+body.settings-page .page-header {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto 1.25rem;
+    padding: 0 0.25rem;
+}
+
+body.settings-page .page-title {
+    color: var(--settings-ink);
+    font-size: clamp(1.45rem, 2vw, 1.9rem);
+    font-weight: 750;
+    letter-spacing: -0.025em;
+}
+
+body.settings-page .settings-workspace {
+    display: grid;
+    grid-template-columns: minmax(220px, 250px) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+    width: 100%;
+}
+
+body.settings-page .settings-nav-card,
+body.settings-page .settings-view {
+    min-width: 0;
+    border: 1px solid var(--settings-line);
+    border-radius: 12px;
+    background: var(--settings-surface);
+    box-shadow: none;
+}
+
+body.settings-page .settings-nav-card {
+    position: sticky;
+    top: calc(var(--topbar-height) + 1rem);
+    overflow: hidden;
+}
+
+body.settings-page .settings-nav-list {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0.75rem;
+}
+
+body.settings-page .settings-nav-button {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 14px;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    min-height: 62px;
+    padding: 0.7rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--settings-ink);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    transition: background-color 160ms var(--settings-ease), border-color 160ms var(--settings-ease), color 160ms var(--settings-ease), transform 160ms var(--settings-ease);
+}
+
+body.settings-page .settings-nav-button:hover {
+    border-color: #d6e3ef;
+    background: #f1f7fc;
+    transform: translateY(-1px);
+}
+
+body.settings-page .settings-nav-button:active {
+    transform: scale(0.98);
+}
+
+body.settings-page .settings-nav-button.is-active {
+    border-color: #a9ccef;
+    background: var(--settings-blue-soft);
+    color: var(--settings-blue);
+}
+
+body.settings-page .settings-nav-button:focus-visible {
+    outline: 3px solid rgba(0, 85, 164, 0.2);
+    outline-offset: 2px;
+}
+
+body.settings-page .settings-nav-icon {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d7e4ef;
+    border-radius: 8px;
+    background: #fff;
+    color: #49627c;
+    font-size: 0.85rem;
+}
+
+body.settings-page .settings-nav-button.is-active .settings-nav-icon {
+    border-color: #c5def6;
+    background: #fff;
+    color: var(--settings-blue);
+}
+
+body.settings-page .settings-nav-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.2rem;
+}
+
+body.settings-page .settings-nav-copy strong {
+    overflow: hidden;
+    font-size: 0.82rem;
+    font-weight: 750;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-nav-copy small {
+    color: var(--settings-muted);
+    font-size: 0.71rem;
+}
+
+body.settings-page .settings-nav-arrow {
+    color: #94a3b8;
+    font-size: 0.68rem;
+    transition: transform 160ms var(--settings-ease), color 160ms var(--settings-ease);
+}
+
+body.settings-page .settings-nav-button.is-active .settings-nav-arrow {
+    color: var(--settings-blue);
+    transform: translateX(2px);
+}
+
+body.settings-page .settings-view {
+    min-height: 470px;
+    overflow: hidden;
+}
+
+body.settings-page .settings-panel[hidden] {
+    display: none !important;
+}
+
+body.settings-page .settings-control-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1.25rem;
+}
+
+body.settings-page .settings-control-card {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 0.85rem;
+    align-items: start;
+    min-width: 0;
+    padding: 1.15rem;
+    border: 1px solid var(--settings-line);
+    border-radius: 10px;
+    background: #fff;
+}
+
+body.settings-page .settings-control-card.settings-feature-card {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    margin: 1.25rem;
+}
+
+body.settings-page .settings-control-icon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cfe3fb;
+    border-radius: 9px;
+    background: var(--settings-blue-soft);
+    color: var(--settings-blue);
+    font-size: 0.9rem;
+}
+
+body.settings-page .settings-control-copy {
+    min-width: 0;
+}
+
+body.settings-page .settings-control-copy h3 {
+    margin: 0;
+    color: var(--settings-ink);
+    font-size: 0.92rem;
+    font-weight: 780;
+}
+
+body.settings-page .settings-control-copy p {
+    margin: 0.35rem 0 0;
+    color: var(--settings-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+body.settings-page .settings-control-field {
+    grid-column: 2;
+    display: grid;
+    gap: 0.35rem;
+    margin-top: 0.25rem;
+}
+
+body.settings-page .settings-control-field span {
+    color: #49627c;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+body.settings-page .settings-control-field .form-control {
+    min-height: 42px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--settings-ink);
+    box-shadow: none;
+}
+
+body.settings-page .settings-control-field .form-control:focus {
+    border-color: var(--settings-blue);
+    box-shadow: 0 0 0 4px rgba(0, 85, 164, 0.11);
+    outline: none;
+}
+
+body.settings-page .settings-feature-action .btn {
+    min-height: 42px;
+    border-radius: 9px;
+    font-weight: 750;
+}
+
+body.settings-page .settings-feature-action {
+    display: grid;
+    min-width: 150px;
+    justify-items: end;
+    gap: 0.7rem;
+}
+
+body.settings-page .settings-value {
+    color: var(--settings-blue);
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-account-grid .settings-feature-card {
+    margin: 0;
+}
+
+body.settings-page .settings-wide-card {
+    grid-column: 1 / -1;
+}
+
+body.settings-page .settings-account-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    margin: 1rem 0 0;
+}
+
+body.settings-page .settings-account-facts div {
+    min-width: 150px;
+}
+
+body.settings-page .settings-account-facts dt {
+    color: var(--settings-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+body.settings-page .settings-account-facts dd {
+    margin: 0.2rem 0 0;
+    color: var(--settings-ink);
+    font-size: 0.86rem;
+    font-weight: 750;
+}
+
+body.settings-page .settings-sessions-card,
+body.settings-page .settings-deactivation-card,
+body.settings-page .settings-admin-request-card {
+    grid-template-columns: 42px minmax(0, 1fr);
+}
+
+body.settings-page .settings-collapsible-card {
+    display: block;
+    padding: 0;
+    overflow: hidden;
+}
+
+body.settings-page .settings-deactivation-card[hidden] {
+    display: none !important;
+}
+
+body.settings-page .settings-session-toggle {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto 18px;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+    padding: 1.15rem;
+    border: 0;
+    background: #fff;
+    color: var(--settings-ink);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+body.settings-page .settings-session-toggle:hover {
+    background: #fbfdff;
+}
+
+body.settings-page .settings-session-toggle:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 3px solid rgba(0, 85, 164, 0.2);
+    outline-offset: -3px;
+}
+
+body.settings-page .settings-session-toggle-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.3rem;
+}
+
+body.settings-page .settings-session-toggle-copy strong {
+    font-size: 0.92rem;
+    font-weight: 780;
+}
+
+body.settings-page .settings-session-toggle-copy small {
+    max-width: 65ch;
+    color: var(--settings-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+body.settings-page .settings-session-count {
+    color: var(--settings-muted);
+    font-size: 0.72rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-session-toggle-chevron {
+    color: #94a3b8;
+    font-size: 0.72rem;
+    transition: transform 160ms var(--settings-ease), color 160ms var(--settings-ease);
+}
+
+body.settings-page .settings-session-toggle[aria-expanded="true"] .settings-session-toggle-chevron {
+    color: var(--settings-blue);
+    transform: rotate(180deg);
+}
+
+body.settings-page .settings-session-panel {
+    padding: 0 1.15rem 1.15rem;
+    border-top: 1px solid var(--settings-line);
+}
+
+body.settings-page .settings-session-scroll {
+    height: 300px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    padding-right: 0.35rem;
+}
+
+body.settings-page .settings-session-list {
+    display: grid;
+    gap: 0;
+    margin-top: 0;
+}
+
+body.settings-page .settings-session-group {
+    border-bottom: 1px solid #edf1f4;
+}
+
+body.settings-page .settings-session-group > summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.85rem 0.2rem;
+    cursor: pointer;
+    list-style: none;
+}
+
+body.settings-page .settings-session-group > summary::-webkit-details-marker {
+    display: none;
+}
+
+body.settings-page .settings-session-group > summary:hover {
+    background: #fbfdff;
+}
+
+body.settings-page .settings-session-group > summary:focus-visible {
+    outline: 2px solid rgba(0, 85, 164, 0.2);
+    outline-offset: -2px;
+}
+
+body.settings-page .settings-session-group-chevron {
+    color: #94a3b8;
+    font-size: 0.68rem;
+    transition: transform 160ms var(--settings-ease), color 160ms var(--settings-ease);
+}
+
+body.settings-page .settings-session-group[open] .settings-session-group-chevron {
+    color: var(--settings-blue);
+    transform: rotate(180deg);
+}
+
+body.settings-page .settings-session-history {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0 0.2rem 0.85rem;
+    padding: 0.7rem 0 0.1rem 0.85rem;
+    border-top: 1px solid #edf1f4;
+}
+
+body.settings-page .settings-session-history-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.7rem;
+    align-items: center;
+    color: var(--settings-muted);
+    font-size: 0.76rem;
+}
+
+body.settings-page .settings-session-history-row strong {
+    color: var(--settings-ink);
+    font-weight: 700;
+}
+
+body.settings-page .settings-session-history-row small {
+    display: block;
+    margin-top: 0.15rem;
+    color: var(--settings-muted);
+    font-size: 0.74rem;
+}
+
+body.settings-page .settings-session-history-more {
+    margin: 0;
+    color: var(--settings-muted);
+    font-size: 0.72rem;
+}
+
+body.settings-page .settings-control-icon--quiet {
+    border-color: #dbe3ea;
+    background: #f5f8fa;
+    color: #526273;
+}
+
+body.settings-page .settings-request-list {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+body.settings-page .settings-session-row,
+body.settings-page .settings-request-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-top: 1px solid #edf1f4;
+}
+
+body.settings-page .settings-session-main,
+body.settings-page .settings-request-main {
+    min-width: 0;
+}
+
+body.settings-page .settings-session-title,
+body.settings-page .settings-request-title {
+    margin: 0;
+    color: var(--settings-ink);
+    font-size: 0.86rem;
+    font-weight: 750;
+}
+
+body.settings-page .settings-session-meta,
+body.settings-page .settings-request-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.8rem;
+    margin-top: 0.25rem;
+    color: var(--settings-muted);
+    font-size: 0.76rem;
+}
+
+body.settings-page .settings-session-status,
+body.settings-page .settings-request-status-pill,
+body.settings-page .settings-count-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0.15rem 0.55rem;
+    border: 1px solid #dbe3ea;
+    border-radius: 999px;
+    background: #f8fafc;
+    color: #526273;
+    font-size: 0.7rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-session-status.is-success,
+body.settings-page .settings-request-status-pill.is-approved {
+    border-color: #bfe3cc;
+    background: #f1fbf4;
+    color: #25723b;
+}
+
+body.settings-page .settings-session-status.is-failure,
+body.settings-page .settings-request-status-pill.is-declined {
+    border-color: #f0c6c6;
+    background: #fff6f6;
+    color: #a33a3a;
+}
+
+body.settings-page .settings-session-status.is-pending,
+body.settings-page .settings-request-status-pill.is-pending {
+    border-color: #ead8ac;
+    background: #fffaf0;
+    color: #85651d;
+}
+
+body.settings-page .settings-inline-state,
+body.settings-page .settings-request-help {
+    margin: 0;
+    color: var(--settings-muted);
+    font-size: 0.8rem;
+}
+
+body.settings-page .settings-deactivation-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 0.8rem;
+    align-items: end;
+    margin-top: 1rem;
+}
+
+body.settings-page .settings-deactivation-form .settings-control-field {
+    grid-column: auto;
+    margin-top: 0;
+}
+
+body.settings-page .settings-control-field textarea.form-control {
+    min-height: 76px;
+    resize: vertical;
+    padding: 0.65rem 0.75rem;
+}
+
+body.settings-page .settings-request-action {
+    min-width: 170px;
+    justify-items: stretch;
+}
+
+body.settings-page .settings-request-status {
+    margin-top: 0.85rem;
+    color: var(--settings-muted);
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+body.settings-page .settings-request-status.is-success {
+    color: #25723b;
+}
+
+body.settings-page .settings-request-status.is-error {
+    color: #a33a3a;
+}
+
+body.settings-page .settings-admin-request-card details > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    color: var(--settings-ink);
+    font-size: 0.92rem;
+    font-weight: 780;
+    list-style: none;
+}
+
+body.settings-page .settings-admin-request-card details > summary::-webkit-details-marker {
+    display: none;
+}
+
+body.settings-page .settings-count-badge {
+    margin-left: auto;
+    min-width: 26px;
+    justify-content: center;
+}
+
+body.settings-page .settings-admin-request-card details > p {
+    margin: 0.5rem 0 0;
+    color: var(--settings-muted);
+    font-size: 0.8rem;
+}
+
+body.settings-page .settings-request-review {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.45rem;
+}
+
+body.settings-page .settings-request-review .btn {
+    min-height: 34px;
+    padding: 0.4rem 0.65rem;
+    font-size: 0.74rem;
+}
+
+body.settings-page .settings-modal-card {
+    border: 1px solid var(--settings-line);
+    border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(20, 42, 64, 0.18);
+}
+
+@media (max-width: 840px) {
+    body.settings-page .settings-workspace {
+        grid-template-columns: 1fr;
+    }
+
+    body.settings-page .settings-nav-card {
+        position: static;
+    }
+
+    body.settings-page .settings-nav-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    body.settings-page .settings-nav-button {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        min-height: 88px;
+        text-align: center;
+    }
+
+    body.settings-page .settings-nav-arrow {
+        display: none;
+    }
+
+    body.settings-page .settings-nav-copy small {
+        display: none;
+    }
+}
+
+@media (max-width: 620px) {
+    body.settings-page #mainContent {
+        padding: 1rem 0.75rem;
+    }
+
+    body.settings-page .settings-control-grid {
+        grid-template-columns: 1fr;
+        padding: 0.9rem;
+    }
+
+    body.settings-page .settings-control-card.settings-feature-card {
+        grid-template-columns: 38px minmax(0, 1fr);
+        margin: 0.9rem;
+    }
+
+    body.settings-page .settings-feature-action {
+        grid-column: 2;
+        justify-items: stretch;
+    }
+
+    body.settings-page .settings-feature-action .btn {
+        width: 100%;
+    }
+
+    body.settings-page .settings-deactivation-form {
+        grid-template-columns: 1fr;
+    }
+
+    body.settings-page .settings-request-action {
+        min-width: 0;
+    }
+
+    body.settings-page .settings-session-row,
+    body.settings-page .settings-request-row {
+        grid-template-columns: 1fr;
+    }
+
+    body.settings-page .settings-session-toggle {
+        grid-template-columns: 38px minmax(0, 1fr) 18px;
+    }
+
+    body.settings-page .settings-session-count {
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: start;
+    }
+
+    body.settings-page .settings-session-toggle-chevron {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    body.settings-page .settings-session-scroll {
+        height: min(300px, 42vh);
+        min-height: 180px;
+    }
+
+    body.settings-page .settings-session-group > summary {
+        grid-template-columns: minmax(0, 1fr) auto 16px;
+    }
+
+    body.settings-page .settings-session-history-row {
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
+    }
+
+    body.settings-page .settings-request-review {
+        justify-content: flex-start;
+    }
+}
+
+
+@media (max-width: 460px) {
+    body.settings-page .settings-nav-list {
+        grid-template-columns: 1fr;
+    }
+
+    body.settings-page .settings-nav-button {
+        grid-template-columns: 34px minmax(0, 1fr);
+        justify-items: start;
+        min-height: 58px;
+        text-align: left;
+    }
+
+    body.settings-page .settings-nav-copy small {
+        display: block;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.settings-page .settings-nav-button,
+    body.settings-page .settings-nav-arrow,
+    body.settings-page .settings-control-field .form-control {
+        transition: none;
+    }
+}
+
+/* Last-in-file overrides for the Settings stack. */
+body.settings-page .settings-option-toggle {
+    grid-template-columns: minmax(0, 1fr) auto auto 18px;
+}
+
+body.settings-page .settings-suboption-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-session-toggle,
+body.settings-page .settings-admin-request-card .settings-suboption-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-option-card.is-open,
+body.settings-page .settings-suboption-card.is-open {
+    z-index: 20;
+    overflow: visible;
+    border-color: #9fc5e8;
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.07), 0 10px 22px rgba(24, 59, 88, 0.06);
+}
+
+body.settings-page .settings-option-card.is-open > .settings-option-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-suboption-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-session-toggle {
+    background: #f4f9fe;
+    box-shadow: inset 3px 0 0 var(--settings-blue);
+}
+
+body.settings-page .settings-toggle-state {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0.12rem 0.48rem;
+    border: 1px solid #d8e1e9;
+    border-radius: 999px;
+    background: #fff;
+    color: #6b7785;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-toggle-state.is-open {
+    border-color: #b9d8f3;
+    background: #e7f2fd;
+    color: var(--settings-blue);
+}
+
+body.settings-page .settings-option-panel,
+body.settings-page .settings-suboption-panel,
+body.settings-page .settings-session-panel,
+body.settings-page .settings-option-body,
+body.settings-page .settings-session-scroll,
+body.settings-page .settings-option-row {
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+}
+
+body.settings-page .settings-control-field:has(select) {
+    position: relative;
+    z-index: 4;
+}
+
+body.settings-page .settings-control-field:has(select):focus-within,
+body.settings-page .settings-option-row:focus-within {
+    z-index: 40;
+}
+
+body.settings-page select[data-settings-select] {
+    position: relative;
+    z-index: 41;
+    min-width: 0;
+    background-color: #fff;
+    isolation: isolate;
+}
+
+body.settings-page .settings-session-location {
+    color: #526273;
+}
+
+body.settings-page .settings-deactivation-card {
+    padding: 0.95rem 0;
+}
+
+body.settings-page .settings-deactivation-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+body.settings-page .settings-deactivation-header .settings-option-copy small {
+    display: block;
+    max-width: 58ch;
+    margin-top: 0.25rem;
+    color: var(--settings-muted);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+body.settings-page .settings-deactivation-open-btn {
+    flex: 0 0 auto;
+    min-height: 38px;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-modal-form {
+    display: grid;
+    gap: 1rem;
+}
+
+body.settings-page .settings-modal-form .settings-control-field {
+    margin: 0;
+}
+
+body.settings-page .settings-modal-form .settings-control-field em {
+    color: var(--settings-muted);
+    font-size: 0.68rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+body.settings-page .settings-modal-form textarea.form-control {
+    min-height: 96px;
+    resize: vertical;
+}
+
+body.settings-page .settings-deactivation-open-btn.is-undo {
+    border-color: #b3261e;
+    background: #fff7f6;
+    color: #a33a3a;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-option-toggle,
+    body.settings-page .settings-suboption-toggle,
+    body.settings-page .settings-session-toggle,
+    body.settings-page .settings-admin-request-card .settings-suboption-toggle {
+        grid-template-columns: minmax(0, 1fr) 18px;
+    }
+
+    /* Legacy mobile state layout retained for unrelated settings surfaces. */
+
+    body.settings-page .settings-option-value {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: start;
+    }
+
+    body.settings-page .settings-option-chevron,
+    body.settings-page .settings-suboption-chevron,
+    body.settings-page .settings-session-toggle-chevron {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    body.settings-page .settings-deactivation-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    body.settings-page .settings-deactivation-open-btn {
+        width: 100%;
+    }
+
+    body.settings-page .settings-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    body.settings-page .settings-modal-card {
+        width: 100%;
+        max-height: min(88dvh, 680px);
+        overflow-y: auto;
+        border-radius: 18px 18px 0 0;
+    }
+}
+
+/* Plain category divider and quieter active elevation. */
+body.settings-page .settings-category {
+    min-width: 0;
+    margin-top: 1.15rem;
+}
+
+body.settings-page .settings-category-note {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.2rem 0.2rem 0.55rem;
+    border-bottom: 1px solid #e6edf3;
+}
+
+body.settings-page .settings-category-note strong {
+    color: #526273;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.settings-page .settings-category-note small {
+    color: #8492a0;
+    font-size: 0.73rem;
+}
+
+body.settings-page .settings-category .settings-option-body {
+    padding-top: 0.2rem;
+}
+
+body.settings-page .settings-option-card,
+body.settings-page .settings-suboption-card {
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 220ms ease,
+        box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1),
+        background-color 220ms ease;
+}
+
+body.settings-page .settings-option-card.is-open,
+body.settings-page .settings-suboption-card.is-open {
+    transform: translateY(-1px);
+    border-color: #dbe5ed;
+    box-shadow: 0 10px 24px rgba(31, 61, 86, 0.09);
+}
+
+body.settings-page .settings-option-card.is-open > .settings-option-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-suboption-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-session-toggle {
+    background: #f8fbfd;
+    box-shadow: 0 3px 10px rgba(31, 61, 86, 0.06);
+}
+
+body.settings-page .settings-deactivation-open-btn {
+    border-color: #b9d1e2;
+    background: #f4f9fd;
+    color: #0055a4;
+    font-weight: 750;
+    box-shadow: 0 4px 12px rgba(31, 61, 86, 0.06);
+}
+
+body.settings-page .settings-deactivation-open-btn:hover,
+body.settings-page .settings-deactivation-open-btn:focus-visible {
+    border-color: #8fb5d0;
+    background: #eaf4fb;
+    color: #00457f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.settings-page .settings-option-card,
+    body.settings-page .settings-suboption-card {
+        transition: none;
+    }
+}
+
+body.settings-page .settings-option-toggle:focus-visible,
+body.settings-page .settings-suboption-toggle:focus-visible,
+body.settings-page .settings-session-toggle:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(82, 98, 115, 0.14), 0 3px 10px rgba(31, 61, 86, 0.06);
+}
+
+/* Flex keeps the state and chevron readable even when Safari reports a
+ * narrow effective viewport or the label copy becomes longer than expected. */
+body.settings-page .settings-option-toggle,
+body.settings-page .settings-suboption-toggle,
+body.settings-page .settings-session-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+body.settings-page .settings-option-toggle .settings-option-copy,
+body.settings-page .settings-suboption-toggle .settings-option-copy,
+body.settings-page .settings-session-toggle .settings-session-toggle-copy {
+    flex: 1 1 240px;
+    min-width: 0;
+}
+
+body.settings-page .settings-option-value,
+body.settings-page .settings-toggle-state,
+body.settings-page .settings-option-chevron,
+body.settings-page .settings-suboption-chevron,
+body.settings-page .settings-session-toggle-chevron {
+    flex: 0 0 auto;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-option-toggle .settings-option-copy,
+    body.settings-page .settings-suboption-toggle .settings-option-copy,
+    body.settings-page .settings-session-toggle .settings-session-toggle-copy {
+        flex-basis: 100%;
+    }
+
+    body.settings-page .settings-option-value,
+    body.settings-page .settings-toggle-state {
+        margin-top: 0.25rem;
+    }
+}
+
+/* Final interaction pass: keep native select menus above the row stack and
+ * make the active parent unmistakable without adding a heavy outline. */
+body.settings-page .settings-option-card,
+body.settings-page .settings-suboption-card {
+    position: relative;
+}
+
+body.settings-page .settings-option-card.is-open,
+body.settings-page .settings-suboption-card.is-open {
+    z-index: 20;
+    overflow: visible;
+    border-color: #9fc5e8;
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.07), 0 10px 22px rgba(24, 59, 88, 0.06);
+}
+
+body.settings-page .settings-option-card.is-open > .settings-option-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-suboption-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-session-toggle {
+    background: #f4f9fe;
+    box-shadow: inset 3px 0 0 var(--settings-blue);
+}
+
+body.settings-page .settings-option-toggle {
+    grid-template-columns: minmax(0, 1fr) auto auto 18px;
+}
+
+body.settings-page .settings-suboption-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-session-toggle,
+body.settings-page .settings-admin-request-card .settings-suboption-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-toggle-state {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0.12rem 0.48rem;
+    border: 1px solid #d8e1e9;
+    border-radius: 999px;
+    background: #fff;
+    color: #6b7785;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-toggle-state.is-open {
+    border-color: #b9d8f3;
+    background: #e7f2fd;
+    color: var(--settings-blue);
+}
+
+body.settings-page .settings-option-panel,
+body.settings-page .settings-suboption-panel,
+body.settings-page .settings-session-panel,
+body.settings-page .settings-option-body,
+body.settings-page .settings-session-scroll {
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+}
+
+body.settings-page .settings-option-row {
+    position: relative;
+    z-index: 1;
+}
+
+body.settings-page .settings-option-row:focus-within,
+body.settings-page .settings-modal-form .settings-control-field:focus-within {
+    z-index: 40;
+}
+
+body.settings-page .settings-control-field:has(select) {
+    position: relative;
+    z-index: 4;
+}
+
+body.settings-page .settings-control-field:has(select):focus-within {
+    z-index: 40;
+}
+
+body.settings-page select[data-settings-select] {
+    position: relative;
+    z-index: 41;
+    min-width: 0;
+    background-color: #fff;
+    isolation: isolate;
+}
+
+body.settings-page select[data-settings-select]:focus {
+    position: relative;
+    z-index: 42;
+}
+
+body.settings-page .settings-session-location {
+    color: #526273;
+}
+
+body.settings-page .settings-session-history-row {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+body.settings-page .settings-deactivation-card {
+    padding: 0.95rem 0;
+}
+
+body.settings-page .settings-deactivation-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+body.settings-page .settings-deactivation-header .settings-option-copy small {
+    display: block;
+    max-width: 58ch;
+    margin-top: 0.25rem;
+    color: var(--settings-muted);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+body.settings-page .settings-deactivation-open-btn {
+    flex: 0 0 auto;
+    min-height: 38px;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-modal-form {
+    display: grid;
+    gap: 1rem;
+}
+
+body.settings-page .settings-modal-form .settings-control-field {
+    margin: 0;
+}
+
+body.settings-page .settings-modal-form .settings-control-field em {
+    color: var(--settings-muted);
+    font-size: 0.68rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+body.settings-page .settings-modal-form textarea.form-control {
+    min-height: 96px;
+    resize: vertical;
+}
+
+body.settings-page .settings-deactivation-open-btn.is-undo {
+    border-color: #b3261e;
+    background: #fff7f6;
+    color: #a33a3a;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-option-toggle {
+        grid-template-columns: minmax(0, 1fr) 18px;
+    }
+
+    body.settings-page .settings-suboption-toggle,
+    body.settings-page .settings-session-toggle,
+    body.settings-page .settings-admin-request-card .settings-suboption-toggle {
+        grid-template-columns: minmax(0, 1fr) 18px;
+    }
+
+    body.settings-page .settings-option-value {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: start;
+    }
+
+    body.settings-page .settings-toggle-state {
+        grid-column: 1;
+        grid-row: 3;
+        justify-self: start;
+    }
+
+    body.settings-page .settings-option-chevron,
+    body.settings-page .settings-suboption-chevron,
+    body.settings-page .settings-session-toggle-chevron {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    body.settings-page .settings-deactivation-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    body.settings-page .settings-deactivation-open-btn {
+        width: 100%;
+    }
+
+    body.settings-page .settings-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    body.settings-page .settings-modal-card {
+        width: 100%;
+        max-height: min(88dvh, 680px);
+        overflow-y: auto;
+        border-radius: 18px 18px 0 0;
+    }
+}
+
+/* Sample Settings interaction: one quiet, stacked list of expandable rows. */
+body.settings-page .settings-stack-workspace {
+    display: block;
+    width: min(100%, 720px);
+    margin-inline: auto;
+}
+
+body.settings-page .settings-stack-view {
+    min-height: 0;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+}
+
+body.settings-page .settings-stack {
+    display: grid;
+    gap: 0.65rem;
+}
+
+body.settings-page .settings-option-card {
+    overflow: hidden;
+    border: 1px solid var(--settings-line);
+    border-radius: 12px;
+    background: #fff;
+}
+
+body.settings-page .settings-option-toggle,
+body.settings-page .settings-suboption-toggle {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) auto 18px;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: 70px;
+    padding: 0.9rem 1.1rem;
+    border: 0;
+    background: transparent;
+    color: var(--settings-ink);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+body.settings-page .settings-option-toggle:hover,
+body.settings-page .settings-suboption-toggle:hover {
+    background: #fbfdff;
+}
+
+body.settings-page .settings-option-toggle:focus-visible,
+body.settings-page .settings-suboption-toggle:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 3px solid rgba(0, 85, 164, 0.2);
+    outline-offset: -3px;
+}
+
+body.settings-page .settings-option-icon,
+body.settings-page .settings-suboption-icon {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d7e4ef;
+    border-radius: 8px;
+    background: #f7fbff;
+    color: #49627c;
+    font-size: 0.85rem;
+}
+
+body.settings-page .settings-option-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.18rem;
+}
+
+body.settings-page .settings-option-copy strong {
+    display: block;
+    overflow: hidden;
+    font-size: 0.92rem;
+    font-weight: 760;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-option-copy small {
+    display: block;
+    overflow: hidden;
+    color: var(--settings-muted);
+    font-size: 0.79rem;
+    line-height: 1.4;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-option-value,
+body.settings-page .settings-session-count {
+    color: var(--settings-muted);
+    font-size: 0.78rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-option-chevron,
+body.settings-page .settings-suboption-chevron {
+    color: #94a3b8;
+    font-size: 0.7rem;
+    transition: transform 160ms var(--settings-ease), color 160ms var(--settings-ease);
+}
+
+body.settings-page .settings-option-card.is-open > .settings-option-toggle .settings-option-chevron,
+body.settings-page .settings-suboption-card.is-open > .settings-suboption-toggle .settings-suboption-chevron {
+    color: var(--settings-blue);
+    transform: rotate(180deg);
+}
+
+body.settings-page .settings-option-panel {
+    border-top: 1px solid var(--settings-line);
+}
+
+body.settings-page .settings-option-body {
+    padding: 0.25rem 1.1rem 1.1rem;
+}
+
+body.settings-page .settings-option-row,
+body.settings-page .settings-account-summary-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--settings-line);
+}
+
+body.settings-page .settings-option-row:last-child,
+body.settings-page .settings-account-summary-row:last-child {
+    border-bottom: 0;
+}
+
+body.settings-page .settings-option-row-copy {
+    min-width: 0;
+}
+
+body.settings-page .settings-option-row-copy strong {
+    display: block;
+    color: var(--settings-ink);
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+body.settings-page .settings-option-row-copy small {
+    display: block;
+    max-width: 60ch;
+    margin-top: 0.2rem;
+    color: var(--settings-muted);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+body.settings-page .settings-inline-field {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto minmax(140px, 180px);
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+body.settings-page .settings-inline-field span {
+    margin: 0;
+}
+
+body.settings-page .settings-inline-action {
+    min-height: 38px;
+    padding: 0.45rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-inline-field .form-control {
+    min-width: 160px;
+    position: relative;
+    z-index: 3;
+    line-height: 1.3;
+}
+
+body.settings-page .settings-account-option-body {
+    padding-top: 0;
+}
+
+body.settings-page .settings-account-summary-row {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+}
+
+body.settings-page .settings-account-summary-row .settings-suboption-icon {
+    width: 32px;
+    height: 32px;
+    background: #f8fafc;
+    border-color: #dbe3ea;
+    color: #526273;
+    font-size: 0.78rem;
+}
+
+body.settings-page .settings-account-facts {
+    gap: 0.75rem 1.5rem;
+    margin-top: 0.7rem;
+}
+
+body.settings-page .settings-account-facts div {
+    min-width: 130px;
+}
+
+body.settings-page .settings-suboption-card {
+    min-width: 0;
+    border-top: 1px solid var(--settings-line);
+    background: transparent;
+}
+
+body.settings-page .settings-suboption-card.settings-collapsible-card {
+    border-radius: 0;
+}
+
+body.settings-page .settings-suboption-toggle {
+    grid-template-columns: 34px minmax(0, 1fr) 18px;
+    min-height: 64px;
+    padding: 0.85rem 0;
+}
+
+body.settings-page .settings-admin-request-card .settings-suboption-toggle {
+    grid-template-columns: 34px minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-suboption-toggle .settings-option-copy small {
+    max-width: 58ch;
+}
+
+body.settings-page .settings-suboption-panel {
+    padding: 0.2rem 0 1rem;
+    border-top: 1px solid var(--settings-line);
+}
+
+body.settings-page .settings-session-toggle {
+    grid-template-columns: 34px minmax(0, 1fr) auto 18px;
+    min-height: 64px;
+    padding: 0.85rem 0;
+    background: transparent;
+}
+
+body.settings-page .settings-session-toggle:hover {
+    background: #fbfdff;
+}
+
+body.settings-page .settings-session-toggle .settings-control-icon {
+    width: 32px;
+    height: 32px;
+    border-color: #dbe3ea;
+    background: #f8fafc;
+    color: #526273;
+    font-size: 0.78rem;
+}
+
+body.settings-page .settings-session-panel {
+    padding: 0.2rem 0 1rem;
+}
+
+body.settings-page .settings-deactivation-card,
+body.settings-page .settings-admin-request-card {
+    grid-template-columns: none;
+    padding: 0;
+}
+
+body.settings-page .settings-deactivation-form {
+    padding-top: 0.55rem;
+}
+
+body.settings-page .settings-admin-request-card .settings-request-list {
+    margin-top: 0.4rem;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-option-toggle,
+    body.settings-page .settings-suboption-toggle {
+        grid-template-columns: 34px minmax(0, 1fr) 18px;
+        padding-inline: 0.9rem;
+    }
+
+    body.settings-page .settings-option-value,
+    body.settings-page .settings-session-count,
+    body.settings-page .settings-count-badge {
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: start;
+    }
+
+    body.settings-page .settings-option-chevron,
+    body.settings-page .settings-suboption-chevron,
+    body.settings-page .settings-session-toggle-chevron {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    body.settings-page .settings-option-row,
+    body.settings-page .settings-account-summary-row {
+        grid-template-columns: 1fr;
+    }
+
+    body.settings-page .settings-account-summary-row .settings-suboption-icon {
+        display: none;
+    }
+
+    body.settings-page .settings-inline-field {
+        grid-template-columns: 1fr;
+        justify-items: stretch;
+    }
+
+    body.settings-page .settings-inline-field .form-control,
+    body.settings-page .settings-inline-action {
+        width: 100%;
+    }
+
+    body.settings-page .settings-account-summary-row .settings-inline-action {
+        grid-column: 1;
+    }
+}
+
+/* Plain sample-style rows have no leading icon column. */
+body.settings-page .settings-option-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-suboption-toggle {
+    grid-template-columns: minmax(0, 1fr) 18px;
+}
+
+body.settings-page .settings-session-toggle,
+body.settings-page .settings-admin-request-card .settings-suboption-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-session-toggle .settings-session-toggle-copy {
+    min-width: 0;
+}
+
+body.settings-page .settings-password-action {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0.2rem 0 0.15rem;
+}
+
+body.settings-page .settings-danger-copy {
+    color: #a33a3a;
+}
+
+body.settings-page .settings-deactivation-form {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    padding-top: 0.55rem;
+}
+
+body.settings-page .settings-deactivation-form .settings-control-field {
+    grid-column: auto;
+}
+
+body.settings-page .settings-request-action {
+    display: flex;
+    flex-wrap: wrap;
+    justify-items: start;
+    align-items: center;
+    min-width: 0;
+    gap: 0.55rem;
+}
+
+body.settings-page .settings-request-action .btn {
+    min-width: 132px;
+}
+
+body.settings-page .settings-session-scroll {
+    height: auto;
+    max-height: min(460px, 62vh);
+    min-height: 0;
+}
+
+body.settings-page .settings-review-summary {
+    display: grid;
+    gap: 0.8rem;
+    margin: 0;
+}
+
+body.settings-page .settings-review-summary div {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--settings-line);
+}
+
+body.settings-page .settings-review-summary div:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+body.settings-page .settings-review-summary dt {
+    color: var(--settings-muted);
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+body.settings-page .settings-review-summary dd {
+    margin: 0.25rem 0 0;
+    color: var(--settings-ink);
+    font-size: 0.9rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-option-toggle,
+    body.settings-page .settings-suboption-toggle,
+    body.settings-page .settings-session-toggle,
+    body.settings-page .settings-admin-request-card .settings-suboption-toggle {
+        grid-template-columns: minmax(0, 1fr) 18px;
+    }
+
+    body.settings-page .settings-option-value,
+    body.settings-page .settings-session-count,
+    body.settings-page .settings-count-badge {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: start;
+    }
+
+    body.settings-page .settings-option-chevron,
+    body.settings-page .settings-suboption-chevron,
+    body.settings-page .settings-session-toggle-chevron {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    body.settings-page .settings-session-scroll {
+        max-height: min(460px, 62vh);
+    }
+}
+
+/* Disclosure motion follows the app sidebar: quick, quiet, and lightly sprung. */
+@keyframes settings-disclosure-settle {
+    0% { transform: translateY(-2px) scale(0.996); }
+    58% { transform: translateY(1px) scale(1.002); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes settings-panel-reveal {
+    0% { opacity: 0; transform: translateY(-6px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+body.settings-page .settings-option-toggle,
+body.settings-page .settings-suboption-toggle,
+body.settings-page .settings-session-toggle {
+    transition: background-color 190ms cubic-bezier(0.22, 1, 0.36, 1),
+        color 190ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body.settings-page .settings-option-toggle:active,
+body.settings-page .settings-suboption-toggle:active,
+body.settings-page .settings-session-toggle:active {
+    transform: scale(0.988);
+}
+
+body.settings-page .settings-option-card.is-toggling > .settings-option-toggle,
+body.settings-page .settings-suboption-card.is-toggling > .settings-suboption-toggle,
+body.settings-page .settings-suboption-card.is-toggling > .settings-session-toggle {
+    animation: settings-disclosure-settle 340ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+body.settings-page .settings-option-panel:not([hidden]),
+body.settings-page .settings-suboption-panel:not([hidden]),
+body.settings-page .settings-session-panel:not([hidden]) {
+    animation: settings-panel-reveal 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.settings-page .settings-option-chevron,
+body.settings-page .settings-suboption-chevron,
+body.settings-page .settings-session-toggle-chevron {
+    transition: transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        color 190ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.settings-page .settings-option-toggle,
+    body.settings-page .settings-suboption-toggle,
+    body.settings-page .settings-session-toggle,
+    body.settings-page .settings-option-chevron,
+    body.settings-page .settings-suboption-chevron,
+    body.settings-page .settings-session-toggle-chevron {
+        transition: none;
+    }
+
+    body.settings-page .settings-option-card.is-toggling > .settings-option-toggle,
+    body.settings-page .settings-suboption-card.is-toggling > .settings-suboption-toggle,
+    body.settings-page .settings-suboption-card.is-toggling > .settings-session-toggle,
+    body.settings-page .settings-option-panel:not([hidden]),
+    body.settings-page .settings-suboption-panel:not([hidden]),
+    body.settings-page .settings-session-panel:not([hidden]) {
+        animation: none;
+    }
+}
+
+/* Ensure the stack rules win over the legacy card rules above. */
+body.settings-page .settings-option-toggle {
+    grid-template-columns: minmax(0, 1fr) auto auto 18px;
+}
+
+body.settings-page .settings-suboption-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-session-toggle,
+body.settings-page .settings-admin-request-card .settings-suboption-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-option-card.is-open,
+body.settings-page .settings-suboption-card.is-open {
+    z-index: 20;
+    overflow: visible;
+    border-color: #9fc5e8;
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.07), 0 10px 22px rgba(24, 59, 88, 0.06);
+}
+
+body.settings-page .settings-option-card.is-open > .settings-option-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-suboption-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-session-toggle {
+    background: #f4f9fe;
+    box-shadow: inset 3px 0 0 var(--settings-blue);
+}
+
+body.settings-page .settings-toggle-state {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0.12rem 0.48rem;
+    border: 1px solid #d8e1e9;
+    border-radius: 999px;
+    background: #fff;
+    color: #6b7785;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-toggle-state.is-open {
+    border-color: #b9d8f3;
+    background: #e7f2fd;
+    color: var(--settings-blue);
+}
+
+body.settings-page .settings-option-panel,
+body.settings-page .settings-suboption-panel,
+body.settings-page .settings-session-panel,
+body.settings-page .settings-option-body,
+body.settings-page .settings-session-scroll,
+body.settings-page .settings-option-row {
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+}
+
+body.settings-page .settings-control-field:has(select) {
+    position: relative;
+    z-index: 4;
+}
+
+body.settings-page .settings-control-field:has(select):focus-within,
+body.settings-page .settings-option-row:focus-within {
+    z-index: 40;
+}
+
+body.settings-page select[data-settings-select] {
+    position: relative;
+    z-index: 41;
+    min-width: 0;
+    background-color: #fff;
+    isolation: isolate;
+}
+
+body.settings-page .settings-session-location {
+    color: #526273;
+}
+
+body.settings-page .settings-deactivation-card {
+    padding: 0.95rem 0;
+}
+
+body.settings-page .settings-deactivation-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+body.settings-page .settings-deactivation-header .settings-option-copy small {
+    display: block;
+    max-width: 58ch;
+    margin-top: 0.25rem;
+    color: var(--settings-muted);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+body.settings-page .settings-deactivation-open-btn {
+    flex: 0 0 auto;
+    min-height: 38px;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-modal-form {
+    display: grid;
+    gap: 1rem;
+}
+
+body.settings-page .settings-modal-form .settings-control-field {
+    margin: 0;
+}
+
+body.settings-page .settings-modal-form .settings-control-field em {
+    color: var(--settings-muted);
+    font-size: 0.68rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+body.settings-page .settings-modal-form textarea.form-control {
+    min-height: 96px;
+    resize: vertical;
+}
+
+body.settings-page .settings-deactivation-open-btn.is-undo {
+    border-color: #b3261e;
+    background: #fff7f6;
+    color: #a33a3a;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-option-toggle,
+    body.settings-page .settings-suboption-toggle,
+    body.settings-page .settings-session-toggle,
+    body.settings-page .settings-admin-request-card .settings-suboption-toggle {
+        grid-template-columns: minmax(0, 1fr) 18px;
+    }
+
+    body.settings-page .settings-option-value {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: start;
+    }
+
+    body.settings-page .settings-toggle-state {
+        grid-column: 1;
+        grid-row: 3;
+        justify-self: start;
+    }
+
+    body.settings-page .settings-option-chevron,
+    body.settings-page .settings-suboption-chevron,
+    body.settings-page .settings-session-toggle-chevron {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    body.settings-page .settings-deactivation-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    body.settings-page .settings-deactivation-open-btn {
+        width: 100%;
+    }
+
+    body.settings-page .settings-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    body.settings-page .settings-modal-card {
+        width: 100%;
+        max-height: min(88dvh, 680px);
+        overflow-y: auto;
+        border-radius: 18px 18px 0 0;
+    }
+}
+
+/* Final interaction treatment: keep open rows clear without a colored edge. */
+body.settings-page .settings-option-card.is-open,
+body.settings-page .settings-suboption-card.is-open {
+    border-color: #dbe5ed;
+    box-shadow: 0 10px 24px rgba(31, 61, 86, 0.09);
+}
+
+body.settings-page .settings-option-card.is-open > .settings-option-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-suboption-toggle,
+body.settings-page .settings-suboption-card.is-open > .settings-session-toggle {
+    background: #f8fbfd;
+    box-shadow: 0 3px 10px rgba(31, 61, 86, 0.06);
+}
+
+body.settings-page .settings-option-toggle:focus-visible,
+body.settings-page .settings-suboption-toggle:focus-visible,
+body.settings-page .settings-session-toggle:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(82, 98, 115, 0.14), 0 3px 10px rgba(31, 61, 86, 0.06);
+}
+
+/* Keep account-security rows on the same compact title/value/chevron template. */
+body.settings-page .settings-account-option-body {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.9rem 1.1rem 1.1rem;
+}
+
+body.settings-page .settings-account-option-body > .settings-suboption-card {
+    overflow: hidden;
+    border: 1px solid var(--settings-line);
+    border-radius: 12px;
+    background: #fff;
+}
+
+body.settings-page .settings-account-option-body > .settings-suboption-card.settings-collapsible-card {
+    border-radius: 12px;
+}
+
+body.settings-page .settings-account-option-body .settings-option-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+    min-height: 70px;
+    padding: 0.9rem 1.1rem;
+}
+
+body.settings-page .settings-account-option-body .settings-option-panel,
+body.settings-page .settings-account-option-body .settings-suboption-panel,
+body.settings-page .settings-account-option-body .settings-session-panel {
+    padding-inline: 1.1rem;
+}
+
+body.settings-page .settings-account-option-body .settings-deactivation-card {
+    padding: 0;
+}
+
+body.settings-page .settings-account-option-body .settings-deactivation-panel {
+    padding: 0.15rem 1.1rem 1rem;
+}
+
+body.settings-page .settings-account-option-body .settings-deactivation-header {
+    justify-content: flex-start;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-account-option-body {
+        padding-inline: 0.75rem;
+    }
+
+    body.settings-page .settings-account-option-body .settings-option-toggle {
+        padding-inline: 0.9rem;
+    }
+}
+
+body.settings-page .settings-suboption-card.is-open > .settings-option-toggle {
+    background: #f8fbfd;
+    box-shadow: 0 3px 10px rgba(31, 61, 86, 0.06);
+}
+
+body.settings-page .settings-suboption-card.is-open > .settings-option-toggle .settings-option-chevron {
+    color: var(--settings-blue);
+    transform: rotate(180deg);
+}
+
+/* Final spacing pass: one full-width card rhythm with a quiet category label. */
+body.settings-page .settings-stack-view {
+    display: grid;
+    gap: 0.85rem;
+}
+
+body.settings-page .settings-category {
+    display: grid;
+    gap: 0.85rem;
+    width: 100%;
+    margin-top: 1.75rem;
+}
+
+body.settings-page .settings-category-note {
+    display: block;
+    padding: 0 0.15rem 0.25rem;
+    border-bottom: 0;
+}
+
+body.settings-page .settings-account-option-body {
+    width: 100%;
+    gap: 0.85rem;
+    padding: 0;
+}
+
+body.settings-page .settings-account-option-body > .settings-suboption-card {
+    width: 100%;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-category {
+        margin-top: 1.35rem;
+    }
+}
+
+/* Keep chevrons flush right whether a row has a value or not. */
+body.settings-page .settings-option-toggle {
+    grid-template-columns: minmax(0, 1fr) 18px;
+}
+
+body.settings-page .settings-option-toggle:has(.settings-option-value) {
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+}
+
+body.settings-page .settings-session-current {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.4rem;
+    color: #25723b;
+    font-size: 0.7rem;
+    font-weight: 750;
+}
+
+/* Per-session safety actions. Keep the report link quiet so it reads as a
+   security affordance instead of another primary action. */
+body.settings-page .settings-session-not-you {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--settings-blue);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 750;
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
+}
+
+body.settings-page .settings-session-not-you:hover,
+body.settings-page .settings-session-not-you:focus-visible {
+    color: #003f79;
+}
+
+body.settings-page .settings-session-action-modal-card {
+    width: min(460px, 100%);
+}
+
+body.settings-page .settings-session-action-note {
+    margin: 0 0 0.9rem;
+    color: var(--settings-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+body.settings-page .settings-session-action-options {
+    display: grid;
+    gap: 0.6rem;
+}
+
+body.settings-page .settings-session-action-options .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 42px;
+    width: 100%;
+}
+
+body.settings-page .settings-session-action-options .settings-session-block-btn {
+    border-color: #e7b8b8;
+    color: #a33a3a;
+}
+
+body.settings-page .settings-session-action-options .settings-session-block-btn:hover,
+body.settings-page .settings-session-action-options .settings-session-block-btn:focus-visible {
+    border-color: #cf8585;
+    background: #fff6f6;
+}
+
+/* Keep the session groups in a bounded, independently scrollable list. */
+body.settings-page .settings-session-scroll {
+    height: min(420px, 55vh);
+    min-height: 180px;
+    max-height: 420px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+
+/* Device list: one quiet row per browser/device, with no nested activity log. */
+body.settings-page .settings-session-list {
+    gap: 0;
+}
+
+body.settings-page .settings-session-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.95rem 0.2rem;
+    border-bottom: 1px solid #edf1f4;
+}
+
+body.settings-page .settings-session-row.is-current {
+    background: #f7fbff;
+    box-shadow: inset 3px 0 0 var(--settings-blue);
+    padding-left: 0.75rem;
+}
+
+body.settings-page .settings-session-row.is-blocked {
+    opacity: 0.76;
+}
+
+body.settings-page .settings-session-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+}
+
+body.settings-page .settings-session-main-device,
+body.settings-page .settings-session-current,
+body.settings-page .settings-session-pending {
+    display: inline-flex;
+    align-items: center;
+    min-height: 21px;
+    padding: 0.12rem 0.42rem;
+    border: 1px solid #d8e5ef;
+    border-radius: 5px;
+    background: #f4f8fb;
+    color: #526273;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+body.settings-page .settings-session-current {
+    margin-left: 0;
+    border-color: #bfe3cc;
+    background: #f1fbf4;
+    color: #25723b;
+}
+
+body.settings-page .settings-session-pending {
+    border-color: #ead8ac;
+    background: #fffaf0;
+    color: #85651d;
+}
+
+body.settings-page .settings-session-meta {
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+}
+
+body.settings-page .settings-session-location {
+    color: #526273;
+}
+
+body.settings-page .settings-session-not-you {
+    min-height: 34px;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid #b9d8f3;
+    border-radius: 7px;
+    background: #f5faff;
+    color: var(--settings-blue);
+    text-decoration: none;
+}
+
+body.settings-page .settings-session-not-you:hover,
+body.settings-page .settings-session-not-you:focus-visible {
+    border-color: var(--settings-blue);
+    background: #eaf4fd;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-session-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.6rem;
+        padding-inline: 0.1rem;
+    }
+
+    body.settings-page .settings-session-row.is-current {
+        padding-left: 0.65rem;
+    }
+}
+
+/* Login sessions: use the same quiet, soft surface as the parent toggles. */
+body.settings-page .settings-sessions-card > .settings-option-toggle {
+    background: #f8fbfd;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(31, 61, 86, 0.06);
+}
+
+body.settings-page .settings-sessions-card > .settings-option-toggle:hover {
+    background: #f5f9fc;
+}
+
+body.settings-page .settings-sessions-card > .settings-option-toggle:focus-visible {
+    box-shadow: 0 0 0 3px rgba(82, 98, 115, 0.14), 0 3px 10px rgba(31, 61, 86, 0.06);
+}
+
+body.settings-page .settings-sessions-card.is-open > .settings-option-toggle {
+    background: #f8fbfd;
+    box-shadow: 0 3px 10px rgba(31, 61, 86, 0.06);
+}
+
+body.settings-page .settings-sessions-card > .settings-session-panel {
+    padding: 0.2rem 0.75rem 0.85rem;
+}
+
+body.settings-page .settings-session-row {
+    padding: 0.85rem 0.55rem;
+    background: transparent;
+    box-shadow: none;
+}
+
+body.settings-page .settings-session-row.is-current {
+    padding-left: 0.55rem;
+    background: #f8fbfd;
+    box-shadow: none;
+}
+
+body.settings-page .settings-session-row.is-current:hover {
+    background: #f5f9fc;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-sessions-card > .settings-session-panel {
+        padding-inline: 0.45rem;
+    }
+
+    body.settings-page .settings-session-row,
+    body.settings-page .settings-session-row.is-current {
+        padding-inline: 0.35rem;
+    }
+}
+
+/* Nested settings rhythm: give every child a clear vertical landing zone. */
+body.settings-page .settings-option-body {
+    padding: 0.7rem 1.1rem 1.2rem;
+}
+
+body.settings-page .settings-option-row {
+    min-height: 58px;
+    padding-block: 1rem;
+}
+
+body.settings-page .settings-account-option-body {
+    gap: 1rem;
+    padding: 0.1rem 0 0.25rem;
+}
+
+body.settings-page .settings-account-option-body > .settings-suboption-card {
+    border: 1px solid var(--settings-line);
+    border-radius: 12px;
+    background: #fff;
+}
+
+body.settings-page .settings-account-option-body .settings-option-toggle {
+    min-height: 66px;
+    padding-block: 1rem;
+}
+
+body.settings-page .settings-account-option-body .settings-suboption-panel,
+body.settings-page .settings-account-option-body .settings-option-panel {
+    padding: 0.9rem 1.1rem 1.15rem;
+}
+
+body.settings-page .settings-account-option-body .settings-session-panel {
+    padding: 0.75rem 0.75rem 1rem;
+}
+
+body.settings-page .settings-account-option-body .settings-password-action,
+body.settings-page .settings-account-option-body .settings-deactivation-panel {
+    padding-top: 0.15rem;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-option-body {
+        padding-inline: 0.9rem;
+    }
+
+    body.settings-page .settings-account-option-body {
+        gap: 0.8rem;
+    }
+
+    body.settings-page .settings-account-option-body .settings-option-toggle {
+        min-height: 62px;
+        padding-block: 0.9rem;
+    }
+
+    body.settings-page .settings-account-option-body .settings-suboption-panel,
+    body.settings-page .settings-account-option-body .settings-option-panel {
+        padding-inline: 0.9rem;
+    }
+}
+
+/* Session rows: soft rounded boards with one consistent inner rhythm. */
+body.settings-page .settings-session-list {
+    display: grid;
+    gap: 0.55rem;
+    padding-block: 0.2rem;
+}
+
+body.settings-page .settings-session-row,
+body.settings-page .settings-session-row.is-current {
+    min-width: 0;
+    padding: 0.85rem 0.85rem;
+    border: 1px solid #e7edf2;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: none;
+    transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+body.settings-page .settings-session-row:hover {
+    border-color: #dce6ed;
+    background: #fbfdff;
+}
+
+body.settings-page .settings-session-row.is-current {
+    border-color: #dbe7ee;
+    background: #f8fbfd;
+}
+
+body.settings-page .settings-session-row.is-current:hover {
+    border-color: #d5e2ea;
+    background: #f5f9fc;
+}
+
+body.settings-page .settings-session-row.is-blocked {
+    border-color: #ece8e8;
+    background: #fdfbfb;
+}
+
+body.settings-page .settings-session-row:focus-within {
+    border-color: #cbdce7;
+    box-shadow: 0 0 0 3px rgba(82, 98, 115, 0.1);
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-session-row,
+    body.settings-page .settings-session-row.is-current {
+        padding: 0.8rem 0.7rem;
+        border-radius: 11px;
+    }
+}
+
+/* About System: compact, professional credit panel inside the Settings stack. */
+body.settings-page #settings-option-about {
+    background: #fff;
+}
+
+body.settings-page #settings-option-about > .settings-option-panel {
+    --settings-ink: #2f3437;
+    --settings-muted: #787774;
+    --settings-line: #eaeaea;
+    --settings-blue: #0055a4;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-top-color: var(--settings-line);
+    background: #fff;
+    box-shadow: none;
+}
+
+body.settings-page .settings-about-developer-detail::before,
+body.settings-page .settings-about-developer-detail::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+}
+
+body.settings-page .settings-about-developer-detail::before {
+    z-index: 0;
+    opacity: 0.72;
+    mix-blend-mode: screen;
+    background:
+        radial-gradient(circle at 12% 22%, rgba(255, 255, 255, 0.9) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 28% 72%, rgba(190, 219, 255, 0.8) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 51% 18%, rgba(255, 255, 255, 0.72) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 72% 62%, rgba(161, 196, 255, 0.9) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 90% 29%, rgba(255, 255, 255, 0.78) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 84% 88%, rgba(148, 180, 255, 0.7) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 16px 26px, rgba(255, 255, 255, 0.85) 0 0.8px, transparent 1.4px),
+        radial-gradient(circle at 94px 84px, rgba(181, 208, 255, 0.75) 0 0.8px, transparent 1.4px),
+        radial-gradient(circle at 178px 132px, rgba(255, 255, 255, 0.7) 0 0.7px, transparent 1.3px),
+        radial-gradient(circle at 48px 154px, rgba(139, 178, 255, 0.65) 0 0.8px, transparent 1.4px);
+    background-size:
+        100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%,
+        180px 160px, 260px 220px, 340px 280px, 420px 340px;
+    background-repeat:
+        no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+        repeat, repeat, repeat, repeat;
+    animation:
+        settings-about-star-drift 28s linear infinite,
+        settings-about-star-twinkle 5.5s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+}
+
+body.settings-page .settings-about-developer-detail::after {
+    z-index: 0;
+    background:
+        radial-gradient(ellipse at 56% 48%, rgba(144, 165, 255, 0.16), rgba(102, 105, 190, 0.08) 20%, transparent 54%),
+        linear-gradient(146deg, transparent 25%, rgba(103, 117, 198, 0.08) 40%, rgba(214, 207, 255, 0.14) 51%, rgba(71, 84, 157, 0.08) 60%, transparent 76%),
+        radial-gradient(ellipse at 76% 14%, rgba(81, 133, 232, 0.18), transparent 32%),
+        linear-gradient(135deg, rgba(10, 18, 36, 0.72), transparent 42%, rgba(1, 3, 8, 0.42));
+    transform: scale(1.05) translate3d(0, 0, 0);
+    animation: settings-about-nebula-drift 18s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+}
+
+body.settings-page #settings-option-about > .settings-option-panel > * {
+    position: relative;
+    z-index: 1;
+}
+
+body.settings-page .settings-about-developer-detail > * {
+    position: relative;
+    z-index: 1;
+}
+
+body.settings-page #settings-option-about .settings-about-intro,
+body.settings-page #settings-option-about .settings-about-credit,
+body.settings-page #settings-option-about .settings-about-disclaimer {
+    color: var(--settings-muted);
+}
+
+body.settings-page .settings-about-body {
+    min-height: 260px;
+    padding: 1.5rem 1.4rem 1.65rem;
+}
+
+body.settings-page .settings-about-intro {
+    margin: 0;
+    color: var(--settings-muted);
+    font-size: 0.84rem;
+    line-height: 1.6;
+}
+
+body.settings-page #settings-option-about > .settings-option-toggle {
+    min-height: 84px;
+}
+
+body.settings-page .settings-about-label {
+    color: var(--settings-muted);
+    font-size: 0.68rem;
+    font-weight: 760;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.settings-page .settings-about-details {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.35rem;
+}
+
+body.settings-page .settings-about-detail {
+    overflow: hidden;
+    border: 1px solid var(--settings-line);
+    border-radius: 9px;
+    background: #fff;
+}
+
+body.settings-page .settings-about-detail-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 58px;
+    padding: 0.85rem 1rem;
+    border: 0;
+    background: transparent;
+    color: var(--settings-ink);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.73rem;
+    font-weight: 760;
+    letter-spacing: 0.08em;
+    text-align: left;
+    text-transform: uppercase;
+    transition: background-color 190ms ease, color 190ms ease;
+}
+
+body.settings-page .settings-about-detail-toggle:hover {
+    background: #f7fbff;
+    color: var(--settings-ink);
+}
+
+body.settings-page .settings-about-detail-toggle:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 3px solid rgba(0, 85, 164, 0.22);
+    outline-offset: -3px;
+}
+
+body.settings-page .settings-about-detail-chevron {
+    color: #94a3b8;
+    font-size: 0.7rem;
+    transition: transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1), color 190ms ease;
+}
+
+body.settings-page .settings-about-detail.is-open > .settings-about-detail-toggle {
+    background: #f4f9fe;
+    color: var(--settings-ink);
+}
+
+body.settings-page .settings-about-detail.is-open > .settings-about-detail-toggle .settings-about-detail-chevron {
+    color: var(--settings-blue);
+    transform: rotate(180deg);
+}
+
+body.settings-page .settings-about-detail-panel {
+    padding: 0.9rem 1rem 1rem;
+    border-top: 1px solid var(--settings-line);
+    background: #fff;
+    color: var(--settings-ink);
+    font-size: 1rem;
+}
+
+body.settings-page .settings-about-detail-panel[hidden] {
+    display: none !important;
+}
+
+body.settings-page .settings-about-detail-panel:not([hidden]) {
+    animation: settings-about-detail-reveal 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.settings-page .settings-about-detail-panel > strong {
+    display: block;
+    color: var(--settings-ink);
+    font-size: 1.08rem;
+    font-weight: 800;
+}
+
+body.settings-page .settings-about-developer-panel {
+    display: flex;
+    justify-content: center;
+    padding: 0.7rem 1rem 0.85rem;
+}
+
+body.settings-page .settings-about-credit-row {
+    display: grid;
+    grid-template-columns: minmax(150px, 180px) minmax(0, 1fr);
+    align-items: center;
+    width: min(100%, 680px);
+    gap: clamp(1rem, 3vw, 1.6rem);
+    min-height: 0;
+    margin-inline: auto;
+}
+
+body.settings-page .settings-about-photo {
+    display: grid;
+    width: min(100%, 165px);
+    aspect-ratio: 1 / 1;
+    place-items: center;
+    justify-self: center;
+}
+
+body.settings-page .settings-about-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center top;
+    image-rendering: pixelated;
+}
+
+body.settings-page .settings-about-credit {
+    display: grid;
+    gap: 0.22rem;
+    color: var(--settings-muted);
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+body.settings-page .settings-about-credit strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--settings-ink);
+    font-size: 0.92rem;
+}
+
+body.settings-page .settings-about-developer-name {
+    justify-self: start;
+}
+
+body.settings-page .settings-about-approved-badge {
+    display: block;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex: 0 0 20px;
+}
+
+body.settings-page .settings-about-education-line {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+body.settings-page .settings-about-education-badge {
+    display: block;
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex: 0 0 22px;
+}
+
+body.settings-page .settings-about-contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: min(100%, 240px);
+    gap: 0.85rem;
+    margin-top: 0.75rem;
+}
+
+body.settings-page .settings-about-contact-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-decoration: none;
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+
+body.settings-page .settings-about-contact-links a:hover {
+    opacity: 0.78;
+    transform: translateY(-2px) scale(1.06);
+}
+
+body.settings-page .settings-about-contact-links a:focus-visible {
+    outline: 3px solid rgba(166, 200, 255, 0.42);
+    outline-offset: 2px;
+}
+
+body.settings-page .settings-about-contact-links img {
+    display: block;
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+/* Keep the galaxy treatment exclusive to the Developer detail row. */
+body.settings-page .settings-about-developer-detail {
+    --settings-ink: #f4f7ff;
+    --settings-muted: #aab7d0;
+    --settings-line: rgba(169, 196, 255, 0.2);
+    --settings-blue: #a6c8ff;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-color: #27344d;
+    background: #03050b;
+}
+
+body.settings-page .settings-about-developer-detail .settings-about-detail-toggle {
+    color: var(--settings-muted);
+}
+
+body.settings-page .settings-about-developer-detail .settings-about-detail-toggle:hover {
+    background: rgba(25, 45, 82, 0.48);
+    color: var(--settings-ink);
+}
+
+body.settings-page .settings-about-developer-detail .settings-about-detail-toggle:focus-visible {
+    outline-color: rgba(166, 200, 255, 0.42);
+}
+
+body.settings-page .settings-about-developer-detail .settings-about-detail-chevron {
+    color: #9cb8ea;
+}
+
+body.settings-page .settings-about-developer-detail.is-open > .settings-about-detail-toggle {
+    background: rgba(20, 37, 69, 0.56);
+    color: var(--settings-ink);
+}
+
+body.settings-page .settings-about-developer-detail .settings-about-detail-panel {
+    border-top-color: var(--settings-line);
+    background: rgba(10, 19, 38, 0.56);
+    color: var(--settings-ink);
+}
+
+body.settings-page .settings-about-developer-detail .settings-about-detail-panel > strong {
+    color: var(--settings-ink);
+}
+
+@keyframes settings-about-detail-reveal {
+    0% { opacity: 0; transform: translateY(-7px); }
+    70% { opacity: 1; transform: translateY(1px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+body.settings-page .settings-about-detail.is-toggling > .settings-about-detail-toggle {
+    animation: settings-about-toggle-bounce 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes settings-about-star-drift {
+    0% { transform: translate3d(-1%, -0.5%, 0) scale(1.02); }
+    50% { transform: translate3d(0.8%, 0.7%, 0) scale(1.035); }
+    100% { transform: translate3d(-0.4%, 1%, 0) scale(1.025); }
+}
+
+@keyframes settings-about-star-twinkle {
+    0% { opacity: 0.48; }
+    48% { opacity: 0.76; }
+    72% { opacity: 0.58; }
+    100% { opacity: 0.88; }
+}
+
+@keyframes settings-about-nebula-drift {
+    0% { opacity: 0.58; transform: scale(1.04) translate3d(-1%, 0, 0) rotate(-1deg); }
+    100% { opacity: 0.92; transform: scale(1.13) translate3d(1%, 0.8%, 0) rotate(1deg); }
+}
+
+@keyframes settings-about-toggle-bounce {
+    0% { transform: translateY(-4px) scale(0.986); }
+    42% { transform: translateY(3px) scale(1.012); }
+    68% { transform: translateY(-1px) scale(1.004); }
+    86% { transform: translateY(0.5px) scale(1.001); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes settings-about-panel-bounce {
+    0% { opacity: 0; transform: translateY(-12px) scale(0.985); }
+    52% { opacity: 1; transform: translateY(3px) scale(1.006); }
+    76% { transform: translateY(-1px) scale(1.002); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+body.settings-page #settings-option-about.is-toggling > .settings-option-toggle {
+    animation: settings-about-toggle-bounce 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+body.settings-page #settings-option-about > .settings-option-panel:not([hidden]) {
+    animation: settings-about-panel-bounce 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (max-width: 620px) {
+    body.settings-page .settings-about-body {
+        min-height: 0;
+        padding-inline: 0.9rem;
+    }
+
+    body.settings-page #settings-option-about > .settings-option-toggle {
+        min-height: 72px;
+    }
+
+    body.settings-page .settings-about-credit-row {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        width: min(100%, 340px);
+        gap: 0.7rem;
+        min-height: 0;
+        text-align: center;
+    }
+
+    body.settings-page .settings-about-photo {
+        width: min(100%, 120px);
+    }
+
+    body.settings-page .settings-about-credit {
+        justify-items: center;
+        text-align: center;
+    }
+
+    body.settings-page .settings-about-developer-name {
+        justify-self: center;
+    }
+
+    body.settings-page .settings-about-contact-links {
+        justify-content: center;
+        width: min(100%, 220px);
+        gap: 0.7rem;
+        margin-top: 0.65rem;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.settings-page .settings-about-developer-detail::before,
+    body.settings-page .settings-about-developer-detail::after {
+        animation: none;
+    }
+
+    body.settings-page #settings-option-about.is-toggling > .settings-option-toggle,
+    body.settings-page #settings-option-about > .settings-option-panel:not([hidden]) {
+        animation: none;
+    }
+}

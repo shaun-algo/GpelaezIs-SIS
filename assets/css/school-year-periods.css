@@ -1,0 +1,637 @@
+.school-year-modal .section-help,
+#recordModal .section-help {
+    margin: -.45rem 0 1rem;
+    color: var(--gray-600, #5d6b7b);
+    font-size: .78rem;
+    line-height: 1.45;
+}
+
+#recordModal .field-help {
+    display: block;
+    margin-top: .35rem;
+    color: var(--gray-600, #5d6b7b);
+    font-size: .74rem;
+    line-height: 1.4;
+}
+
+.school-year-periods-panel {
+    /* The panel is inserted after the school-year end date field. Keep it as
+       the full-width transition into the period table instead of a one-column
+       grid item with a divider above it. */
+    grid-column: 1 / -1;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+
+/* Keep the curriculum selector separate from the two controls that follow it
+   in the School Year form. This also keeps the order consistent in edit and
+   view mode without changing the shared masterfile field renderer. */
+#recordModal .form-section:first-child .section-fields > .form-group:has(> #field-curriculum_id) {
+    grid-column: 1 / -1;
+}
+
+#recordModal .mf-readonly-reference {
+    display: flex;
+    align-items: center;
+    min-height: var(--control-min-height, 2.5rem);
+    background: var(--gray-100, #f3f4f6);
+    color: var(--gray-800, #1f2937);
+    cursor: default;
+    overflow-wrap: anywhere;
+}
+
+.school-year-periods-panel[hidden] {
+    display: none;
+}
+
+.school-year-periods-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: .8rem;
+}
+
+.school-year-periods-title {
+    margin: 0;
+    color: var(--gray-900, #111827);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.school-year-periods-help {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding: 9px 12px;
+    border: 1px solid #f2c94c;
+    border-radius: 8px;
+    background: #fff8d6;
+    color: #7a4b00;
+    font-size: .82rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.school-year-periods-help i {
+    margin-top: 2px;
+    color: #b77900;
+}
+
+.school-year-periods-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--gray-200, #e5e7eb);
+    border-radius: .55rem;
+}
+
+.school-year-periods-table {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.school-year-periods-table th:nth-child(1),
+.school-year-periods-table td:nth-child(1) { width: 25%; }
+
+.school-year-periods-table th:nth-child(2),
+.school-year-periods-table td:nth-child(2),
+.school-year-periods-table th:nth-child(3),
+.school-year-periods-table td:nth-child(3) { width: 27.5%; }
+
+.school-year-periods-table th:nth-child(4),
+.school-year-periods-table td:nth-child(4) { width: 20%; }
+
+.school-year-periods-table th,
+.school-year-periods-table td {
+    padding: .75rem .85rem;
+    border-bottom: 1px solid var(--gray-200, #e5e7eb);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.school-year-periods-table th {
+    color: var(--gray-600, #4b5563);
+    background: var(--gray-50, #f9fafb);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.school-year-periods-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.school-year-period-name {
+    display: block;
+    color: var(--gray-900, #111827);
+    font-weight: 600;
+}
+
+.school-year-period-number {
+    display: block;
+    margin-top: .15rem;
+    color: var(--gray-500, #6b7280);
+    font-size: .75rem;
+}
+
+.school-year-period-date {
+    color: var(--gray-700, #374151);
+    white-space: nowrap;
+}
+
+.school-year-period-row--actionable {
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background-color 150ms ease;
+}
+
+.school-year-period-row--actionable:hover,
+.school-year-period-row--actionable:focus-visible {
+    outline: none;
+    background: #f1f6fb;
+}
+
+.school-year-period-row--actionable:focus-visible {
+    box-shadow: inset 0 0 0 2px rgba(0, 85, 164, .35);
+}
+
+.school-year-period-date-editor,
+.setup-date-field {
+    position: relative;
+    min-width: 0;
+}
+
+.school-year-period-date-editor.is-open,
+.setup-date-field.is-open {
+    z-index: 1100;
+}
+
+.school-year-period-date-trigger,
+.setup-date-trigger {
+    display: flex;
+    width: 100%;
+    min-height: 40px;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .55rem .75rem;
+    border: 1px solid #cbd7e2;
+    border-radius: 8px;
+    background: #fbfdff;
+    color: #748296;
+    cursor: pointer;
+    font: inherit;
+    font-size: .78rem;
+    text-align: left;
+    transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.school-year-period-date-trigger:hover,
+.school-year-period-date-trigger:focus-visible,
+.setup-date-trigger:hover,
+.setup-date-trigger:focus-visible {
+    border-color: #0055a4;
+    background: #fff;
+    outline: none;
+}
+
+.school-year-period-date-trigger:focus-visible,
+.setup-date-trigger:focus-visible {
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, .12);
+}
+
+.school-year-period-date-trigger.has-value,
+.setup-date-trigger.has-value {
+    color: #17263a;
+    font-weight: 600;
+}
+
+.school-year-period-date-trigger > i,
+.setup-date-trigger > i {
+    flex: 0 0 auto;
+    color: #0055a4;
+}
+
+.school-year-period-date-trigger-value,
+.setup-date-trigger-value {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.school-year-period-date-picker,
+.setup-date-picker {
+    position: fixed;
+    z-index: 1310;
+    width: min(320px, calc(100vw - 2rem));
+    padding: .85rem;
+    border: 1px solid #d7e0e8;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 36px rgba(23, 38, 58, .18);
+}
+
+.school-year-period-date-picker {
+    z-index: 10200;
+}
+
+.school-year-period-date-picker[hidden],
+.setup-date-picker[hidden] {
+    display: none !important;
+}
+
+.school-year-period-date-picker-header,
+.setup-date-picker-header {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 34px 34px;
+    align-items: center;
+    gap: .3rem;
+}
+
+.school-year-period-date-year,
+.setup-date-year {
+    color: #17263a;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.school-year-period-date-nav,
+.school-year-period-date-picker-close,
+.setup-date-nav,
+.setup-date-close {
+    display: inline-flex;
+    width: 34px;
+    min-height: 34px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: #516174;
+    cursor: pointer;
+}
+
+.school-year-period-date-picker-close,
+.setup-date-close {
+    grid-column: 4;
+    grid-row: 1;
+}
+
+.school-year-period-date-nav:hover,
+.school-year-period-date-picker-close:hover,
+.setup-date-nav:hover,
+.setup-date-close:hover {
+    border-color: #dbe5ef;
+    background: #f3f8fe;
+    color: #0055a4;
+}
+
+.school-year-period-date-picker-hint,
+.setup-date-picker-hint {
+    margin: .55rem 0 .65rem;
+    color: #5d6b7b;
+    font-size: .77rem;
+    text-align: center;
+}
+
+.school-year-period-month-grid,
+.setup-date-month-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .35rem;
+}
+
+.school-year-period-month-grid button,
+.school-year-period-day-grid button,
+.setup-date-month-grid button,
+.setup-date-day-grid button {
+    min-width: 0;
+    min-height: 36px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: #f7fafc;
+    color: #334155;
+    cursor: pointer;
+    font: inherit;
+    font-size: .79rem;
+}
+
+.school-year-period-month-grid button:hover,
+.school-year-period-month-grid button:focus-visible,
+.school-year-period-day-grid button:hover:not(:disabled),
+.school-year-period-day-grid button:focus-visible,
+.setup-date-month-grid button:hover,
+.setup-date-month-grid button:focus-visible,
+.setup-date-day-grid button:hover:not(:disabled),
+.setup-date-day-grid button:focus-visible {
+    border-color: #b8d1e9;
+    background: #eef6fd;
+    color: #0055a4;
+}
+
+.school-year-period-day-grid button:disabled,
+.setup-date-day-grid button:disabled {
+    border-color: transparent;
+    background: #edf1f5;
+    color: #a0acb9;
+    cursor: not-allowed;
+    opacity: .7;
+}
+
+.school-year-period-month-grid button.is-current,
+.school-year-period-day-grid button.is-selected,
+.setup-date-month-grid button.is-current,
+.setup-date-day-grid button.is-selected {
+    border-color: #0055a4;
+    background: #0055a4;
+    color: #fff;
+    font-weight: 700;
+}
+
+.school-year-period-date-month-heading,
+.setup-date-month-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    margin: .45rem 0 .7rem;
+    color: #17263a;
+}
+
+.school-year-period-date-month-heading button,
+.setup-date-month-heading > button {
+    display: inline-flex;
+    min-height: 34px;
+    align-items: center;
+    gap: .35rem;
+    padding: 0 .45rem;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #0055a4;
+    cursor: pointer;
+    font: inherit;
+    font-size: .76rem;
+}
+
+.school-year-period-date-month-heading button:hover,
+.school-year-period-date-month-heading button:focus-visible,
+.setup-date-month-heading > button:hover,
+.setup-date-month-heading > button:focus-visible {
+    background: #eef6fd;
+}
+
+.school-year-period-day-grid,
+.setup-date-day-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: .25rem;
+}
+
+.school-year-period-day-grid > span,
+.setup-date-weekday {
+    display: grid;
+    min-height: 28px;
+    place-items: center;
+    color: #718096;
+    font-size: .68rem;
+    font-weight: 700;
+}
+
+.school-year-period-day-grid button,
+.setup-date-day-grid button {
+    min-height: 34px;
+    padding: 0;
+}
+
+.school-year-period-date-picker button:focus-visible,
+.setup-date-picker button:focus-visible {
+    outline: 2px solid #0055a4;
+    outline-offset: 2px;
+}
+
+.school-year-period-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.7rem;
+    padding: .2rem .55rem;
+    border-radius: 999px;
+    background: var(--gray-100, #f3f4f6);
+    color: var(--gray-700, #374151);
+    font-size: .74rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.school-year-period-status--open {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.school-year-period-status--submitted {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.school-year-period-status--approved {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.school-year-period-status--locked {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.school-year-period-row-menu {
+    position: fixed;
+    z-index: 12000;
+    display: grid;
+    min-width: 188px;
+    padding: .3rem;
+    border: 1px solid #d9e2eb;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(23, 38, 58, .2);
+}
+
+.school-year-period-row-menu button {
+    display: flex;
+    min-height: 42px;
+    align-items: center;
+    gap: .65rem;
+    padding: .55rem .7rem;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #26384c;
+    cursor: pointer;
+    text-align: left;
+}
+
+.school-year-period-row-menu button:hover,
+.school-year-period-row-menu button:focus-visible {
+    outline: none;
+    background: #f1f6fb;
+}
+
+.school-year-period-modal {
+    display: none;
+    position: fixed;
+    z-index: 10100;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(23, 38, 58, .38);
+    backdrop-filter: blur(2px);
+}
+
+.school-year-period-modal.show {
+    display: flex;
+}
+
+.school-year-period-modal-content {
+    position: relative;
+    z-index: 10101;
+    width: min(560px, 100%);
+    max-height: calc(100dvh - 2rem);
+    overflow: visible;
+    border: 1px solid #d9e2eb;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 20px 52px rgba(23, 38, 58, .2);
+}
+
+.school-year-period-modal-header,
+.school-year-period-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: 1rem;
+    border-bottom: 1px solid #d9e2eb;
+}
+
+.school-year-period-modal-footer {
+    justify-content: flex-end;
+    border-top: 1px solid #d9e2eb;
+    border-bottom: 0;
+}
+
+.school-year-period-modal-title {
+    margin: 0;
+    color: #17263a;
+    font-size: 1rem;
+}
+
+.school-year-period-modal-kicker {
+    margin: 0 0 .2rem;
+    color: #5d6b7b;
+    font-size: .66rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.school-year-period-modal-close {
+    width: 36px;
+    min-height: 36px;
+    padding: 0;
+    border: 1px solid #cbd7e2;
+    border-radius: 8px;
+    background: #fff;
+    color: #516174;
+    cursor: pointer;
+}
+
+.school-year-period-modal-body {
+    padding: 1rem;
+    overflow: visible;
+}
+
+.school-year-period-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.school-year-period-modal-field > label {
+    display: block;
+    margin-bottom: .35rem;
+    color: #5d6b7b;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.school-year-period-modal-error {
+    min-height: 1rem;
+    margin-top: .65rem;
+    color: #b91c1c;
+    font-size: .75rem;
+    font-weight: 600;
+}
+
+.school-year-periods-empty,
+.school-year-periods-loading,
+.school-year-periods-error {
+    padding: 1rem;
+    color: var(--gray-600, #4b5563);
+    font-size: .85rem;
+    text-align: center;
+}
+
+.school-year-periods-error {
+    color: #b91c1c;
+}
+
+@media (max-width: 700px) {
+    .school-year-periods-header {
+        display: block;
+    }
+
+    .school-year-periods-table th,
+    .school-year-periods-table td {
+        padding: .6rem .45rem;
+        font-size: .78rem;
+    }
+
+    .school-year-period-date-trigger,
+    .setup-date-trigger {
+        padding-inline: .4rem;
+        font-size: .7rem;
+    }
+
+    .school-year-period-modal {
+        align-items: flex-end;
+        padding: .65rem;
+    }
+
+    .school-year-period-modal-content {
+        max-height: calc(100svh - 1.3rem);
+        overflow: auto;
+        border-radius: 14px 14px 10px 10px;
+    }
+
+    .school-year-period-modal-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .school-year-period-modal-footer {
+        justify-content: stretch;
+        flex-wrap: wrap;
+    }
+
+    .school-year-period-modal-footer .btn {
+        flex: 1 1 100%;
+    }
+}

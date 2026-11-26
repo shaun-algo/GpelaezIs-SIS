@@ -1,0 +1,88 @@
+/* Shared unsaved-changes confirmation surface. Keep this above sidebar sheets,
+ * mobile drawers, and page-level dialogs so the decision stays actionable. */
+.swal2-container.app-unsaved-dialog-layer {
+    z-index: 2147483647 !important;
+}
+
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog {
+    width: min(430px, calc(100vw - 2rem));
+    margin: 1rem;
+    padding: 1.45rem 1.4rem 1.25rem;
+    border: 1px solid #d8e3ec;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 24px 70px rgba(15, 45, 79, 0.28);
+}
+
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__title {
+    margin: 0.85rem 0 0;
+    color: #0f4f82;
+    font-size: 1.12rem;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+}
+
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__message {
+    max-width: 34rem;
+    margin: 0.6rem auto 0;
+    color: #52697d;
+    font-size: 0.86rem;
+    line-height: 1.55;
+}
+
+.swal2-container.app-unsaved-dialog-layer .swal2-icon.swal2-warning {
+    width: 3.2rem;
+    height: 3.2rem;
+    margin: 0 auto;
+    border-color: #e7b65c;
+    color: #a86b09;
+}
+
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__actions {
+    gap: 0.6rem;
+    margin: 1.35rem auto 0;
+}
+
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__confirm,
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__cancel {
+    min-height: 40px;
+    margin: 0;
+    padding: 0.62rem 0.9rem;
+    border-radius: 9px;
+    font-size: 0.78rem;
+    font-weight: 750;
+    box-shadow: none;
+}
+
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__confirm {
+    background: #b42318 !important;
+}
+
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__confirm:hover {
+    background: #8f1d16 !important;
+}
+
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__cancel {
+    background: #0f4f82 !important;
+}
+
+.swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__cancel:hover {
+    background: #0b3e68 !important;
+}
+
+@media (max-width: 480px) {
+    .swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog {
+        margin: 0.75rem;
+        padding: 1.25rem 1rem 1rem;
+    }
+
+    .swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__actions {
+        flex-direction: column-reverse;
+        width: 100%;
+    }
+
+    .swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__confirm,
+    .swal2-container.app-unsaved-dialog-layer .app-unsaved-dialog__cancel {
+        width: 100%;
+    }
+}

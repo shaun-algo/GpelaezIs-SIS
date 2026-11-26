@@ -1,0 +1,91 @@
+/* Shared generated-document preview surface used by print-capable modules. */
+.print-preview-modal .modal-content {
+    width: min(1240px, calc(100vw - 2rem));
+    max-width: 1240px;
+    max-height: calc(100dvh - 2rem);
+}
+
+.print-preview-modal .modal-body {
+    display: flex;
+    min-height: 0;
+    padding: .75rem;
+    overflow: hidden;
+    background: #eef1f5;
+}
+
+.print-preview-scroll {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    min-height: 0;
+    overflow: auto;
+    padding: .75rem;
+    border: 1px solid #dce3eb;
+    border-radius: .65rem;
+    background: #e3e8ee;
+    overscroll-behavior: contain;
+    touch-action: pan-x pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+}
+
+.print-preview-frame {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: min(78vh, 980px);
+    min-height: 540px;
+    border: 0;
+    background: #e3e8ee;
+    touch-action: pan-x pan-y pinch-zoom;
+}
+
+.print-preview-modal .modal-footer {
+    flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+    .print-preview-modal {
+        padding: .5rem;
+    }
+
+    .print-preview-modal .modal-content {
+        width: 100%;
+        max-height: calc(100svh - 1rem);
+        border-radius: .7rem;
+    }
+
+    .print-preview-modal .modal-body {
+        padding: .4rem;
+    }
+
+    .print-preview-modal .modal-header {
+        padding: .7rem .8rem;
+    }
+
+    .print-preview-modal .modal-title {
+        font-size: 1rem;
+    }
+
+    .print-preview-scroll {
+        align-items: center;
+        justify-content: center;
+        padding: .35rem;
+        overflow: auto;
+    }
+
+    .print-preview-frame {
+        height: calc(100svh - 190px);
+        min-height: 280px;
+    }
+
+    .print-preview-modal .modal-footer {
+        gap: .5rem;
+        padding: .65rem .75rem;
+    }
+
+    .print-preview-modal .modal-footer .btn {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+}

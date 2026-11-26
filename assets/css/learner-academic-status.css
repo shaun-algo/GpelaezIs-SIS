@@ -1,0 +1,224 @@
+body.learner-academic-status-page {
+    background: var(--academic-canvas, var(--gray-50));
+}
+
+.academic-status-shell {
+    width: 100%;
+    max-width: 920px;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.academic-status-header {
+    padding: 1rem 1.25rem;
+}
+
+.academic-status-header .page-title {
+    margin: 0;
+    color: var(--academic-ink, var(--gray-900));
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+}
+
+.academic-status-message {
+    padding: 2rem 1.25rem;
+    color: var(--academic-muted, var(--gray-600));
+    text-align: center;
+}
+
+.academic-status-periods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: 1rem 1.25rem 0;
+    padding-bottom: .9rem;
+    border-bottom: 1px solid var(--academic-line, var(--gray-200));
+}
+
+.academic-status-period-button {
+    min-height: 40px;
+    padding: .5rem .75rem;
+    border: 1px solid var(--academic-line, var(--gray-300));
+    border-radius: .55rem;
+    color: var(--academic-muted, var(--gray-700));
+    background: var(--academic-surface, #fff);
+    cursor: pointer;
+    font: inherit;
+    font-size: .78rem;
+    font-weight: 800;
+    transition: border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease;
+}
+
+.academic-status-period-button:hover {
+    border-color: var(--deped-blue, #0f4c81);
+    color: var(--deped-blue, #0f4c81);
+    transform: translateY(-1px);
+}
+
+.academic-status-period-button:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--deped-blue, #0f4c81) 28%, transparent);
+    outline-offset: 2px;
+}
+
+.academic-status-period-button.is-active {
+    border-color: var(--deped-blue, #0f4c81);
+    color: #fff;
+    background: var(--deped-blue, #0f4c81);
+}
+
+.academic-status-period-button small {
+    display: block;
+    margin-top: .14rem;
+    font-size: .62rem;
+    font-weight: 650;
+    opacity: .78;
+}
+
+.academic-status-period-button.is-active small {
+    color: #e5eff9;
+}
+
+.academic-status-card {
+    margin: 1rem 1.25rem 1.25rem;
+    padding: 1rem;
+    border: 1px solid var(--academic-line, var(--gray-200));
+    border-radius: .7rem;
+    background: var(--academic-surface, #fff);
+}
+
+.academic-status-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.academic-status-period-label {
+    margin: 0;
+    color: var(--academic-ink, var(--gray-900));
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.academic-status-primary-status {
+    display: flex;
+    min-width: 13rem;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .35rem;
+    padding: .75rem .85rem;
+    border-radius: .7rem;
+    background: var(--academic-soft, #f8fafc);
+    text-align: right;
+}
+
+.academic-status-primary-label {
+    color: var(--academic-muted, var(--gray-600));
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.academic-status-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 54px;
+    padding: .7rem 1rem;
+    border-radius: .55rem;
+    color: #475569;
+    background: #f1f5f9;
+    font-size: 1.08rem;
+    font-weight: 850;
+    line-height: 1.15;
+    letter-spacing: -.01em;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.academic-status-badge.is-low { color: #166534; background: #dcfce7; }
+.academic-status-badge.is-medium { color: #92400e; background: #fef3c7; }
+.academic-status-badge.is-high { color: #991b1b; background: #fee2e2; }
+.academic-status-badge.is-not-assessed { color: #475569; background: #f1f5f9; }
+
+.academic-status-section {
+    margin-top: 1rem;
+    padding-top: .9rem;
+    border-top: 1px solid var(--academic-line, var(--gray-200));
+}
+
+.academic-status-section h3 {
+    margin: 0;
+    color: var(--academic-ink, var(--gray-900));
+    font-size: .82rem;
+    font-weight: 800;
+}
+
+.academic-status-indicators {
+    display: grid;
+    gap: .5rem;
+    margin: .7rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.academic-status-indicator {
+    padding: .65rem .75rem;
+    border-bottom: 1px solid var(--academic-line, var(--gray-200));
+    background: transparent;
+}
+
+.academic-status-indicator:last-child {
+    border-bottom: 0;
+}
+
+.academic-status-indicator strong {
+    display: block;
+    color: var(--academic-ink, var(--gray-900));
+    font-size: .8rem;
+}
+
+.academic-status-indicator span {
+    display: block;
+    margin-top: .18rem;
+    color: var(--academic-muted, var(--gray-600));
+    font-size: .75rem;
+    line-height: 1.4;
+}
+
+.academic-status-empty {
+    margin: .7rem 0 0;
+    color: var(--academic-muted, var(--gray-600));
+    font-size: .78rem;
+}
+
+@media screen and (max-width: 48rem) {
+    .academic-status-card-header {
+        align-items: center;
+        gap: .65rem;
+    }
+
+    .academic-status-card-header > div:first-child {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    .academic-status-primary-status {
+        width: min(10rem, 47%);
+        min-width: 0;
+        flex: 0 1 10rem;
+        align-items: stretch;
+        box-sizing: border-box;
+        padding: .55rem .6rem;
+        text-align: left;
+    }
+
+    .academic-status-badge {
+        min-height: 48px;
+        padding: .55rem .65rem;
+        font-size: .98rem;
+    }
+}

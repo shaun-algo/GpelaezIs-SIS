@@ -1,0 +1,1460 @@
+/* Theme-aligned styling for LIS Import Wizard.
+   Uses tokens defined in assets/css/dashboard.css.
+*/
+
+/* ===========================
+   Wizard container & layout
+   =========================== */
+
+#liswiz {
+    padding: 1.5rem 1.75rem;
+    overflow: visible;
+    position: relative;
+}
+
+#liswiz .ss-panel {
+    position: relative;
+    overflow: visible;
+    z-index: 1;
+}
+
+#liswiz select.form-control {
+    position: relative;
+    z-index: 10;
+}
+
+/* Scoped button refinements for the wizard */
+#liswiz .btn {
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+    padding: 0.5rem 1rem;
+    border: none;
+}
+
+#liswiz .btn-primary {
+    background: var(--deped-blue);
+    color: #fff;
+    font-weight: 600;
+}
+
+#liswiz .btn-primary:hover {
+    background: var(--deped-blue-dark);
+}
+
+#liswiz .btn-primary:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+#liswiz .btn-secondary {
+    background: var(--surface-0);
+    color: var(--gray-700);
+    border: 1px solid var(--gray-300);
+    font-weight: 600;
+}
+
+#liswiz .btn-secondary:hover {
+    background: var(--gray-50);
+    border-color: var(--gray-400);
+}
+
+.btn-sm {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+}
+
+/* --- Enrollment panel tabs (outer) --- */
+
+.enroll-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.enroll-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 1px solid var(--gray-200);
+    background: transparent;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 0.375rem;
+}
+
+.enroll-tab-btn:hover {
+    border-color: var(--deped-blue);
+    color: var(--deped-blue);
+    background: #eff6ff;
+}
+
+.enroll-tab-btn.active {
+    background: var(--deped-blue);
+    color: #fff;
+    border-color: var(--deped-blue);
+}
+
+.enroll-panel[hidden] {
+    display: none !important;
+}
+
+/* --- Mode tabs (Upload / Spreadsheet) --- */
+
+.liswiz-top-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.25rem;
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.liswiz-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    background: transparent;
+    color: var(--gray-500);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 0;
+}
+
+.liswiz-tab:hover {
+    color: var(--deped-blue);
+}
+
+.liswiz-tab.active {
+    color: var(--deped-blue);
+    border-bottom-color: var(--deped-blue);
+    background: transparent;
+}
+
+/* --- Upload zone --- */
+
+.liswiz-upload-zone {
+    border: 2px dashed var(--gray-300);
+    background: var(--gray-50);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    color: var(--gray-500);
+    font-size: 0.875rem;
+}
+
+.liswiz-upload-zone:hover {
+    border-color: var(--deped-blue);
+    background: #f0f7ff;
+    color: var(--deped-blue);
+}
+
+.liswiz-upload-zone.drag {
+    border-color: var(--deped-blue);
+    background: var(--deped-blue-light);
+    color: var(--deped-blue);
+}
+
+.liswiz-upload-zone i {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+}
+
+/* --- Step indicator pills --- */
+
+.liswiz-step-indicator {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+.liswiz-step-indicator .step {
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    border: 1px solid var(--gray-200);
+    color: var(--gray-500);
+    background: transparent;
+    letter-spacing: 0.02em;
+}
+
+.liswiz-step-indicator .step.active {
+    background: var(--deped-blue);
+    color: #fff;
+    border-color: var(--deped-blue);
+}
+
+.liswiz-step-indicator .step.done {
+    background: #f0fdf4;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.liswiz-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (max-width: 900px) {
+    .liswiz-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.liswiz-map-row {
+    display: grid;
+    grid-template-columns: 1fr 32px 1fr;
+    gap: 0.5rem;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+/* ===========================
+   Step 2: Review Table
+   =========================== */
+
+.liswiz-review-note {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    color: var(--gray-700);
+    border-radius: 0.375rem;
+}
+
+.liswiz-table-wrap {
+    border: 1px solid var(--gray-200);
+    background: var(--surface-0);
+    max-height: 520px;
+    overflow: auto;
+    resize: vertical;
+    min-height: 220px;
+    border-radius: 0.375rem;
+}
+
+.liswiz-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+}
+
+/* Wide-template tables (SF1) */
+.liswiz-table.liswiz-table-fixed {
+    table-layout: fixed;
+}
+
+.liswiz-table th,
+.liswiz-table td {
+    max-width: 260px;
+}
+
+.liswiz-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Keep selection columns visible while horizontally scrolling */
+.liswiz-sticky-col-1 {
+    position: sticky;
+    left: 0;
+    background: var(--surface-0);
+    z-index: 2;
+}
+
+.liswiz-sticky-col-2 {
+    position: sticky;
+    left: 36px;
+    background: var(--surface-0);
+    z-index: 2;
+}
+
+.liswiz-table th.liswiz-sticky-col-1,
+.liswiz-table th.liswiz-sticky-col-2 {
+    background: var(--gray-50);
+    z-index: 3;
+}
+
+.liswiz-table th,
+.liswiz-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    vertical-align: top;
+}
+
+.liswiz-table th {
+    position: sticky;
+    top: 0;
+    background: var(--gray-50);
+    z-index: 1;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+}
+
+.liswiz-table tr:hover td {
+    background: var(--gray-50);
+}
+
+.liswiz-checkbox {
+    width: 16px;
+    height: 16px;
+}
+
+.liswiz-map-row:last-child {
+    border-bottom: 0;
+}
+
+.liswiz-bar {
+    height: 6px;
+    background: var(--gray-200);
+    margin-top: 6px;
+    overflow: hidden;
+    border-radius: 0;
+}
+
+.liswiz-bar > div {
+    height: 100%;
+}
+
+.liswiz-section-option {
+    border: 1px solid var(--gray-300);
+    padding: 0.625rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.625rem;
+    background: var(--surface-0);
+    border-radius: 0;
+}
+
+.liswiz-section-option:hover {
+    border-color: var(--deped-blue);
+}
+
+.liswiz-section-option.selected {
+    border-color: var(--deped-blue);
+    box-shadow: var(--shadow-sm);
+}
+
+.liswiz-section-option.disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.liswiz-progress {
+    height: 6px;
+    background: var(--gray-200);
+    overflow: hidden;
+    border-radius: 999px;
+}
+
+.liswiz-progress > div {
+    height: 100%;
+    width: 0;
+    background: var(--deped-blue);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.liswiz-log {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    min-height: 120px;
+    max-height: 220px;
+    overflow: auto;
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    line-height: 1.7;
+    margin-top: 0.75rem;
+}
+
+.liswiz-log .ok {
+    color: #16a34a;
+}
+
+.liswiz-log .warn {
+    color: #d97706;
+}
+
+.liswiz-log .err {
+    color: #dc2626;
+}
+
+.liswiz-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.625rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 900px) {
+    .liswiz-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.liswiz-summary .item {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.liswiz-summary .label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--gray-500);
+}
+
+.liswiz-summary .val {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-top: 0.125rem;
+}
+
+/* ===========================
+   Step 1: File Summary Card
+   =========================== */
+
+.s1-file-card {
+    border: 1px solid var(--gray-200);
+    background: var(--surface-0);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    margin-top: 1.25rem;
+}
+
+.s1-file-header {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+}
+
+.s1-file-icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background: #eff6ff;
+    color: var(--deped-blue);
+    font-size: 1rem;
+}
+
+.s1-file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.s1-file-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--gray-900);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.s1-file-detail {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 0.125rem;
+}
+
+.s1-remove-btn {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: var(--gray-100);
+    border-radius: 0.25rem;
+    color: var(--gray-500);
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.15s;
+}
+
+.s1-remove-btn:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.s1-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-top: 0.875rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--gray-100);
+}
+
+.s1-meta-item {
+    font-size: 0.75rem;
+    color: var(--gray-800);
+    font-weight: 500;
+}
+
+.s1-meta-k {
+    color: var(--gray-500);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.625rem;
+    letter-spacing: 0.03em;
+    margin-right: 0.25rem;
+}
+
+.s1-columns {
+    margin-top: 0.875rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--gray-100);
+}
+
+.s1-columns-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-500);
+    margin-bottom: 0.5rem;
+}
+
+.s1-columns-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.liswiz-col-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border: 1px solid var(--gray-200);
+    background: var(--gray-50);
+    color: var(--gray-600);
+}
+
+.liswiz-col-pill i {
+    font-size: 0.5625rem;
+}
+
+.liswiz-col-pill.ok {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.liswiz-col-pill.miss {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+/* Legacy (unused but kept for compat) */
+.liswiz-muted {
+    color: var(--gray-500);
+}
+
+.liswiz-alert {
+    margin-top: 1rem;
+    border: 0;
+    background: var(--gray-50);
+    padding: 0.875rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.liswiz-alert-title {
+    font-weight: 700;
+    font-size: 0.8125rem;
+    color: var(--gray-900);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.liswiz-alert-body {
+    margin-top: 0.5rem;
+    color: var(--gray-800);
+}
+
+.liswiz-alert.success {
+    background: var(--deped-green-light);
+}
+
+.liswiz-alert.warning {
+    background: var(--status-warning-bg);
+    color: var(--status-warning-text);
+}
+
+.liswiz-alert.danger {
+    background: var(--status-danger-bg);
+    color: var(--status-danger-text);
+}
+
+.liswiz-alert.info {
+    background: var(--alert-low-bg);
+}
+
+.liswiz-alert.success .liswiz-alert-title i {
+    color: var(--color-success);
+}
+
+.liswiz-alert.warning .liswiz-alert-title i {
+    color: var(--color-warning);
+}
+
+.liswiz-alert.danger .liswiz-alert-title i {
+    color: var(--color-danger);
+}
+
+.liswiz-alert.info .liswiz-alert-title i {
+    color: var(--color-info);
+}
+
+/* Pills used for Sections/SF1 checks */
+.liswiz-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.35rem;
+}
+
+.liswiz-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.45rem;
+    border: 1px solid var(--gray-200);
+    background: var(--surface-0);
+    font-size: 0.75rem;
+    color: var(--gray-800);
+}
+
+.liswiz-pill.ok {
+    border-color: rgba(16, 185, 129, 0.35);
+    background: rgba(16, 185, 129, 0.12);
+}
+
+.liswiz-pill.miss {
+    border-color: rgba(239, 68, 68, 0.35);
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.liswiz-pill.info {
+    border-color: rgba(59, 130, 246, 0.25);
+    background: rgba(59, 130, 246, 0.10);
+}
+
+.liswiz-sf1 {
+    margin-top: 0.75rem;
+}
+
+.liswiz-sf1-title {
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: 0.35rem;
+}
+
+.liswiz-sf1-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0.5rem;
+    align-items: start;
+    margin-top: 0.35rem;
+}
+
+.liswiz-sf1-label {
+    font-size: 0.75rem;
+    color: var(--gray-600);
+    padding-top: 0.15rem;
+}
+
+/* ===========================
+   Step 2: Improved Review Section
+   =========================== */
+
+.liswiz-review-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+}
+
+.liswiz-review-section-header > i {
+    font-size: 1rem;
+    color: var(--deped-blue);
+    margin-top: 0.15rem;
+}
+
+.liswiz-step2-status {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    border-radius: 0;
+    border: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+
+.liswiz-review-alert {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    border: 0;
+    background: var(--gray-50);
+    border-radius: 0.375rem;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ===========================
+   Spreadsheet Entry Mode
+   =========================== */
+
+/* --- Panels (form sections) --- */
+
+.ss-panel {
+    background: var(--surface-0);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 1.125rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.ss-panel-table {
+    padding: 0;
+    overflow: visible;
+}
+
+.ss-panel-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-500);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+}
+
+.ss-panel-label i {
+    font-size: 0.625rem;
+    opacity: 0.7;
+}
+
+.ss-panel-guidance {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0 0 0.75rem;
+    padding: 9px 12px;
+    border: 1px solid #f2c94c;
+    border-radius: 8px;
+    background: #fff8d6;
+    color: #7a4b00;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.ss-panel-guidance i {
+    margin-top: 2px;
+    color: #b77900;
+}
+
+.ss-panel-desc {
+    font-size: 0.8125rem;
+    color: var(--gray-500);
+    margin-top: 0.375rem;
+    margin-bottom: 0;
+}
+
+.ss-panel-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+.ss-field label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--gray-500);
+    margin-bottom: 0.3rem;
+}
+
+.ss-field .form-control {
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid var(--gray-200);
+    padding: 0.5rem 0.625rem;
+    font-size: 0.8125rem;
+    transition: border-color 0.15s;
+}
+
+.ss-field .form-control:focus {
+    border-color: var(--deped-blue);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    outline: none;
+}
+
+/* --- Toolbar inside table panel --- */
+
+.ss-panel-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.75rem 1.125rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--gray-50);
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.ss-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.ss-toolbar-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--gray-300);
+    margin: 0 0.25rem;
+}
+
+.ss-tool-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--gray-600);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.ss-tool-btn:hover {
+    background: var(--gray-100);
+    color: var(--gray-800);
+    border-color: var(--gray-300);
+}
+
+.ss-tool-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.ss-tool-btn--danger:not(:disabled) {
+    color: #dc2626;
+}
+
+.ss-tool-btn--danger:not(:disabled):hover {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+}
+
+.ss-hint {
+    font-size: 0.6875rem;
+    color: var(--gray-500);
+    padding: 0.5rem 1.125rem;
+    border-bottom: 1px solid var(--gray-100);
+    background: var(--surface-0);
+}
+
+/* ─── Centered floating info banner ─── */
+.liswiz-info-banner-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+}
+.liswiz-info-banner-backdrop.fade-out {
+    opacity: 0;
+}
+.liswiz-info-banner {
+    pointer-events: auto;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 1.25rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.07);
+    padding: 3rem 3.5rem;
+    max-width: 36rem;
+    width: 92vw;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+.liswiz-info-banner .lib-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background: var(--deped-blue-light, #CCE1FF);
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    color: var(--deped-blue, #0055A4);
+    font-size: 1.5rem;
+}
+.liswiz-info-banner .lib-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gray-800, #1e293b);
+    margin-bottom: 0.625rem;
+    line-height: 1.35;
+}
+.liswiz-info-banner .lib-body {
+    font-size: 0.9375rem;
+    color: var(--gray-500, #64748b);
+    line-height: 1.6;
+}
+.liswiz-info-banner .lib-dismiss {
+    display: inline-block;
+    margin-top: 1.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray-400, #94a3b8);
+}
+
+/* --- Spreadsheet table --- */
+
+.liswiz-spreadsheet-wrap {
+    background: var(--surface-0);
+    max-height: 480px;
+    overflow: auto;
+    min-height: 260px;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.liswiz-spreadsheet {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+
+.liswiz-spreadsheet th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--gray-50);
+    border-bottom: 2px solid var(--gray-200);
+    border-right: 1px solid var(--gray-100);
+    padding: 0.5rem 0.625rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--gray-500);
+    white-space: nowrap;
+    text-align: left;
+    min-width: 80px;
+}
+
+.liswiz-spreadsheet th.col-lrn { min-width: 120px; }
+.liswiz-spreadsheet th.col-last-name,
+.liswiz-spreadsheet th.col-first-name,
+.liswiz-spreadsheet th.col-middle-name { min-width: 132px; }
+.liswiz-spreadsheet th.col-sex { min-width: 56px; max-width: 64px; }
+.liswiz-spreadsheet th.col-date { min-width: 100px; }
+.liswiz-spreadsheet th.col-age { min-width: 48px; max-width: 56px; }
+.liswiz-spreadsheet th.col-place { min-width: 120px; }
+.liswiz-spreadsheet th.col-addr { min-width: 140px; }
+.liswiz-spreadsheet th.col-contact { min-width: 120px; }
+
+.liswiz-spreadsheet th.col-row-num {
+    min-width: 34px;
+    max-width: 34px;
+    text-align: center;
+    background: var(--gray-100);
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    padding: 0.5rem 0;
+    border-right: 1px solid var(--gray-200);
+}
+
+.liswiz-spreadsheet td {
+    border-bottom: 1px solid var(--gray-100);
+    border-right: 1px solid var(--gray-100);
+    padding: 0;
+    vertical-align: top;
+}
+
+.liswiz-spreadsheet td.row-num-cell {
+    background: var(--gray-50);
+    text-align: center;
+    padding: 0;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    border-right: 1px solid var(--gray-200);
+    user-select: none;
+    vertical-align: middle;
+}
+
+.liswiz-ss-chk {
+    width: 13px;
+    height: 13px;
+    cursor: pointer;
+    accent-color: var(--deped-blue);
+    margin: 0;
+    vertical-align: middle;
+}
+
+.liswiz-spreadsheet tr.ss-row-selected td {
+    background: #eff6ff !important;
+}
+
+.liswiz-spreadsheet tr.ss-row-selected td.row-num-cell {
+    background: #dbeafe !important;
+}
+
+.liswiz-spreadsheet td input[type="text"] {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0.4375rem 0.5rem;
+    font-size: 0.75rem;
+    font-family: inherit;
+    background: transparent;
+    box-sizing: border-box;
+    color: var(--gray-800);
+}
+
+.liswiz-spreadsheet td input[type="text"]::placeholder {
+    color: var(--gray-400);
+    font-style: italic;
+}
+
+.liswiz-spreadsheet td input[data-date-mask="mdy"] {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+}
+
+.liswiz-spreadsheet td input[type="text"]:focus {
+    background: #eef6ff;
+    box-shadow: inset 0 0 0 1.5px var(--deped-blue);
+    position: relative;
+    z-index: 1;
+}
+
+.liswiz-spreadsheet td input.has-value {
+    color: var(--gray-900);
+    font-weight: 500;
+}
+
+.liswiz-spreadsheet td input.has-error {
+    background: #fef2f2;
+    box-shadow: inset 0 0 0 1px #fca5a5;
+}
+
+.liswiz-spreadsheet tr:hover td {
+    background: var(--gray-50);
+}
+
+.liswiz-spreadsheet tr:hover td.row-num-cell {
+    background: var(--gray-100);
+}
+
+.liswiz-spreadsheet tr:hover td input[type="text"] {
+    background: var(--gray-50);
+}
+
+.liswiz-spreadsheet tr:hover td input.has-value {
+    background: var(--gray-50);
+}
+
+/* --- Action bar --- */
+
+.ss-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.125rem;
+    margin-top: 1rem;
+    border-top: 1px solid var(--gray-100);
+    gap: 1rem;
+}
+
+.ss-action-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.ss-row-count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gray-500);
+}
+
+/* --- Status alerts --- */
+
+.liswiz-ss-status {
+    margin: 1rem 0;
+    padding: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    background: var(--gray-50);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.liswiz-ss-status.status-success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.liswiz-ss-status.status-warning {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+.liswiz-ss-status.status-error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.liswiz-ss-status.status-info {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e40af;
+}
+
+/* Spreadsheet import progress view (matches upload step 4) */
+.liswiz-ss-status.ss-import-view {
+    display: block;
+    padding: 0;
+    border: none;
+    background: none;
+    margin: 1.25rem 0 0;
+}
+
+.ss-import-progress .liswiz-progress {
+    margin-bottom: 0;
+}
+
+.ss-import-progress .liswiz-log {
+    margin-top: 0.75rem;
+}
+
+.ss-import-enrolled-note {
+    font-size: 0.8125rem;
+    color: var(--gray-700);
+    margin-top: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.ss-import-enrolled-note i {
+    color: #16a34a;
+}
+
+/* --- Step 4: Import progress & results --- */
+
+.liswiz-step4-progress {
+    margin-bottom: 0.25rem;
+}
+
+.liswiz-prog-label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--gray-800);
+    margin-bottom: 0.625rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.liswiz-prog-label i {
+    color: var(--deped-blue);
+}
+
+.liswiz-summary-card {
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    background: var(--gray-50);
+}
+
+.liswiz-summary-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 0.9375rem;
+}
+
+/* --- Import result card (legacy) --- */
+
+.liswiz-import-result {
+    padding: 0;
+}
+
+.liswiz-import-result .result-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.875rem;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.liswiz-import-result .result-header.success { color: #166534; }
+.liswiz-import-result .result-header.partial { color: #92400e; }
+.liswiz-import-result .result-header.failed  { color: #991b1b; }
+
+.liswiz-import-result .result-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.liswiz-import-result .stat-box {
+    text-align: center;
+    padding: 0.625rem 0.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.375rem;
+    background: var(--gray-50);
+}
+
+.liswiz-import-result .stat-box .num {
+    font-size: 1.375rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.liswiz-import-result .stat-box .lbl {
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 0.25rem;
+}
+
+.liswiz-import-result .stat-box.success .num { color: #16a34a; }
+.liswiz-import-result .stat-box.error .num   { color: #dc2626; }
+.liswiz-import-result .stat-box.warning .num { color: #d97706; }
+
+/* --- 3-column variant for assign-to --- */
+
+.ss-panel-fields--3col {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* ===========================
+   Review table (upload mode step 2)
+   =========================== */
+
+.liswiz-rv-table {
+    font-size: 0.75rem;
+}
+
+.liswiz-rv-table th {
+    background: var(--gray-50);
+    border-bottom: 2px solid var(--gray-200);
+    border-right: 1px solid var(--gray-100);
+}
+
+.liswiz-rv-table td {
+    border-bottom: 1px solid var(--gray-100);
+    border-right: 1px solid var(--gray-100);
+    padding: 0;
+    vertical-align: top;
+}
+
+.liswiz-rv-table td.rv-cell-action {
+    min-width: 150px;
+    max-width: 200px;
+    padding: 0.4rem 0.5rem;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+.liswiz-rv-table th.col-action {
+    min-width: 150px;
+}
+
+.rv-action-desc {
+    font-size: 0.625rem;
+    color: var(--gray-500);
+    line-height: 1.35;
+    margin-top: 0.2rem;
+}
+
+.rv-action-messages {
+    list-style: none;
+    margin: 0.35rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.2rem;
+}
+
+.rv-action-messages li {
+    font-size: 0.625rem;
+    line-height: 1.3;
+    border-left: 2px solid var(--gray-300);
+    padding-left: 0.35rem;
+}
+
+.rv-action-messages .rv-msg-e {
+    color: #991b1b;
+    border-left-color: #dc2626;
+}
+
+.rv-action-messages .rv-msg-w {
+    color: #92400e;
+    border-left-color: #d97706;
+}
+
+.rv-action-messages .rv-msg-i {
+    color: #374151;
+    border-left-color: #6b7280;
+}
+
+/* Action tags */
+.rv-action-tag {
+    display: inline-block;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.2rem;
+}
+
+.rv-action-tag.rv-action-insert  { color: #166534; background: #f0fdf4; }
+.rv-action-tag.rv-action-update  { color: #1d4ed8; background: #eff6ff; }
+.rv-action-tag.rv-action-transfer { color: #0f766e; background: #f0fdfa; }
+.rv-transfer-route {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: var(--gray-900);
+    font-size: 0.75rem;
+    overflow-wrap: anywhere;
+}
+.rv-action-tag.rv-action-revive  { color: #7c3aed; background: #f5f3ff; }
+.rv-action-tag.rv-action-skip    { color: #6b7280; background: #f3f4f6; }
+
+/* Row states */
+.liswiz-rv-table tr.rv-row-excluded {
+    opacity: 0.4;
+}
+
+.liswiz-rv-table tr.rv-row-error td {
+    background: #fef2f2;
+}
+
+.liswiz-rv-table tr.rv-row-error td.row-num-cell {
+    background: #fee2e2;
+}
+
+/* Review chips in toolbar */
+.ss-review-chips {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.ss-review-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 0.25rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    #liswiz {
+        padding: 1rem;
+    }
+    .ss-panel-fields,
+    .ss-panel-fields--3col {
+        grid-template-columns: 1fr;
+    }
+    .ss-panel-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    .ss-action-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+    .ss-action-bar .btn {
+        width: 100%;
+    }
+    .liswiz-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .liswiz-import-result .result-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.rv-action-returnee { color: #9a3412; background: #fff7ed; border-color: #fed7aa; }
+.rv-action-promote { color: #0369a1; background: #f0f9ff; border-color: #bae6fd; }

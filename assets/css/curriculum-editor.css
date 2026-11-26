@@ -1,0 +1,1574 @@
+/* ═══════════════════════════════════════════════
+   Curriculum Editor — Sidebar + Card-based layout
+   ═══════════════════════════════════════════════ */
+
+/* ─── Curriculum selector in header ─── */
+
+.cc-curriculum-select {
+    min-width: 260px;
+    font-weight: 600;
+}
+
+/* ─── Empty state ─── */
+
+.cc-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--gray-500);
+}
+
+.cc-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--gray-300);
+}
+
+.cc-empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin: 0 0 0.5rem;
+}
+
+.cc-empty-state p {
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* ─── Editor layout (sidebar + panels) ─── */
+
+.cc-editor {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+    min-height: 520px;
+    background: var(--surface-0);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+/* ─── Sidebar ─── */
+
+.cc-sidebar {
+    display: flex;
+    flex-direction: column;
+    background: var(--gray-50);
+    border-right: 1px solid var(--gray-200);
+    padding: 0.75rem 0;
+}
+
+.cc-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--gray-600);
+    text-align: left;
+    transition: background 0.15s, color 0.15s;
+    border-left: 3px solid transparent;
+}
+
+.cc-tab:hover {
+    background: var(--gray-100);
+    color: var(--gray-800);
+}
+
+.cc-tab.active {
+    background: var(--surface-0);
+    color: var(--deped-blue);
+    border-left-color: var(--deped-blue);
+    font-weight: 600;
+}
+
+.cc-tab i {
+    width: 1.125rem;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+/* ─── Panels ─── */
+
+.cc-panels {
+    padding: 0;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+}
+
+.cc-panel {
+    display: none;
+    padding: 1.5rem 1.75rem;
+}
+
+.cc-panel.active {
+    display: block;
+}
+
+.cc-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.cc-panel-header h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin: 0;
+}
+
+.cc-panel-header p {
+    font-size: 0.8125rem;
+    color: var(--gray-500);
+    margin: 0.25rem 0 0;
+}
+
+.cc-panel-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* ─── Info card (Overview) ─── */
+
+.cc-info-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.cc-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.cc-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.cc-info-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-500);
+}
+
+.cc-info-value {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.cc-info-value .badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+.cc-info-value .badge-active {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.cc-info-value .badge-inactive {
+    background: #fef9c3;
+    color: #a16207;
+}
+
+/* ─── Sections ─── */
+
+.cc-section {
+    margin-top: 1.5rem;
+}
+
+.cc-section-header {
+    margin-bottom: 0.75rem;
+}
+
+.cc-section-header h3 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cc-section-header h3 i {
+    color: var(--deped-blue);
+    font-size: 0.8125rem;
+}
+
+.cc-section-header p {
+    font-size: 0.8125rem;
+    color: var(--gray-500);
+    margin: 0.25rem 0 0;
+}
+
+.cc-section-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* ─── Grade level pills (Overview) ─── */
+
+.cc-grade-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.cc-grade-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+.cc-grade-pill .remove-grade {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    font-size: 0.625rem;
+    cursor: pointer;
+    color: #1e40af;
+    transition: background 0.15s;
+}
+
+.cc-grade-pill .remove-grade:hover {
+    background: rgba(30, 64, 175, 0.15);
+}
+
+.cc-grade-pill-empty {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--gray-500);
+    font-style: italic;
+}
+
+/* ─── Collapsible grade cards ─── */
+
+.cc-grade-card {
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    overflow: visible;
+    background: var(--surface-0);
+}
+
+.cc-grade-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-100);
+    border-radius: 0.5rem 0.5rem 0 0;
+    transition: background 0.15s;
+}
+
+.cc-grade-card-header:hover {
+    background: var(--gray-100);
+}
+
+.cc-grade-card.collapsed .cc-grade-card-header {
+    border-bottom: none;
+    border-radius: 0.5rem;
+}
+
+.cc-grade-card-header .cc-card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.cc-grade-card-header .cc-card-title i.chevron {
+    font-size: 0.6875rem;
+    color: var(--gray-400);
+    transition: transform 0.2s;
+}
+
+.cc-grade-card.collapsed .cc-card-title i.chevron {
+    transform: rotate(-90deg);
+}
+
+.cc-grade-card-header .cc-card-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--gray-500);
+    background: var(--gray-100);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+}
+
+.cc-grade-card-body {
+    padding: 0.75rem 1rem;
+}
+
+.cc-grade-card.collapsed .cc-grade-card-body {
+    display: none;
+}
+
+/* ─── Subject rows inside cards ─── */
+
+.cc-subject-row {
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.375rem 0;
+    border-bottom: 1px solid var(--gray-50);
+}
+
+.cc-subject-row:last-child {
+    border-bottom: none;
+}
+
+.cc-subject-row select,
+.cc-subject-row input {
+    font-size: 0.8125rem;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.375rem;
+    background: var(--surface-0);
+}
+
+.cc-subject-row select:focus,
+.cc-subject-row input:focus {
+    border-color: var(--deped-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 85, 164, 0.1);
+}
+
+.cc-subject-row .cc-row-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none;
+    background: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    transition: color 0.15s, background 0.15s;
+}
+
+.cc-subject-row .cc-row-remove:hover {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+.cc-add-row-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    margin-top: 0.5rem;
+    border: 1px dashed var(--gray-300);
+    border-radius: 0.375rem;
+    background: none;
+    color: var(--gray-500);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.cc-add-row-btn:hover {
+    border-color: var(--deped-blue);
+    color: var(--deped-blue);
+}
+
+/* ─── Grading component rows ─── */
+
+/* ─── Passing marks rows ─── */
+
+.cc-mark-row {
+    display: grid;
+    grid-template-columns: 180px 180px 100px 1fr 40px;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.cc-mark-row:last-child {
+    border-bottom: none;
+}
+
+.cc-mark-row select,
+.cc-mark-row input {
+    font-size: 0.8125rem;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.375rem;
+    background: var(--surface-0);
+}
+
+.cc-mark-row select:focus,
+.cc-mark-row input:focus {
+    border-color: var(--deped-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 85, 164, 0.1);
+}
+
+.cc-mark-row .cc-row-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none;
+    background: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    transition: color 0.15s, background 0.15s;
+}
+
+.cc-mark-row .cc-row-remove:hover {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+.cc-mark-labels {
+    display: grid;
+    grid-template-columns: 180px 180px 100px 1fr 40px;
+    gap: 0.5rem;
+    padding: 0 0 0.375rem;
+    margin-bottom: 0.25rem;
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--gray-500);
+}
+
+/* ─── School year mapping rows ─── */
+
+.cc-map-row {
+    display: grid;
+    grid-template-columns: 200px 100px 40px;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.cc-map-row:last-child {
+    border-bottom: none;
+}
+
+.cc-map-row select,
+.cc-map-row input {
+    font-size: 0.8125rem;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.375rem;
+    background: var(--surface-0);
+}
+
+.cc-map-row .cc-row-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none;
+    background: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    transition: color 0.15s, background 0.15s;
+}
+
+.cc-map-row .cc-row-remove:hover {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+.cc-map-labels {
+    display: grid;
+    grid-template-columns: 200px 100px 40px;
+    gap: 0.5rem;
+    padding: 0 0 0.375rem;
+    margin-bottom: 0.25rem;
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--gray-500);
+}
+
+/* ─── Status text ─── */
+
+.cc-status-text {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--gray-500);
+    margin-top: 0.75rem;
+    min-height: 1.25em;
+}
+
+/* ─── Buttons (scoped) ─── */
+
+.cc-editor .btn {
+    border-radius: 0.375rem;
+}
+
+.cc-editor .btn-sm {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+}
+
+/* ─── Responsive ─── */
+
+@media (max-width: 768px) {
+    .cc-editor {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    .cc-sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--gray-200);
+        padding: 0;
+    }
+
+    .cc-tab {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        padding: 0.75rem 1rem;
+        white-space: nowrap;
+    }
+
+    .cc-tab.active {
+        border-left-color: transparent;
+        border-bottom-color: var(--deped-blue);
+    }
+
+    .cc-tab span {
+        display: none;
+    }
+
+    .cc-tab i {
+        font-size: 1rem;
+    }
+
+    .cc-panel {
+        padding: 1rem;
+    }
+
+    .cc-subject-row {
+        grid-template-columns: 1fr 32px;
+    }
+
+    .cc-mark-row,
+    .cc-mark-labels {
+        grid-template-columns: 1fr 1fr 80px 1fr 32px;
+    }
+
+    .cc-curriculum-select {
+        min-width: 180px;
+    }
+
+    .cc-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cc-filter-bar select {
+        min-width: 0;
+    }
+
+    .cc-subject-item {
+        grid-template-columns: 1fr 32px;
+    }
+
+    .cc-component-item {
+        grid-template-columns: 80px 1fr 80px 32px;
+    }
+}
+
+/* ─── Header right (curriculum select + add button) ─── */
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ─── Filter bar (grade selector for subjects/grading) ─── */
+
+.cc-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding: 0.75rem 1rem;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+}
+
+.cc-filter-bar label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--gray-500);
+    white-space: nowrap;
+}
+
+.cc-filter-bar select {
+    min-width: 200px;
+    font-size: 0.8125rem;
+}
+
+/* ─── Subject items (simplified - just name + remove) ─── */
+
+.cc-subject-item {
+    display: grid;
+    grid-template-columns: 1fr 32px;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--gray-50);
+    border-radius: 0.25rem;
+}
+
+.cc-subject-item:hover {
+    background: var(--gray-50);
+}
+
+.cc-subject-item:last-child {
+    border-bottom: none;
+}
+
+.cc-subject-item select {
+    font-size: 0.8125rem;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.375rem;
+}
+
+.cc-subject-item select:focus {
+    border-color: var(--deped-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 85, 164, 0.1);
+}
+
+/* ─── Component items (code, name, weight + remove) ─── */
+
+.cc-component-item {
+    display: grid;
+    grid-template-columns: 100px 1fr 100px 32px;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--gray-50);
+    border-radius: 0.25rem;
+}
+
+.cc-component-item:hover {
+    background: var(--gray-50);
+}
+
+.cc-component-item:last-child {
+    border-bottom: none;
+}
+
+.cc-component-item input {
+    font-size: 0.8125rem;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.375rem;
+}
+
+.cc-component-item input:focus {
+    border-color: var(--deped-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 85, 164, 0.1);
+}
+
+/* ─── Generic row remove button for item lists ─── */
+
+.cc-subject-item .cc-row-remove,
+.cc-component-item .cc-row-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none;
+    background: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    transition: color 0.15s, background 0.15s;
+}
+
+.cc-subject-item .cc-row-remove:hover,
+.cc-component-item .cc-row-remove:hover {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+/* ─── School year list items ─── */
+
+.cc-sy-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid var(--gray-100);
+    border-radius: 0.25rem;
+}
+
+.cc-sy-item:last-child {
+    border-bottom: none;
+}
+
+.cc-sy-item:hover {
+    background: var(--gray-50);
+}
+
+.cc-sy-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gray-800);
+}
+
+.cc-sy-badges {
+    display: flex;
+    gap: 0.375rem;
+}
+
+.cc-sy-badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+.cc-sy-badge-active {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.cc-sy-badge-mapped {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.cc-sy-badge-primary {
+    background: #fef9c3;
+    color: #a16207;
+}
+
+.cc-sy-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.cc-sy-actions button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.25rem;
+    background: var(--surface-0);
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.cc-sy-actions button:hover {
+    border-color: var(--deped-blue);
+    color: var(--deped-blue);
+}
+
+.cc-sy-actions button.active {
+    background: var(--deped-blue);
+    color: #fff;
+    border-color: var(--deped-blue);
+}
+
+/* ─── Inline form (for create curriculum / school year) ─── */
+
+.cc-inline-form {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.cc-inline-form h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+    color: var(--gray-800);
+}
+
+.cc-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+}
+
+.cc-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.cc-form-group label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--gray-500);
+}
+
+.cc-form-group input,
+.cc-form-group select {
+    font-size: 0.8125rem;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.375rem;
+}
+
+.cc-form-group input:focus,
+.cc-form-group select:focus {
+    border-color: var(--deped-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 85, 164, 0.1);
+}
+
+.cc-form-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+/* ─── Danger button ─── */
+
+.btn-danger {
+    background: #dc2626;
+    color: #fff;
+    border: 1px solid #dc2626;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+}
+
+/* ═══════════════════════════════════════════════
+   New table-based controls with soft radius
+   ═══════════════════════════════════════════════ */
+
+/* ─── Soft edge radius utilities ─── */
+
+.cc-soft-select,
+.cc-soft-input {
+    border-radius: 0.625rem;
+    font-size: 0.8125rem;
+    padding: 0.45rem 0.65rem;
+    border: 1px solid var(--gray-200);
+    background: var(--surface-0);
+    min-height: 2.25rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.cc-soft-select:focus,
+.cc-soft-input:focus {
+    border-color: var(--deped-blue);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+}
+
+.cc-soft-btn {
+    border-radius: 0.625rem;
+    font-size: 0.8125rem;
+    padding: 0.45rem 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+/* ─── Top control bar ─── */
+
+.cc-top-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.cc-sticky-control {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.cc-control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.cc-control-group .cc-soft-select {
+    min-width: 220px;
+}
+
+/* ─── Data tables ─── */
+
+.cc-table-wrap {
+    background: var(--surface-0);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.cc-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.cc-data-table thead {
+    background: var(--gray-50);
+}
+
+.cc-data-table thead th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--gray-500);
+    border-bottom: 1px solid var(--gray-200);
+    white-space: nowrap;
+}
+
+.cc-data-table thead th.cc-table-caption {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--gray-800);
+    background: var(--gray-50);
+}
+
+.cc-data-table tbody tr {
+    border-bottom: 1px solid var(--gray-100);
+    transition: background 0.15s;
+}
+
+.cc-data-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.cc-data-table tbody tr:hover {
+    background: var(--gray-50);
+}
+
+.cc-data-table tbody td {
+    padding: 0.625rem 1rem;
+    color: var(--gray-800);
+    vertical-align: middle;
+}
+
+.cc-subjects-table tbody td {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.cc-row-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 1.6rem;
+    border-radius: 0.4rem;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    color: var(--gray-600);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.cc-grade-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.65rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.45rem;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.cc-subject-name {
+    color: var(--gray-900);
+    font-weight: 700;
+}
+
+.cc-data-table tbody td .cc-soft-select,
+.cc-data-table tbody td .cc-soft-input {
+    width: 100%;
+}
+
+.cc-data-table tfoot td {
+    padding: 0.625rem 1rem;
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+    font-size: 0.8125rem;
+}
+
+.cc-actions-col {
+    width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.cc-narrow-col {
+    width: 120px;
+    text-align: center;
+}
+
+.cc-empty-cell {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--gray-500);
+    font-style: italic;
+}
+
+.cc-empty-note {
+    color: var(--gray-500);
+    font-size: 0.8125rem;
+    margin: 0;
+}
+
+/* ─── Icon action buttons ─── */
+
+.cc-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    background: var(--surface-0);
+    color: var(--gray-500);
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.cc-icon-btn:hover {
+    border-color: var(--deped-blue);
+    color: var(--deped-blue);
+    background: #eff6ff;
+}
+
+.cc-icon-btn--danger:hover {
+    border-color: #fecaca;
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+/* ─── Modals ─── */
+
+.cc-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cc-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+}
+
+.cc-modal-dialog {
+    position: relative;
+    background: var(--surface-0);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 460px;
+    overflow: hidden;
+    animation: cc-modal-in 0.2s ease;
+}
+
+@keyframes cc-modal-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.cc-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.cc-modal-header h4 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cc-modal-header h4 i {
+    color: var(--deped-blue);
+}
+
+.cc-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: var(--gray-400);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.cc-modal-close:hover {
+    color: var(--gray-700);
+}
+
+.cc-modal-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cc-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--gray-100);
+    background: var(--gray-50);
+}
+
+.cc-form-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.cc-modal-dialog--wide {
+    max-width: 600px;
+}
+
+/* ─── Curriculum subject picker modal ─── */
+
+#ccAddSubjectModal.show {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+#ccAddSubjectModal .modal-dialog {
+    margin: 0;
+    width: min(780px, calc(100vw - 2rem));
+    max-width: 780px;
+}
+
+.cc-subject-modal-content {
+    width: 100%;
+    max-height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0.9rem;
+    background: var(--surface-0);
+    box-shadow: var(--shadow-lg);
+}
+
+.cc-subject-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: linear-gradient(180deg, var(--gray-50) 0%, var(--surface-0) 100%);
+}
+
+.cc-subject-modal-header h5 {
+    margin: 0;
+    color: var(--gray-900);
+    font-size: 1rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.cc-subject-modal-header h5 i {
+    color: var(--deped-blue);
+}
+
+.cc-subject-modal-header p {
+    margin: 0.25rem 0 0;
+    color: var(--gray-600);
+    font-size: 0.8125rem;
+}
+
+.cc-subject-modal-body {
+    padding: 1.1rem 1.25rem;
+    overflow: auto;
+    display: grid;
+    gap: 0.85rem;
+}
+
+.cc-modal-detail-card {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.85rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.65rem;
+    background: var(--gray-50);
+}
+
+.cc-modal-detail-card > span {
+    color: var(--gray-600);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.cc-mapeh-presets {
+    display: grid;
+    gap: 0.7rem;
+    padding: 0.85rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.65rem;
+    background: var(--surface-0);
+}
+
+.cc-mapeh-presets-head h6 {
+    margin: 0;
+    color: var(--gray-900);
+    font-size: 0.86rem;
+    font-weight: 800;
+}
+
+.cc-mapeh-presets-head p {
+    margin: 0.2rem 0 0;
+    color: var(--gray-600);
+    font-size: 0.76rem;
+}
+
+.cc-mapeh-preset-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+}
+
+.cc-preset-btn {
+    min-width: 0;
+    padding: 0.75rem 0.8rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.55rem;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    text-align: left;
+    cursor: pointer;
+}
+
+.cc-preset-btn:hover {
+    border-color: var(--color-info);
+    background: var(--deped-blue-light);
+}
+
+.cc-preset-btn:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.cc-preset-btn span,
+.cc-preset-btn small {
+    display: block;
+}
+
+.cc-preset-btn span {
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.cc-preset-btn small {
+    margin-top: 0.25rem;
+    color: var(--gray-600);
+    font-size: 0.72rem;
+    line-height: 1.3;
+}
+
+.cc-subject-picker {
+    border: 1px solid var(--gray-200);
+    border-radius: 0.65rem;
+    overflow: hidden;
+    background: var(--surface-0);
+}
+
+.cc-subject-picker-head,
+.cc-subject-picker-tools {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.8rem 0.9rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--surface-0);
+}
+
+.cc-subject-picker-head h6 {
+    margin: 0;
+    color: var(--gray-900);
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.cc-subject-picker-head p {
+    margin: 0.15rem 0 0;
+    color: var(--gray-600);
+    font-size: 0.78rem;
+}
+
+.cc-subject-picker-tools {
+    background: var(--gray-50);
+}
+
+.cc-subject-picker-tools input {
+    min-width: 0;
+}
+
+.cc-subject-checklist {
+    max-height: 330px;
+    overflow: auto;
+    padding: 0.6rem;
+    display: grid;
+    gap: 0.55rem;
+    background: var(--surface-0);
+}
+
+.cc-subject-choice {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    gap: 0.7rem;
+    align-items: flex-start;
+    padding: 0.8rem 0.85rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.55rem;
+    background: var(--surface-0);
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cc-subject-choice.is-selected,
+.cc-subject-choice:has(.cc-subject-checkbox:checked) {
+    border-color: var(--color-info);
+    background: var(--deped-blue-light);
+}
+
+.cc-subject-choice:hover {
+    background: var(--gray-50);
+    border-color: var(--gray-300);
+}
+
+.cc-subject-checkbox {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.15rem;
+    cursor: pointer;
+}
+
+.cc-subject-choice-body {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.cc-subject-choice-title {
+    display: block;
+    color: var(--gray-900);
+    font-size: 0.86rem;
+    line-height: 1.25;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.cc-subject-choice-desc {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--gray-500);
+    font-size: 0.75rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.cc-subject-checklist-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 2rem 1rem;
+    color: var(--gray-500);
+    text-align: center;
+}
+
+.cc-quick-create-subject {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.65rem;
+    align-items: end;
+    padding: 0.85rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.65rem;
+    background: var(--gray-50);
+}
+
+.cc-quick-create-subject h6 {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--deped-blue);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.cc-subject-modal-footer {
+    padding: 0.9rem 1.25rem;
+    border-top: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+
+@media (max-width: 700px) {
+    .cc-modal-detail-card,
+    .cc-quick-create-subject {
+        grid-template-columns: 1fr;
+    }
+
+    .cc-subject-picker-head,
+    .cc-subject-picker-tools,
+    .cc-mapeh-preset-actions {
+        align-items: stretch;
+        flex-direction: column;
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ─── View grade modal content ─── */
+
+/* ─── Responsive ─── */
+
+@media (max-width: 768px) {
+    .cc-top-control {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cc-control-group {
+        width: 100%;
+    }
+
+    .cc-control-group .cc-soft-select {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .cc-form-grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .cc-data-table {
+        font-size: 0.8125rem;
+    }
+
+    .cc-data-table tbody td,
+    .cc-data-table thead th {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .cc-actions-col,
+    .cc-narrow-col {
+        width: auto;
+    }
+}

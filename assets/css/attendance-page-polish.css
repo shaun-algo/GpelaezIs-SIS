@@ -1,0 +1,845 @@
+/*
+ * Attendance page final layout pass.
+ *
+ * The attendance sheet is intentionally one real table at every viewport.
+ * The sheet scrolls on its own, while the learner identity rail remains
+ * available during entry.  Keeping one layout model avoids the old
+ * table-to-card-to-table cascade that caused broken intermediate widths.
+ */
+
+body.attendance-page {
+    --attendance-sheet-surface: #fbfdff;
+    --attendance-sheet-header: #e8f1f9;
+    --attendance-sheet-line: #dbe5ee;
+    --attendance-sheet-ink: #294861;
+}
+
+/* The browser's default [hidden] rule loses to the shared button display
+   rule in this project. Keep role-based controls genuinely hidden. */
+body.attendance-page [hidden] {
+    display: none !important;
+}
+
+body.attendance-page .attendance-shell,
+body.attendance-page .attendance-shell > .card-body {
+    overflow: visible !important;
+}
+
+body.attendance-page .attendance-shell-header {
+    min-height: 4.5rem;
+}
+
+body.attendance-page .attendance-shell-header > div:first-child,
+body.attendance-page .attendance-table-header > * {
+    min-width: 0;
+}
+
+body.attendance-page .att-right {
+    align-items: center;
+}
+
+body.attendance-page .att-save-ind {
+    white-space: nowrap;
+}
+
+/* Selection panel */
+body.attendance-page .att-filters.attendance-filter-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: end;
+}
+
+body.attendance-page .att-filters .form-group {
+    min-width: 0;
+}
+
+body.attendance-page .att-filters .form-control,
+body.attendance-page .att-filters .academic-date-trigger {
+    width: 100%;
+    min-width: 0;
+}
+
+body.attendance-page .att-filters .academic-date-trigger {
+    justify-content: space-between;
+    text-align: left;
+}
+
+body.attendance-page .att-wizard-validation {
+    min-height: 1.2rem;
+}
+
+/* The legend is important, but should not push the sheet below the fold. */
+body.attendance-page .sf2-entry-legend {
+    margin: .9rem 0 0;
+    padding: .7rem .85rem;
+    border: 1px solid #e2c56b;
+    border-radius: .65rem;
+    background: #fffaf0;
+    color: #5b470c;
+    font-size: .78rem;
+    line-height: 1.45;
+    box-shadow: none;
+}
+
+body.attendance-page .sf2-entry-legend > summary {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    min-height: 1.4rem;
+    color: #5b470c;
+    font-weight: 800;
+    cursor: pointer;
+    list-style: none;
+}
+
+body.attendance-page .sf2-entry-legend > summary::-webkit-details-marker {
+    display: none;
+}
+
+body.attendance-page .sf2-entry-legend > summary::after {
+    width: .45rem;
+    height: .45rem;
+    margin-left: auto;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    content: '';
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 160ms var(--academic-ease, ease);
+}
+
+body.attendance-page .sf2-entry-legend[open] > summary::after {
+    transform: rotate(225deg) translate(-1px, -1px);
+}
+
+body.attendance-page .sf2-legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem .9rem;
+    margin-top: .55rem;
+}
+
+/* Sheet chrome */
+body.attendance-page .attendance-table-card {
+    overflow: visible !important;
+}
+
+body.attendance-page .attendance-table-header {
+    min-height: 0;
+    padding: .8rem 1rem !important;
+}
+
+body.attendance-page .attendance-table-card .sf2-attendance-tools {
+    display: flex;
+    align-items: end;
+    justify-content: flex-start;
+    gap: .75rem;
+    flex-wrap: wrap;
+    padding: .85rem 1.25rem;
+    border-bottom: 1px solid var(--academic-line);
+    background: #fff;
+}
+
+body.attendance-page .attendance-table-card .sf2-attendance-search {
+    display: flex;
+    flex: 0 1 280px;
+    min-width: min(100%, 220px);
+    flex-direction: column;
+    gap: .3rem;
+}
+
+body.attendance-page .attendance-table-card .sf2-attendance-search .form-label {
+    margin: 0;
+    color: #49627c;
+    font-size: .68rem;
+    font-weight: 750;
+    letter-spacing: .055em;
+    text-transform: uppercase;
+}
+
+body.attendance-page .attendance-table-card .sf2-entry-page {
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: .85rem;
+    border: 0;
+    border-radius: 0 0 .65rem .65rem;
+    background: transparent;
+    box-shadow: none;
+}
+
+body.attendance-page .attendance-table-card .attendance-grade-sheet-wrap {
+    --sf2-index-width: 3rem;
+    --sf2-learner-width: clamp(14rem, 23vw, 18rem);
+    --sf2-date-width: 3.25rem;
+    --sf2-total-width: 4.5rem;
+    position: relative;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: min(72vh, 46rem);
+    margin: 0 !important;
+    overflow: auto !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-color: #b8c7d8 transparent;
+    scrollbar-width: thin;
+    border: 1px solid var(--attendance-sheet-line);
+    border-radius: .65rem;
+    background: var(--attendance-sheet-surface);
+    isolation: isolate;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table {
+    display: table !important;
+    width: max-content !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    table-layout: fixed !important;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    color: var(--attendance-sheet-ink);
+    font-size: .78rem;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table thead,
+body.attendance-page .attendance-table-card table.sf2-monthly-table tbody {
+    display: table-row-group !important;
+    width: auto !important;
+    height: auto !important;
+    position: static !important;
+    clip: auto !important;
+    overflow: visible !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table tfoot {
+    display: table-footer-group !important;
+    width: auto !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table tr {
+    display: table-row !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td {
+    display: table-cell !important;
+    box-sizing: border-box;
+    position: static;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: .55rem .45rem !important;
+    border: 0 !important;
+    border-right: 1px solid var(--attendance-sheet-line) !important;
+    border-bottom: 1px solid var(--attendance-sheet-line) !important;
+    border-radius: 0 !important;
+    background: var(--attendance-sheet-surface) !important;
+    vertical-align: middle;
+    white-space: nowrap !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table tr > :last-child {
+    border-right: 0 !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table thead th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 30 !important;
+    min-height: 3.3rem;
+    padding: .55rem .35rem !important;
+    border-bottom-color: #cbd9e5 !important;
+    background: var(--attendance-sheet-header) !important;
+    color: #49627c;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .055em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-no,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-no {
+    width: var(--sf2-index-width) !important;
+    min-width: var(--sf2-index-width) !important;
+    max-width: var(--sf2-index-width) !important;
+    text-align: center;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-name,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-name,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-gender-label {
+    width: var(--sf2-learner-width) !important;
+    min-width: var(--sf2-learner-width) !important;
+    max-width: var(--sf2-learner-width) !important;
+    text-align: left;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-no,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-no,
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-name,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-name,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-gender-label {
+    position: sticky !important;
+    z-index: 20 !important;
+    background: var(--attendance-sheet-surface) !important;
+    box-shadow: 1px 0 0 var(--attendance-sheet-line);
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-no,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-no {
+    left: 0 !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-name,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-name,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-gender-label {
+    left: var(--sf2-index-width) !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table thead th.sf2-no,
+body.attendance-page .attendance-table-card table.sf2-monthly-table thead th.sf2-name {
+    z-index: 40 !important;
+    background: var(--attendance-sheet-header) !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-date,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-mark-cell {
+    width: var(--sf2-date-width) !important;
+    min-width: var(--sf2-date-width) !important;
+    max-width: var(--sf2-date-width) !important;
+    text-align: center;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-date {
+    white-space: normal !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-date-heading {
+    display: grid;
+    min-width: 0;
+    justify-items: center;
+    gap: .18rem;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-weekday,
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-day-number {
+    display: block;
+    width: 100%;
+    line-height: 1.05;
+    text-align: center;
+    white-space: nowrap;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-weekday {
+    color: #60788f;
+    font-size: .55rem;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-day-number {
+    color: var(--attendance-sheet-ink);
+    font-size: .78rem;
+    font-variant-numeric: tabular-nums;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-day-kind {
+    width: 100%;
+    min-width: 100%;
+    height: 1.9rem;
+    min-height: 1.9rem;
+    padding: 0 .12rem;
+    border: 1px solid #d2dee9;
+    border-radius: 6px;
+    background: #f8fbfe;
+    color: #60788f;
+    font-size: .58rem;
+    font-weight: 800;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-day-kind[data-kind="P"] {
+    border-color: #9bc4a5;
+    background: #eef9f0;
+    color: #176b2c;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-mark-cell {
+    height: 3.25rem !important;
+    min-height: 3.25rem !important;
+    padding: .4rem .28rem !important;
+    background: #fff !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-mark-input {
+    display: inline-block !important;
+    box-sizing: border-box;
+    width: 2.45rem !important;
+    min-width: 2.45rem !important;
+    max-width: 2.45rem !important;
+    height: 2.35rem !important;
+    min-height: 2.35rem !important;
+    margin: 0 auto;
+    padding: .3rem .15rem;
+    border: 1px solid #d1dfea;
+    border-radius: 7px;
+    background: #f8fbfe;
+    color: var(--attendance-sheet-ink);
+    font-size: .88rem;
+    line-height: 1.2;
+    text-align: center;
+    touch-action: manipulation;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-mark-input:focus {
+    outline: 2px solid #2876bd;
+    outline-offset: 1px;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-mark-input[data-mark="P"] {
+    border-color: #9bc4a5;
+    background: #eef9f0;
+    color: #176b2c;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-mark-input[data-mark="X"] {
+    border-color: #e4a7a2;
+    background: #fff1f0;
+    color: #b42318;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-mark-input[data-mark="L"] {
+    color: transparent;
+    background: linear-gradient(to bottom right, #111827 0 50%, #fff 50% 100%);
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-mark-input[data-mark="C"] {
+    color: transparent;
+    background: linear-gradient(to bottom right, #fff 0 50%, #111827 50% 100%);
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-mark-input[data-mark="HD"] {
+    color: transparent;
+    background: linear-gradient(to bottom right, #111827 0 50%, #b42318 50% 100%);
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-non-school {
+    height: 3.25rem !important;
+    min-height: 3.25rem !important;
+    background: #fff8df !important;
+    color: #806310;
+    font-size: .68rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+/* Result totals remain part of the worksheet's horizontal scroll flow. The
+   learner identity rail is the only pinned table edge; Present/Absent must
+   travel with the date columns instead of attaching to the viewport edge. */
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-total,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-total,
+body.attendance-page .attendance-table-card table.sf2-monthly-table tfoot .sf2-summary-present,
+body.attendance-page .attendance-table-card table.sf2-monthly-table tfoot .sf2-summary-absent {
+    width: var(--sf2-total-width) !important;
+    min-width: var(--sf2-total-width) !important;
+    max-width: var(--sf2-total-width) !important;
+    position: static !important;
+    right: auto !important;
+    z-index: auto !important;
+    padding-inline: .35rem !important;
+    background: #fff !important;
+    box-shadow: none;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-total:last-child,
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-total:last-child,
+body.attendance-page .attendance-table-card table.sf2-monthly-table tfoot .sf2-summary-absent {
+    right: auto !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table th.sf2-total:nth-last-child(2),
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-total:nth-last-child(2),
+body.attendance-page .attendance-table-card table.sf2-monthly-table tfoot .sf2-summary-present {
+    right: auto !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table thead th.sf2-total {
+    position: static !important;
+    right: auto !important;
+    z-index: auto !important;
+    background: var(--attendance-sheet-header) !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-gender-row td {
+    background: #edf3f8 !important;
+    color: #41556b;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-gender-row td.sf2-gender-label {
+    z-index: 24 !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table tfoot td {
+    height: 2.4rem !important;
+    min-height: 0 !important;
+    padding: .4rem .45rem !important;
+    background: #eaf0f6 !important;
+    color: #334e68;
+    font-size: .72rem;
+    font-weight: 800;
+    line-height: 1.15;
+    white-space: nowrap !important;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table tfoot td:first-child {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 24 !important;
+    width: calc(var(--sf2-index-width) + var(--sf2-learner-width)) !important;
+    min-width: calc(var(--sf2-index-width) + var(--sf2-learner-width)) !important;
+    max-width: calc(var(--sf2-index-width) + var(--sf2-learner-width)) !important;
+    overflow: hidden;
+    background: #eaf0f6 !important;
+    text-align: left;
+    text-overflow: ellipsis;
+}
+
+body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-empty {
+    min-height: 8rem;
+    padding: 1.5rem !important;
+    color: var(--academic-muted, #787774);
+    text-align: center;
+    white-space: normal !important;
+}
+
+/* Mobile selection flow */
+@media screen and (max-width: 56.25rem) {
+    body.attendance-page .att-filters.attendance-filter-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.attendance-page .attendance-table-card .attendance-grade-sheet-wrap {
+        max-height: none;
+    }
+}
+
+@media screen and (max-width: 48rem) {
+    body.attendance-page #mainContent {
+        padding-inline: .65rem;
+    }
+
+    body.attendance-page .attendance-shell-header {
+        align-items: center !important;
+        flex-wrap: nowrap;
+        gap: .55rem;
+        padding: .8rem !important;
+    }
+
+    body.attendance-page .attendance-shell-header .card-title {
+        font-size: .98rem;
+        line-height: 1.25;
+    }
+
+    body.attendance-page .att-right {
+        flex: 0 0 auto;
+        gap: .4rem;
+        flex-wrap: nowrap;
+    }
+
+    body.attendance-page .att-save-ind {
+        gap: 0;
+    }
+
+    body.attendance-page .att-save-ind #attSaveLbl {
+        display: none;
+    }
+
+    body.attendance-page .att-right #btnAttSaveTop {
+        min-height: 40px;
+        padding-inline: .7rem;
+    }
+
+    body.attendance-page .att-filters.attendance-filter-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: .65rem;
+        margin-bottom: .85rem !important;
+        padding: .8rem;
+    }
+
+    body.attendance-page .att-mobile-wizard {
+        display: block;
+    }
+
+    body.attendance-page .att-wizard-select-step {
+        display: grid;
+        gap: .65rem;
+    }
+
+    body.attendance-page .att-wizard-validation {
+        font-size: .74rem;
+    }
+
+    body.attendance-page .att-wizard-proceed,
+    body.attendance-page .att-mobile-change-selection {
+        width: 100%;
+        min-height: 44px;
+        justify-content: center;
+    }
+
+    body.attendance-page:not(.att-mobile-ready) .attendance-table-card,
+    body.attendance-page:not(.att-mobile-ready) .att-mobile-change-selection {
+        display: none !important;
+    }
+
+    body.attendance-page.att-mobile-ready .att-mobile-wizard {
+        display: none !important;
+    }
+
+    body.attendance-page .attendance-table-header {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr);
+        gap: .5rem;
+        padding: .7rem .75rem !important;
+    }
+
+    body.attendance-page .attendance-table-card .sf2-attendance-tools {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+        gap: .6rem;
+        padding: .7rem .75rem;
+    }
+
+    body.attendance-page .attendance-table-card .sf2-attendance-search {
+        width: 100%;
+        min-width: 0;
+        flex-basis: auto;
+    }
+
+    body.attendance-page .attendance-table-card .sf2-entry-page {
+        padding: .45rem .45rem 0;
+        border-radius: 0;
+    }
+
+    body.attendance-page .attendance-table-card .attendance-grade-sheet-wrap {
+        --sf2-index-width: 2.25rem;
+        --sf2-learner-width: clamp(9.5rem, 42vw, 13rem);
+        --sf2-date-width: 3.15rem;
+        --sf2-total-width: 4.25rem;
+        border-radius: .55rem;
+    }
+
+    body.attendance-page .attendance-table-card table.sf2-monthly-table {
+        font-size: .75rem;
+    }
+
+    body.attendance-page .attendance-table-card table.sf2-monthly-table th,
+    body.attendance-page .attendance-table-card table.sf2-monthly-table td {
+        padding-block: .5rem !important;
+    }
+
+    body.attendance-page .attendance-table-card table.sf2-monthly-table thead th {
+        min-height: 3rem;
+        padding-inline: .25rem !important;
+    }
+
+    body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-weekday {
+        font-size: .52rem;
+    }
+
+    body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-day-number {
+        font-size: .75rem;
+    }
+
+    body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-day-kind {
+        height: 1.8rem;
+        min-height: 1.8rem;
+        font-size: .54rem;
+    }
+
+    body.attendance-page .attendance-table-card table.sf2-monthly-table td.sf2-mark-cell {
+        height: 3rem !important;
+        min-height: 3rem !important;
+        padding-inline: .2rem !important;
+    }
+
+    body.attendance-page .attendance-table-card table.sf2-monthly-table .sf2-mark-input {
+        width: 2.35rem !important;
+        min-width: 2.35rem !important;
+        max-width: 2.35rem !important;
+        height: 2.2rem !important;
+        min-height: 2.2rem !important;
+        font-size: .82rem;
+    }
+
+    body.attendance-page .sf2-entry-legend {
+        font-size: .74rem;
+    }
+
+    body.attendance-page .sf2-legend-items {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .25rem .7rem;
+    }
+
+    /* Learner summary becomes a readable metric table, not a clipped rail. */
+    body.attendance-page.att-learner-mode .learner-att-toolbar {
+        grid-template-columns: minmax(0, 1fr);
+        gap: .75rem;
+        padding: .8rem;
+    }
+
+    body.attendance-page.att-learner-mode .learner-att-toolbar-left,
+    body.attendance-page.att-learner-mode .learner-att-toolbar-right,
+    body.attendance-page.att-learner-mode .learner-att-toolbar .form-group,
+    body.attendance-page.att-learner-mode .learner-att-toolbar select,
+    body.attendance-page.att-learner-mode .learner-att-toolbar input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    body.attendance-page.att-learner-mode #myAttSchoolYear {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        border: 0 !important;
+        opacity: 0 !important;
+    }
+
+    body.attendance-page.att-learner-mode .learner-att-school-year-mobile {
+        display: block;
+        position: relative;
+        z-index: 5;
+    }
+
+    body.attendance-page.att-learner-mode #myAttendanceView .att-table-wrap {
+        overflow-x: auto;
+        margin-inline: 0;
+    }
+
+    body.attendance-page.att-learner-mode .learner-att-table {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: fixed !important;
+    }
+
+    body.attendance-page.att-learner-mode .learner-att-table th,
+    body.attendance-page.att-learner-mode .learner-att-table td {
+        padding: .65rem .45rem !important;
+        overflow-wrap: anywhere;
+        white-space: normal !important;
+        font-size: .72rem;
+    }
+
+    body.attendance-page.att-learner-mode .learner-att-table th:first-child,
+    body.attendance-page.att-learner-mode .learner-att-table td:first-child {
+        width: 42% !important;
+        min-width: 0 !important;
+        position: static !important;
+    }
+
+    body.attendance-page.att-learner-mode .learner-att-table th:not(:first-child),
+    body.attendance-page.att-learner-mode .learner-att-table td:not(:first-child) {
+        width: 19.33% !important;
+        min-width: 0 !important;
+        text-align: center !important;
+    }
+
+}
+
+@media screen and (max-width: 22rem) {
+    body.attendance-page .attendance-shell-header {
+        align-items: flex-start !important;
+        flex-direction: column !important;
+    }
+
+    body.attendance-page .att-right {
+        width: 100% !important;
+        justify-content: flex-end;
+    }
+
+    body.attendance-page .sf2-legend-items {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+}
+
+@media print {
+    body.attendance-page .attendance-grade-sheet-wrap {
+        max-height: none !important;
+        overflow: visible !important;
+        border: 0 !important;
+    }
+
+    body.attendance-page .attendance-table-header,
+    body.attendance-page #btnAttSaveTop,
+    body.attendance-page .att-options,
+    body.attendance-page .att-wizard-select-step,
+    body.attendance-page .sf2-entry-legend {
+        display: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.attendance-page .btn,
+    body.attendance-page .form-control,
+    body.attendance-page .sf2-entry-legend > summary::after {
+        transition: none !important;
+    }
+}
+
+/* Learner accounts use one chronological monthly table, not subject rows. */
+body.attendance-page.att-learner-mode .learner-att-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+body.attendance-page.att-learner-mode #myAttendanceView .att-table-wrap {
+    overflow-x: auto !important;
+}
+
+body.attendance-page.att-learner-mode .learner-att-table {
+    width: 100% !important;
+    min-width: 720px !important;
+    table-layout: fixed !important;
+}
+
+body.attendance-page.att-learner-mode .learner-att-table th,
+body.attendance-page.att-learner-mode .learner-att-table td {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+}
+
+body.attendance-page.att-learner-mode .learner-att-table th:first-child,
+body.attendance-page.att-learner-mode .learner-att-table td:first-child {
+    width: 24% !important;
+    text-align: left !important;
+}
+
+body.attendance-page.att-learner-mode .learner-att-table th:not(:first-child),
+body.attendance-page.att-learner-mode .learner-att-table td:not(:first-child) {
+    width: 12.667% !important;
+}
+
+body.attendance-page.att-learner-mode .learner-att-table .learner-att-number {
+    text-align: right !important;
+    font-variant-numeric: tabular-nums;
+}
+
+body.attendance-page.att-learner-mode .learner-att-whole-year td {
+    background: var(--academic-soft);
+    font-weight: 800;
+}

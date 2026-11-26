@@ -1,0 +1,648 @@
+/*
+ * Learner record workspace
+ * A quiet, form-first layout for staff reviewing and updating one learner.
+ */
+
+.learner-record-page {
+    --learner-ink: #18324a;
+    --learner-muted: #6b7f91;
+    --learner-line: #dfe8ef;
+    --learner-soft: #f6f9fc;
+    --learner-accent: #1669a7;
+    --learner-accent-soft: #edf6fd;
+    --learner-heading: #0f4f82;
+}
+
+.learner-record-page .main-content {
+    padding: 1.45rem clamp(1rem, 3vw, 2.25rem) 2.25rem;
+}
+
+.learner-record-page .learner-content-wrapper {
+    width: min(100%, 1180px);
+    max-width: none;
+    margin-inline: auto;
+}
+
+.learner-record-page .page-header {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 1.25rem;
+}
+
+.learner-record-page .page-title {
+    color: var(--learner-ink);
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+}
+
+.learner-record-page .page-subtitle {
+    color: var(--learner-muted);
+    font-size: 0.88rem;
+}
+
+.learner-record-workspace {
+    display: grid;
+    grid-template-columns: minmax(230px, 280px) minmax(0, 1fr);
+    gap: 1.15rem;
+    align-items: start;
+}
+
+.learner-record-sidebar,
+.learner-record-page .learner-details-card {
+    border: 1px solid var(--learner-line);
+    border-radius: 16px;
+    background: var(--surface-0);
+    box-shadow: 0 10px 28px rgba(24, 50, 74, 0.055);
+}
+
+.learner-record-sidebar {
+    position: sticky;
+    top: calc(var(--topbar-height, 64px) + 1rem);
+    z-index: 5;
+    padding: 1.15rem;
+}
+
+.learner-filter-heading h2 {
+    margin: 0;
+    color: var(--learner-ink);
+    font-size: 1.08rem;
+    letter-spacing: -0.015em;
+}
+
+.learner-filter-heading p,
+.learner-segment-heading p {
+    margin: 0.35rem 0 0;
+    color: var(--learner-muted);
+    font-size: 0.76rem;
+    line-height: 1.45;
+}
+
+.learner-search-container {
+    width: 100%;
+    max-width: none;
+    margin: 1.15rem 0 1.45rem;
+}
+
+.learner-search-label {
+    display: block;
+    margin-bottom: 0.38rem;
+    color: var(--learner-ink);
+    font-size: 0.72rem;
+    font-weight: 750;
+}
+
+.learner-record-page .search-box {
+    width: 100%;
+}
+
+.learner-record-page .search-box > i {
+    left: 0.85rem;
+    color: var(--learner-muted);
+    font-size: 0.78rem;
+}
+
+.learner-record-page .search-input {
+    width: 100%;
+    max-width: none !important;
+    min-height: 42px;
+    padding: 0.68rem 0.75rem 0.68rem 2.35rem !important;
+    border: 1px solid var(--learner-line) !important;
+    border-radius: 10px !important;
+    background: var(--surface-0) !important;
+    color: var(--learner-ink) !important;
+    font-size: 0.82rem;
+    box-shadow: none !important;
+}
+
+.learner-record-page .search-input:focus {
+    border-color: var(--learner-accent) !important;
+    box-shadow: 0 0 0 3px rgba(22, 105, 167, 0.11) !important;
+}
+
+.learner-record-page .search-input::placeholder {
+    color: #90a1af;
+    font-style: normal;
+}
+
+.learner-record-page .search-suggestions {
+    top: calc(100% + 0.4rem);
+    left: 0;
+    width: 100%;
+    max-width: none;
+    max-height: 310px;
+    overflow-y: auto;
+    border: 1px solid var(--learner-line);
+    border-radius: 11px;
+    background: var(--surface-0);
+    box-shadow: 0 18px 34px rgba(24, 50, 74, 0.14);
+}
+
+.learner-record-page .suggestion-item {
+    gap: 0.7rem;
+    padding: 0.75rem;
+    border-bottom-color: var(--learner-line);
+}
+
+.learner-record-page .suggestion-item:hover,
+.learner-record-page .suggestion-item.selected {
+    background: var(--learner-accent-soft);
+}
+
+.learner-record-page .suggestion-avatar {
+    width: 31px;
+    height: 31px;
+    border-radius: 9px;
+    background: var(--learner-accent-soft);
+    color: var(--learner-accent);
+    font-size: 0.68rem;
+}
+
+.learner-record-page .suggestion-name {
+    font-size: 0.76rem;
+    font-weight: 750;
+}
+
+.learner-record-page .suggestion-meta {
+    gap: 0.5rem;
+    font-size: 0.64rem;
+}
+
+.learner-segment-heading {
+    margin-top: 1.35rem;
+}
+
+.learner-segment-heading h3 {
+    margin: 0;
+    color: var(--learner-ink);
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.learner-segment-nav {
+    display: grid;
+    gap: 0.32rem;
+    margin-top: 0.8rem;
+}
+
+.learner-segment-tab {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 38px;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    background: transparent;
+    color: var(--learner-ink);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.learner-segment-tab:hover {
+    background: var(--learner-soft);
+    border-color: var(--learner-line);
+}
+
+.learner-segment-tab.is-active {
+    border-color: #cfe3f2;
+    background: var(--learner-accent-soft);
+    color: var(--learner-accent);
+}
+
+.learner-segment-tab:focus-visible {
+    outline: 2px solid var(--learner-accent);
+    outline-offset: 2px;
+}
+
+.learner-record-page .learner-details-card {
+    min-width: 0;
+    margin: 0;
+    overflow: visible;
+}
+
+.learner-record-page #studentDetailsForm {
+    padding: 0;
+}
+
+/* Match the existing masterfile selectors so the segmented shell owns the
+ * summary card instead of inheriting the former inset/sticky treatment. */
+body.learner-record-page #studentDetailsForm {
+    padding: 0;
+}
+
+.learner-record-page .student-fixed-header {
+    position: static;
+    display: block;
+    align-items: center;
+    min-height: 0;
+    margin: 0;
+    padding: 1rem 1.15rem 1.15rem;
+    border: 0;
+    border-bottom: 1px solid var(--learner-line);
+    border-radius: 16px 16px 0 0;
+    background: linear-gradient(180deg, #fbfdff 0%, var(--surface-0) 100%);
+    box-shadow: none;
+}
+
+.learner-record-page .student-fixed-meta {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.85fr) minmax(0, 2.15fr);
+    gap: 0.65rem;
+    width: 100%;
+}
+
+.learner-record-page .student-fixed-item {
+    display: grid;
+    align-content: center;
+    min-height: 64px;
+    min-width: 0;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--learner-line);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.learner-record-page .student-fixed-item--primary {
+    border-color: #cfe3f2;
+    background: var(--learner-accent-soft);
+}
+
+.learner-record-page .student-fixed-label {
+    color: var(--learner-muted);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.learner-record-page .student-fixed-value {
+    margin-top: 0.3rem;
+    color: var(--learner-ink);
+    font-size: 0.9rem;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.learner-record-page .student-fixed-item--primary .student-fixed-value {
+    color: var(--learner-accent);
+    font-size: 1rem;
+    letter-spacing: 0.015em;
+}
+
+.learner-record-page .student-fixed-item--context .student-fixed-value {
+    letter-spacing: 0.01em;
+}
+
+body.learner-record-page .student-fixed-header,
+body[data-form-theme="clean"].learner-record-page .student-fixed-header {
+    position: static;
+    top: auto;
+    z-index: auto;
+    margin: 0;
+    box-shadow: none;
+    border: 0 !important;
+    border-bottom: 1px solid var(--learner-line) !important;
+    border-radius: 16px 16px 0 0 !important;
+    padding: 1rem 1.15rem 1.15rem !important;
+    background: linear-gradient(180deg, #fbfdff 0%, var(--surface-0) 100%) !important;
+}
+
+.learner-record-page .learner-record-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin: 0;
+    padding: 0.9rem 1.15rem 1.1rem;
+    border-top: 1px solid var(--learner-line);
+    background: var(--surface-0);
+}
+
+.learner-record-page .learner-record-footer .btn {
+    min-height: 42px;
+    padding-inline: 1.05rem;
+    border-radius: 9px;
+    white-space: nowrap;
+}
+
+.learner-record-page .learner-record-footer .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.52;
+}
+
+.learner-record-page .learner-record-footer .btn.is-unsaved {
+    box-shadow: 0 0 0 3px rgba(15, 79, 130, 0.14);
+}
+
+.learner-record-page #studentDetailsFields .form-group.is-unsaved > label::after {
+    content: 'Unsaved';
+    display: inline-flex;
+    margin-left: 0.45rem;
+    color: #9a6700;
+    font-size: 0.62rem;
+    font-weight: 750;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    vertical-align: middle;
+}
+
+.learner-record-page #studentDetailsFields .form-group.is-unsaved .form-control,
+.learner-record-page #studentDetailsFields .form-group.is-unsaved .choices__inner,
+.learner-record-page #studentDetailsFields .form-group.is-unsaved .academic-date-trigger {
+    border-color: #d39a32 !important;
+    background: #fff8e7 !important;
+    box-shadow: 0 0 0 3px rgba(211, 154, 50, 0.14) !important;
+}
+
+.learner-record-page #studentDetailsFields {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background: transparent;
+}
+
+.learner-record-page #studentDetailsFields .section-school-information {
+    display: none !important;
+}
+
+.learner-record-page #studentDetailsFields .form-section[hidden] {
+    display: none !important;
+}
+
+.learner-record-page #studentDetailsFields .form-section:not([hidden]) {
+    animation: learner-segment-in 220ms ease both;
+}
+
+@keyframes learner-segment-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.learner-record-page #studentDetailsFields .form-section {
+    margin: 0;
+    padding: 0.15rem 0 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.learner-record-page #studentDetailsFields .section-title {
+    margin: 0 0 1.1rem;
+    padding: 0;
+    border: 0;
+    color: var(--learner-heading);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.learner-record-page #studentDetailsFields .section-learner-information + .section-personal-details {
+    margin-top: 2rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--app-line);
+}
+
+.learner-record-page #studentDetailsFields .section-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.3rem;
+    padding: 0;
+}
+
+/* The segment-in animation creates a stacking context on each section. Raise
+ * the section containing an open menu so its dropdown can clear the section
+ * below it instead of appearing behind the Personal Details fields. */
+.learner-record-page #studentDetailsFields .form-section:has(.choices.is-open) {
+    position: relative;
+    z-index: 10050;
+}
+
+.learner-record-page #studentDetailsFields .form-section:not(:has(.choices.is-open)) {
+    position: relative;
+    z-index: 1;
+}
+
+.learner-record-page #studentDetailsFields .form-group {
+    display: grid;
+    align-content: start;
+    gap: 0.4rem;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Keep learner-form dropdowns as front-layer menus. The open field receives
+ * its own stacking level so the menu floats above the neighboring controls
+ * without changing the form's layout. */
+.learner-record-page #studentDetailsFields .form-group:has(.choices.is-open) {
+    position: relative;
+    z-index: 10060;
+}
+
+.learner-record-page #studentDetailsFields .choices {
+    width: 100%;
+    margin: 0;
+}
+
+.learner-record-page #studentDetailsFields .choices.is-open {
+    z-index: 10061;
+    overflow: visible !important;
+}
+
+.learner-record-page #studentDetailsFields .choices.is-open .choices__list--dropdown,
+.learner-record-page #studentDetailsFields .choices.is-open .choices__list[aria-expanded] {
+    position: absolute !important;
+    top: calc(100% + 0.4rem) !important;
+    right: 0 !important;
+    bottom: auto !important;
+    left: 0 !important;
+    display: block;
+    width: 100%;
+    max-height: 15rem;
+    margin: 0 !important;
+    overflow: hidden !important;
+    border-radius: 9px;
+    box-shadow: 0 8px 20px rgba(24, 50, 74, 0.1);
+}
+
+.learner-record-page #studentDetailsFields .choices.is-open.is-flipped .choices__list--dropdown,
+.learner-record-page #studentDetailsFields .choices.is-open.is-flipped .choices__list[aria-expanded] {
+    top: auto !important;
+    bottom: calc(100% + 0.4rem) !important;
+}
+
+.learner-record-page #studentDetailsFields .choices__list--dropdown .choices__list,
+.learner-record-page #studentDetailsFields .choices__list[aria-expanded] .choices__list {
+    max-height: 13.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.learner-record-page #studentDetailsFields .choices__list--dropdown .choices__item--selectable,
+.learner-record-page #studentDetailsFields .choices__list[aria-expanded] .choices__item--selectable {
+    min-height: 2.4rem;
+    padding: 0.62rem 0.75rem;
+}
+
+.learner-record-page #studentDetailsFields .form-group > label {
+    color: var(--gray-700);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.learner-record-page #studentDetailsFields .form-control {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 9px;
+    background: var(--surface-0);
+    color: var(--gray-900);
+    font: inherit;
+    font-size: 0.88rem;
+    line-height: 1.35;
+    box-shadow: none;
+}
+
+.learner-record-page #studentDetailsFields .form-control:focus {
+    border-color: var(--deped-blue);
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.12);
+    outline: none;
+}
+
+.learner-record-page #studentDetailsFields .form-control[readonly],
+.learner-record-page #studentDetailsFields .form-control:disabled {
+    background: var(--gray-50);
+    color: var(--gray-600);
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+.learner-record-page #studentDetailsFields .birthday-input {
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 0.65rem 0.75rem !important;
+    border: 1px solid var(--gray-300) !important;
+    border-radius: 9px !important;
+    font-size: 0.88rem !important;
+}
+
+.learner-record-page #studentDetailsFields .error-message {
+    min-height: 0;
+    margin-top: 0.25rem;
+    font-size: 0.66rem;
+}
+
+.learner-record-page #studentDetailsFields .status-feedback {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.35rem;
+    margin: 0.35rem 0 0;
+    color: #a33a36;
+    font-size: 0.7rem;
+    line-height: 1.4;
+}
+
+.learner-record-page #studentDetailsFields .status-feedback::before {
+    content: '\f023';
+    flex: 0 0 auto;
+    margin-top: 0.05rem;
+    font-family: 'Font Awesome 5 Free';
+    font-size: 0.66rem;
+    font-weight: 900;
+}
+
+.learner-record-page #studentDetailsFields .status-feedback[hidden] {
+    display: none;
+}
+
+@media (max-width: 1020px) {
+    .learner-record-workspace {
+        grid-template-columns: minmax(210px, 245px) minmax(0, 1fr);
+    }
+
+    .learner-record-page .student-fixed-meta {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 760px) {
+    .learner-record-page .main-content {
+        padding: 1rem 0.85rem 1.5rem;
+    }
+
+    .learner-record-workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .learner-record-sidebar {
+        position: static;
+    }
+
+    .learner-segment-nav {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .learner-segment-tab {
+        min-height: 38px;
+        padding: 0.55rem 0.62rem;
+    }
+
+    .learner-record-page .student-fixed-header {
+        padding: 1rem;
+    }
+
+    .learner-record-page .student-fixed-meta {
+        grid-template-columns: minmax(150px, 0.8fr) minmax(0, 1.2fr);
+        gap: 0.6rem;
+    }
+
+    .learner-record-page .student-fixed-item {
+        min-height: 58px;
+        padding: 0.62rem 0.7rem;
+    }
+
+    .learner-record-page #studentDetailsFields {
+        padding-inline: 1rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .learner-record-page .student-fixed-header {
+        grid-template-columns: 1fr;
+    }
+
+    .learner-record-page #studentDetailsFields .section-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .learner-record-page .learner-record-footer {
+        align-items: stretch;
+        flex-direction: column;
+        padding-inline: 1rem;
+    }
+
+    .learner-record-page .learner-record-footer .btn {
+        width: 100%;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .learner-segment-tab,
+    .learner-record-page #studentDetailsFields .form-section:not([hidden]) {
+        transition: none;
+        animation: none;
+    }
+}

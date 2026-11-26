@@ -1,0 +1,490 @@
+/* Learner profile details: match the clean segmented staff profile workspace. */
+
+body.learner-profile-page {
+    --learner-profile-line: var(--app-line, #e4e8ee);
+    --learner-profile-ink: var(--gray-900, #182230);
+    --learner-profile-muted: var(--gray-600, #5d6877);
+}
+
+body.learner-profile-page .main-content {
+    padding: 1.45rem clamp(1rem, 3vw, 2.25rem) 2.5rem;
+}
+
+body.learner-profile-page .page-header {
+    width: min(100%, 1180px);
+    max-width: none;
+    margin: 0 auto 4rem;
+}
+
+body.learner-profile-page .page-title {
+    color: var(--learner-profile-ink);
+    font-size: clamp(1.35rem, 2vw, 1.75rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+}
+
+body.learner-profile-page .page-subtitle {
+    color: var(--learner-profile-muted);
+    font-size: 0.88rem;
+}
+
+body.learner-profile-page #profileStatus {
+    width: min(100%, 1180px);
+    margin: 0 auto;
+    padding: 1.4rem;
+    border: 1px solid var(--learner-profile-line);
+    border-radius: 12px;
+    background: var(--surface-0);
+    color: var(--learner-profile-muted);
+}
+
+body.learner-profile-page .learner-profile-panel {
+    width: min(100%, 1180px);
+    margin: 0 auto;
+}
+
+body.learner-profile-page .learner-profile-layout {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.34fr) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+body.learner-profile-page .learner-profile-rail {
+    position: sticky;
+    top: calc(var(--topbar-height, 72px) + 1rem);
+    min-width: 0;
+    padding: 0.5rem 0;
+}
+
+body.learner-profile-page .learner-profile-rail h2 {
+    margin: 0;
+    color: var(--learner-profile-ink);
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+body.learner-profile-page .learner-profile-nav {
+    margin-top: 0.85rem;
+    margin-bottom: 0;
+}
+
+body.learner-profile-page .learner-profile-form-shell {
+    min-width: 0;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--learner-profile-line);
+    border-radius: 16px;
+    background: var(--surface-0);
+    box-shadow: 0 10px 26px rgba(0, 85, 164, 0.045);
+}
+
+body.learner-profile-page .learner-profile-form .form-section[hidden] {
+    display: none !important;
+}
+
+body.learner-profile-page .learner-profile-form .form-section:not([hidden]) {
+    animation: learner-profile-section-in 180ms ease both;
+}
+
+@keyframes learner-profile-section-in {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body.learner-profile-page .learner-profile-form .form-section {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-left: 0 !important;
+    background: transparent;
+    box-shadow: none;
+}
+
+body.learner-profile-page .learner-profile-form .section-title {
+    margin: 0 0 1.1rem;
+    padding: 0;
+    border: 0;
+    border-left: 0 !important;
+    color: var(--learner-profile-ink);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+body.learner-profile-page .learner-profile-form .form-section + .form-section {
+    margin-top: 1.5rem;
+    padding-top: 0;
+    border-top: 0;
+}
+
+body.learner-profile-page .learner-profile-form .section-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 0;
+}
+
+body.learner-profile-page .learner-profile-form .form-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 0.4rem;
+    min-width: 0;
+    margin: 0;
+}
+
+body.learner-profile-page .learner-profile-form .form-group > label {
+    color: var(--gray-700);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+body.learner-profile-page .learner-profile-form .form-control {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 9px;
+    background: var(--surface-0);
+    color: var(--gray-900);
+    font: inherit;
+    font-size: 0.88rem;
+    line-height: 1.35;
+    box-shadow: none;
+}
+
+body.learner-profile-page .learner-profile-form .form-control:focus {
+    border-color: var(--deped-blue);
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.12);
+    outline: none;
+}
+
+body.learner-profile-page .learner-profile-form .form-control[readonly],
+body.learner-profile-page .learner-profile-form .form-control:disabled {
+    background: var(--gray-50);
+    color: var(--gray-900);
+    cursor: default;
+    opacity: 1;
+}
+
+body.learner-profile-page .learner-profile-form .birthday-input {
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 0.65rem 0.75rem !important;
+    border: 1px solid var(--gray-300) !important;
+    border-radius: 9px !important;
+    font-size: 0.88rem !important;
+}
+
+body.learner-profile-page .learner-profile-form .error-message {
+    min-height: 0;
+    margin-top: 0.2rem;
+    font-size: 0.66rem;
+}
+
+@media (max-width: 760px) {
+    body.learner-profile-page .main-content {
+        padding: 1rem 0.85rem 1.5rem;
+    }
+
+    body.learner-profile-page .learner-profile-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    body.learner-profile-page .learner-profile-rail {
+        position: static;
+        padding: 0;
+    }
+
+    body.learner-profile-page .learner-profile-nav {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.35rem;
+    }
+
+    body.learner-profile-page .learner-profile-form-shell {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 500px) {
+    body.learner-profile-page .learner-profile-form .section-fields {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.learner-profile-page .learner-profile-form .form-section:not([hidden]) {
+        animation: none;
+    }
+}
+
+/* Profile workspace refinement: use the same identity header as employee
+   profiles, then present the learner record as a quiet details table. */
+body.learner-profile-page .learner-profile-hero {
+    width: min(100%, 1180px);
+    margin: 0 auto 1.25rem;
+}
+
+body.learner-profile-page .learner-profile-avatar {
+    border-radius: 18px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+body.learner-profile-page .learner-profile-form .section-title {
+    margin: 0;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--learner-profile-line);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    background: var(--gray-50);
+    color: var(--learner-profile-ink);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    text-transform: none;
+}
+
+body.learner-profile-page .learner-profile-form .section-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    border: 1px solid var(--learner-profile-line);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+}
+
+body.learner-profile-page .learner-profile-form .form-group {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.85fr) minmax(0, 1.15fr);
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid var(--learner-profile-line);
+}
+
+body.learner-profile-page .learner-profile-form .form-group:nth-child(odd) {
+    border-right: 1px solid var(--learner-profile-line);
+}
+
+body.learner-profile-page .learner-profile-form .form-group:nth-last-child(-n + 2) {
+    border-bottom: 0;
+}
+
+body.learner-profile-page .learner-profile-form .form-group > label {
+    color: var(--gray-700);
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+body.learner-profile-page .learner-profile-form .form-control {
+    min-height: 30px;
+    padding: 0.15rem 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--gray-900);
+    font-size: 0.82rem;
+    font-weight: 650;
+}
+
+body.learner-profile-page .learner-profile-form .form-control:focus {
+    border-bottom: 2px solid var(--deped-blue);
+    box-shadow: none;
+    outline: none;
+}
+
+body.learner-profile-page .learner-profile-form .birthday-input {
+    min-height: 30px !important;
+    padding: 0.15rem 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    font-size: 0.82rem !important;
+}
+
+body.learner-profile-page .learner-profile-form .form-check {
+    grid-column: 1 / -1;
+}
+
+body.learner-profile-page .learner-profile-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--learner-profile-line);
+}
+
+body.learner-profile-page .learner-profile-edit-actions[hidden] {
+    display: none;
+}
+
+@media (max-width: 760px) {
+    body.learner-profile-page .learner-profile-form .form-group {
+        grid-template-columns: minmax(7.25rem, 0.85fr) minmax(0, 1.15fr);
+    }
+}
+
+@media (max-width: 500px) {
+    body.learner-profile-page .learner-profile-form .section-fields {
+        grid-template-columns: 1fr;
+    }
+
+    body.learner-profile-page .learner-profile-form .form-group,
+    body.learner-profile-page .learner-profile-form .form-group:nth-child(odd),
+    body.learner-profile-page .learner-profile-form .form-group:nth-last-child(-n + 2) {
+        grid-template-columns: minmax(7.25rem, 0.85fr) minmax(0, 1.15fr);
+        border-right: 0;
+        border-bottom: 1px solid var(--learner-profile-line);
+    }
+
+    body.learner-profile-page .learner-profile-form .form-group:last-child {
+        border-bottom: 0;
+    }
+}
+
+/* Employee-profile parity: use the same label-above-control rhythm instead of
+   a dense row-lined table. Field borders stay visible for read-only clarity. */
+body.learner-profile-page .learner-profile-form .form-section {
+    margin: 0;
+    padding: 0;
+    border: 0 !important;
+    background: transparent;
+    box-shadow: none;
+}
+
+body.learner-profile-page .learner-profile-form .form-section + .form-section {
+    margin-top: 1.85rem;
+    padding-top: 0;
+    border-top: 0 !important;
+}
+
+body.learner-profile-page .learner-profile-form .section-title {
+    margin: 0 0 1rem;
+    padding: 0;
+    border: 0 !important;
+    background: transparent;
+    color: var(--learner-profile-ink);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+body.learner-profile-page .learner-profile-form .section-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 0;
+    border: 0;
+}
+
+body.learner-profile-page .learner-profile-form .form-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 0.4rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0 !important;
+}
+
+body.learner-profile-page .learner-profile-form .form-group > label {
+    color: var(--gray-700);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+body.learner-profile-page .learner-profile-form .form-control,
+body.learner-profile-page .learner-profile-form .birthday-input,
+body.learner-profile-page .learner-profile-form .choices__inner {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--gray-300) !important;
+    border-radius: 9px;
+    background: var(--surface-0);
+    color: var(--gray-900);
+    font: inherit;
+    font-size: 0.88rem;
+    line-height: 1.35;
+    box-shadow: none;
+}
+
+body.learner-profile-page .learner-profile-form .form-control:focus,
+body.learner-profile-page .learner-profile-form .birthday-input:focus,
+body.learner-profile-page .learner-profile-form .choices.is-focused .choices__inner {
+    border-color: var(--deped-blue) !important;
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.12);
+    outline: none;
+}
+
+body.learner-profile-page .learner-profile-form .form-control[readonly],
+body.learner-profile-page .learner-profile-form .form-control:disabled,
+body.learner-profile-page .learner-profile-form .birthday-input:disabled,
+body.learner-profile-page .learner-profile-form .choices.is-disabled .choices__inner {
+    background: var(--gray-50) !important;
+    color: var(--gray-900);
+    cursor: default;
+    opacity: 1;
+}
+
+body.learner-profile-page .learner-profile-form .choices {
+    min-width: 0;
+    margin: 0;
+}
+
+body.learner-profile-page .learner-profile-form .choices__inner {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+}
+
+body.learner-profile-page .learner-profile-form .choices__list--single {
+    padding: 0.25rem 2rem 0.25rem 0;
+}
+
+body.learner-profile-page .learner-profile-form .birthday-picker-container {
+    min-width: 0;
+}
+
+body.learner-profile-page .learner-profile-form .birthday-picker-container input,
+body.learner-profile-page .learner-profile-form .birthday-picker-container select {
+    min-height: 44px;
+    border: 1px solid var(--gray-300) !important;
+    border-radius: 9px;
+    background: var(--surface-0) !important;
+    color: var(--gray-900) !important;
+}
+
+body.learner-profile-page .learner-profile-form .form-check {
+    grid-column: 1 / -1;
+}
+
+body.learner-profile-page .learner-profile-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+    padding-top: 0;
+    border-top: 0;
+}
+
+@media (max-width: 760px) {
+    body.learner-profile-page .learner-profile-form .section-fields {
+        grid-template-columns: 1fr;
+    }
+}

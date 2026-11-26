@@ -1,0 +1,16 @@
+<?php
+function recovery_email_html(string $subject,string $body,string $baseUrl, ?string $logoSource=null): string {
+    $escape=fn($s)=>htmlspecialchars($s,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
+    // Email clients cannot load localhost files. Only use a public HTTPS URL,
+    // and keep the logo out of the MIME parts so it cannot appear as an attachment.
+    $logoUrl='';
+    if (is_string($logoSource) && filter_var($logoSource,FILTER_VALIDATE_URL)!==false
+        && strtolower((string)(parse_url($logoSource,PHP_URL_SCHEME)??''))==='https') $logoUrl=$logoSource;
+    $logo=$logoUrl!==''?'<img src="'.$escape($logoUrl).'" alt="School logo" width="80" height="80" style="display:block;width:80px;height:80px;border:0;border-radius:50%;margin:0 0 20px;color:#ffffff;font-size:12px">':'';
+    $url='';
+    if (preg_match('~https?://[^\s<>]+~',$body,$match)) $url=$match[0];
+    $label=str_contains($url,'verify-email')?'Verify email address':(str_contains($url,'reset-password')?'Reset password':'Review request');
+    $text=$escape($url?str_replace($url,'',$body):$body);
+    $button=$url?'<p style="margin:28px 0"><a href="'.$escape($url).'" style="background:#0055a4;color:#ffffff;text-decoration:none;padding:15px 25px;display:inline-block;border-radius:6px;font-weight:bold">'.$label.'</a></p><p style="font-size:12px;color:#53687d;line-height:1.7">If the button does not work, copy this link into your browser:<br><a href="'.$escape($url).'" style="color:#0055a4;word-break:break-all">'.$escape($url).'</a></p>':'';
+    return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.$escape($subject).'</title></head><body style="margin:0;padding:24px 12px;background:#f2f6fa;font-family:Arial,Helvetica,sans-serif;color:#173554"><div style="display:none;max-height:0;overflow:hidden">'.$escape($subject).' - a secure message from your school portal.</div><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center"><table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background:#ffffff;border:1px solid #dce5ee;border-radius:10px;overflow:hidden"><tr><td style="padding:28px;background:#004482;color:#ffffff">'.$logo.'<p style="margin:0;font-size:20px;font-weight:bold">G. Pelaez Integrated School</p><p style="margin:8px 0 0;font-size:13px;color:#dceafa">Academic Monitoring System - Gitagum, Misamis Oriental</p></td></tr><tr><td style="padding:30px"><p style="font-size:11px;letter-spacing:1.5px;color:#53687d;font-weight:bold;margin:0 0 16px">ACCOUNT SECURITY</p><h1 style="font-size:25px;line-height:1.3;margin:0 0 22px">'.$escape($subject).'</h1><p style="line-height:1.8;font-size:15px;margin:0">'.nl2br($text).'</p>'.$button.'<div style="margin-top:26px;padding:16px;background:#eef4fa;border-left:3px solid #0055a4;font-size:13px;line-height:1.7">Keep your password and security links private. School staff will never ask you to disclose your password.</div></td></tr><tr><td style="padding:22px 30px;background:#f8fafc;border-top:1px solid #e1e9f2;font-size:12px;line-height:1.7;color:#607489">Sent by G. Pelaez Integrated School System.<br>If you need help, contact the school office. Please do not reply with your password.</td></tr></table></td></tr></table></body></html>';
+}

@@ -1,0 +1,366 @@
+/* Announcements page navigation refresh.
+   The canonical sidebar markup stays shared; this page-specific layer only
+   changes its visual rhythm and typography. */
+
+.announcement-page {
+    font-family: "Source Sans 3", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.announcement-page .page-title {
+    font-family: "Merriweather", Georgia, serif;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+}
+
+.announcement-page .sidebar {
+    background: #f8fbfe;
+    border-right-color: #dce7ef;
+    box-shadow: 12px 0 32px rgba(30, 77, 111, 0.08);
+}
+
+.announcement-page .sidebar-branding {
+    padding: 1.35rem 1.25rem 1.2rem;
+    background: #f8fbfe;
+    border-bottom-color: #e1ebf2;
+}
+
+.announcement-page .sidebar-nav {
+    padding: 1.15rem 0.85rem 2rem;
+}
+
+.announcement-page .sidebar-search {
+    padding: 0 0.25rem 1.1rem;
+}
+
+.announcement-page .nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+}
+
+.announcement-page .nav-item {
+    margin: 0;
+}
+
+.announcement-page .nav-link {
+    min-height: 3.1rem;
+    padding: 0.82rem 0.9rem;
+    border: 1px solid transparent;
+    border-radius: 0.72rem;
+    color: #506274;
+    font-family: inherit;
+    font-size: 0.98rem;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    line-height: 1.25;
+    gap: 0.82rem;
+    transform: none;
+    box-shadow: none;
+}
+
+.announcement-page .nav-link::before,
+.announcement-page .nav-link::after {
+    display: none;
+}
+
+.announcement-page .nav-link i:not(.submenu-icon) {
+    width: 1.2rem;
+    color: #6b8398;
+    font-size: 1rem;
+    transform: none;
+}
+
+.announcement-page .nav-link .submenu-icon {
+    color: #8ca0b1;
+    font-size: 0.78rem;
+}
+
+.announcement-page .nav-link:hover,
+.announcement-page .nav-link:focus-visible {
+    background: #edf5fa;
+    border-color: #d8e8f2;
+    color: #0055a4;
+    transform: translateX(3px);
+    box-shadow: none;
+}
+
+.announcement-page .nav-link:hover i:not(.submenu-icon),
+.announcement-page .nav-item.open > .nav-link i:not(.submenu-icon) {
+    color: #0055a4;
+    transform: none;
+}
+
+.announcement-page .nav-link.active {
+    background: #e3f0f8;
+    border-color: #cfe3ef;
+    color: #0055a4;
+    font-weight: 700;
+    transform: none;
+    box-shadow: inset 3px 0 0 #0055a4;
+}
+
+.announcement-page .nav-link.active i:not(.submenu-icon) {
+    color: #0055a4;
+}
+
+.announcement-page .submenu {
+    background: transparent;
+}
+
+.announcement-page .submenu > li {
+    transform: none;
+}
+
+.announcement-page .submenu.open > li {
+    transform: none;
+}
+
+.announcement-page .submenu li a {
+    min-height: 2.55rem;
+    margin: 0.16rem 0.2rem;
+    padding: 0.64rem 0.8rem 0.64rem 2.7rem;
+    border: 1px solid transparent;
+    border-radius: 0.58rem;
+    color: #607488;
+    font-family: inherit;
+    font-size: 0.93rem;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.announcement-page .submenu li a:hover,
+.announcement-page .submenu li a:focus-visible {
+    background: #eef6fb;
+    border-color: #d8e8f2;
+    color: #0055a4;
+    transform: translateX(3px);
+    box-shadow: none;
+}
+
+.announcement-page .submenu li a.active {
+    background: #e3f0f8;
+    border-color: #cfe3ef;
+    color: #0055a4;
+    font-weight: 700;
+    padding-left: 2.7rem;
+}
+
+.announcement-page .submenu li a i {
+    color: #7890a4;
+    font-size: 0.8rem;
+}
+
+.announcement-page .submenu li a:hover i,
+.announcement-page .submenu li a.active i {
+    color: #0055a4;
+    transform: none;
+}
+
+.announcement-page .nested-submenu > .nav-link {
+    min-height: 2.85rem;
+    margin: 0.26rem 0.2rem 0.34rem 0.9rem;
+    padding: 0.72rem 0.8rem;
+    border: 1px solid transparent !important;
+    border-radius: 0.62rem;
+    background: transparent;
+    font-size: 0.93rem;
+    font-weight: 600;
+}
+
+.announcement-page .nested-submenu > .nav-link:hover,
+.announcement-page .nested-submenu > .nav-link:focus-visible {
+    background: #edf5fa;
+    border-color: #d8e8f2 !important;
+    color: #0055a4;
+    transform: translateX(3px);
+}
+
+.announcement-page .nested-submenu.open > .nav-link {
+    background: #eaf3f9;
+    border-color: #d8e8f2 !important;
+    color: #0055a4;
+    transform: none;
+}
+
+.announcement-page .nested-submenu > .submenu.nested {
+    margin: 0.08rem 0.2rem 0.72rem 1.48rem;
+    padding: 0.18rem 0 0.42rem 0.82rem;
+}
+
+.announcement-page .submenu.nested li a {
+    min-height: 2.4rem;
+    margin: 0.16rem 0;
+    padding: 0.6rem 0.7rem 0.6rem 2.05rem;
+    background: transparent;
+    font-size: 0.91rem;
+}
+
+.announcement-page .submenu.nested li a.active {
+    padding-left: 2.05rem;
+}
+
+.announcement-page .submenu.nested > li:not(.nested-submenu) > a::before {
+    background-color: #87a0b2;
+}
+
+.announcement-page .submenu.nested > li:not(.nested-submenu) > a::after {
+    background: #c6dbe8;
+}
+
+.announcement-page .submenu.nested li a:hover,
+.announcement-page .submenu.nested li a:focus-visible {
+    background: #eef6fb;
+}
+
+@media (max-width: 768px) {
+    .announcement-page .sidebar-nav {
+        padding: 1rem 0.7rem 1.75rem;
+    }
+
+    .announcement-page .nav-link {
+        min-height: 3.2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .announcement-page .nav-link,
+    .announcement-page .submenu li a {
+        transition: none;
+    }
+}
+
+/* Keep the announcement rail on the same compact, low-noise rhythm as the
+   shared navigation while preserving its page-specific colour treatment. */
+.announcement-page .sidebar-branding {
+    min-height: 4.6rem;
+    padding: 1rem 3.25rem 0.95rem 1.15rem;
+}
+
+.announcement-page .sidebar-nav {
+    padding: 0.9rem 0.75rem 1.5rem;
+}
+
+.announcement-page .sidebar-search {
+    padding: 0 0.15rem 1rem;
+}
+
+.announcement-page .nav-list {
+    gap: 0.28rem;
+}
+
+.announcement-page .nav-link {
+    min-height: 2.75rem;
+    padding: 0.68rem 0.75rem;
+    border-radius: 0.65rem;
+    font-size: 0.92rem;
+    gap: 0.7rem;
+}
+
+.announcement-page .nav-link:hover,
+.announcement-page .nav-link:focus-visible {
+    transform: translateX(2px);
+}
+
+.announcement-page .nav-link.active {
+    box-shadow: inset 3px 0 0 #0055a4;
+}
+
+.announcement-page .submenu li a {
+    min-height: 2.4rem;
+    margin: 0.16rem 0.1rem;
+    padding: 0.56rem 0.7rem 0.56rem 2.7rem;
+    border-radius: 0.55rem;
+    font-size: 0.86rem;
+}
+
+.announcement-page .nested-submenu > .nav-link {
+    min-height: 2.45rem;
+    margin: 0.26rem 0.1rem 0.14rem 0.55rem;
+    padding: 0.58rem 0.7rem;
+    border-radius: 0.58rem;
+    font-size: 0.86rem;
+}
+
+.announcement-page .nested-submenu > .submenu.nested {
+    margin: 0.08rem 0.1rem 0.55rem 1.25rem;
+    padding: 0.16rem 0 0.3rem 0.72rem;
+}
+
+.announcement-page .submenu.nested li a {
+    min-height: 2.25rem;
+    margin: 0.14rem 0;
+    padding: 0.5rem 0.6rem 0.5rem 1.95rem;
+    font-size: 0.83rem;
+}
+
+@media (max-width: 768px) {
+    .announcement-page .sidebar-nav {
+        padding: 0.8rem 0.65rem 1.35rem;
+    }
+
+    .announcement-page .nav-link {
+        min-height: 3.15rem;
+        padding-block: 0.75rem;
+    }
+}
+
+/* Keep nested navigation flat on the announcement page as well. */
+.announcement-page .nested-submenu > .nav-link {
+    background: transparent;
+    border-color: transparent !important;
+    box-shadow: none;
+}
+
+.announcement-page .nested-submenu > .nav-link:hover,
+.announcement-page .nested-submenu > .nav-link:focus-visible {
+    background: #f4f7f9;
+    border-color: #dfe7ec !important;
+    box-shadow: none;
+    transform: none;
+}
+
+.announcement-page .nested-submenu.open > .nav-link {
+    background-color: #eaf3f9 !important;
+    border: 1px solid #cfe0eb !important;
+    box-shadow: none;
+    transform: none;
+}
+
+.announcement-page .nested-submenu > .submenu.nested {
+    border-left: 1px solid #dfe7ec !important;
+    background: transparent;
+}
+
+.announcement-page .nested-submenu > .submenu.nested::before {
+    display: none;
+}
+
+.announcement-page .submenu.nested li a {
+    border: 0 !important;
+    box-shadow: none;
+    background: transparent;
+    transform: none;
+}
+
+.announcement-page .submenu.nested > li:not(.nested-submenu) > a::before {
+    background-color: #93a4b0;
+}
+
+.announcement-page .submenu.nested > li:not(.nested-submenu) > a::after {
+    display: none;
+}
+
+.announcement-page .submenu.nested li a:hover,
+.announcement-page .submenu.nested li a:focus-visible {
+    background: #f4f7f9;
+    border-color: transparent !important;
+    transform: none;
+}
+
+.announcement-page .submenu.nested li a.active {
+    background-color: #eaf3f9 !important;
+    border: 1px solid #d8e8f2 !important;
+    box-shadow: none;
+}

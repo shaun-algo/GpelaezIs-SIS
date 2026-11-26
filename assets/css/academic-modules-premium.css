@@ -1,0 +1,634 @@
+/* Shared visual polish for Attendance, Class Records, and Report Cards.
+ * These modules keep their existing behavior and data flow; this layer only
+ * brings their surfaces, controls, tables, and responsive rhythm together.
+ */
+:root {
+    --academic-ink: #2f3437;
+    --academic-muted: #787774;
+    --academic-line: #eaeaea;
+    --academic-surface: #fbfdff;
+    --academic-soft: #f8fbfe;
+    --academic-blue: #0055a4;
+    --academic-blue-soft: #e8f2ff;
+    --academic-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.attendance-page,
+body.class-records-page,
+body.report-cards-page {
+    background: var(--app-canvas);
+    color: var(--academic-ink);
+    overflow-x: hidden;
+}
+
+body.attendance-page #mainContent,
+body.report-cards-page #mainContent {
+    width: 100%;
+    max-width: 1180px;
+    margin-inline: auto;
+    padding: clamp(1.25rem, 2.5vw, 2.5rem);
+}
+
+body.class-records-page #mainContent {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding: clamp(1.25rem, 2.5vw, 2.5rem);
+}
+
+body.attendance-page .page-header,
+body.class-records-page .page-header {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 1.25rem;
+    padding: 0 0.25rem;
+}
+
+body.attendance-page .page-title,
+body.class-records-page .page-title,
+body.report-cards-page .rc-page-title {
+    color: var(--academic-ink);
+    font-size: clamp(1.45rem, 2vw, 1.9rem);
+    font-weight: 750;
+    letter-spacing: -0.025em;
+}
+
+body.attendance-page .card,
+body.class-records-page #mainContent > .card,
+body.report-cards-page .rc-student-list,
+body.report-cards-page .rc-content {
+    border: 1px solid var(--academic-line);
+    border-radius: 12px;
+    background: var(--academic-surface);
+    box-shadow: none;
+}
+
+body.attendance-page .attendance-shell,
+body.class-records-page #mainContent > .card {
+    overflow: hidden;
+}
+
+body.attendance-page .attendance-shell-header,
+body.class-records-page #mainContent > .card > .card-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1.25rem 1.5rem !important;
+    border-bottom: 1px solid var(--academic-line);
+    background: var(--academic-soft);
+}
+
+body.attendance-page .attendance-shell-header .card-title,
+body.class-records-page #mainContent > .card > .card-header .card-title {
+    color: var(--academic-ink);
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+}
+
+body.attendance-page .attendance-shell > .card-body,
+body.class-records-page #mainContent > .card > .card-body {
+    padding: 1.5rem !important;
+}
+
+/* Shared control language */
+body.attendance-page .form-control,
+body.class-records-page .form-control,
+body.report-cards-page .rc-controls select,
+body.report-cards-page .rc-controls input,
+body.report-cards-page .rc-learner-filter-select {
+    min-height: 42px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: #fff;
+    color: var(--academic-ink);
+    box-shadow: none;
+}
+
+body.attendance-page .form-control:focus,
+body.class-records-page .form-control:focus,
+body.report-cards-page .rc-controls select:focus,
+body.report-cards-page .rc-controls input:focus,
+body.report-cards-page .rc-learner-filter-select:focus {
+    border-color: var(--academic-blue);
+    box-shadow: 0 0 0 4px rgba(0, 85, 164, 0.11);
+    outline: none;
+}
+
+body.attendance-page .form-label,
+body.class-records-page .form-label,
+body.report-cards-page .rc-controls label,
+body.report-cards-page .rc-learner-filter-label {
+    color: #49627c;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+}
+
+body.attendance-page .btn,
+body.class-records-page .btn,
+body.report-cards-page .btn {
+    min-height: 42px;
+    border-radius: 9px;
+    font-weight: 700;
+    transition: transform 160ms var(--academic-ease), background-color 160ms var(--academic-ease), border-color 160ms var(--academic-ease), box-shadow 160ms var(--academic-ease);
+}
+
+body.attendance-page .btn:hover,
+body.class-records-page .btn:hover,
+body.report-cards-page .btn:hover {
+    transform: translateY(-1px);
+}
+
+body.attendance-page .btn:active,
+body.class-records-page .btn:active,
+body.report-cards-page .btn:active {
+    transform: scale(0.98);
+}
+
+/* Attendance */
+body.attendance-page .att-filters.attendance-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.85rem;
+    align-items: end;
+    margin-bottom: 1.25rem !important;
+    padding: 1.1rem;
+    border: 1px solid var(--academic-line);
+    border-radius: 10px;
+    background: var(--academic-soft);
+}
+
+body.attendance-page .att-filters .form-group {
+    min-width: 0;
+    margin: 0;
+}
+
+body.attendance-page .att-right {
+    gap: 0.55rem;
+}
+
+body.attendance-page .att-save-ind {
+    color: var(--academic-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+body.attendance-page .attendance-table-card {
+    border-color: var(--academic-line) !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+}
+
+body.attendance-page .attendance-table-header {
+    padding: 1rem 1.25rem !important;
+    background: var(--academic-soft);
+}
+
+body.attendance-page .attendance-table-header #attSearch {
+    max-width: 280px !important;
+}
+
+body.attendance-page .att-table-wrap {
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-color: #b8c7d8 transparent;
+}
+
+body.attendance-page .att-table {
+    min-width: 760px;
+    border-collapse: collapse;
+}
+
+body.attendance-page .att-table thead {
+    background: #e8f1f9;
+    color: var(--academic-ink);
+}
+
+body.attendance-page .att-table th {
+    padding: 0.9rem 1.15rem;
+    border-bottom: 1px solid #dbe5ee;
+    color: #49627c;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+body.attendance-page .att-table td {
+    padding: 1rem 1.15rem;
+    border-bottom: 1px solid var(--academic-line);
+    color: #334e68;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    vertical-align: middle;
+}
+
+body.attendance-page .att-table tbody tr:hover {
+    background: #f1f7fc;
+}
+
+body.attendance-page .att-name {
+    color: var(--academic-ink);
+    font-weight: 750;
+}
+
+body.attendance-page .att-lrn,
+body.attendance-page .learner-att-note,
+body.attendance-page .learner-att-mini {
+    color: var(--academic-muted);
+}
+
+/* Class Records */
+body.class-records-page #mainContent > .card > .card-header {
+    align-items: flex-start;
+}
+
+body.class-records-page #mainContent > .card > .card-header > div:first-child {
+    flex: 0 0 auto;
+    text-align: left;
+}
+
+body.class-records-page .cr-tabs {
+    gap: 0.4rem;
+}
+
+body.class-records-page .cr-tabs .btn,
+body.class-records-page .cr-gender-filter .btn {
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #49627c;
+    box-shadow: none;
+}
+
+body.class-records-page .cr-tabs .btn.active,
+body.class-records-page .cr-gender-filter .btn.active {
+    border-color: var(--academic-blue);
+    background: var(--academic-blue-soft);
+    color: var(--academic-blue);
+    box-shadow: none;
+}
+
+body.class-records-page .cr-context {
+    flex-wrap: wrap !important;
+    gap: 0.85rem !important;
+    align-items: end !important;
+    margin-bottom: 1.4rem !important;
+    padding: 1.1rem !important;
+    border: 1px solid var(--academic-line) !important;
+    border-radius: 10px !important;
+    background: var(--academic-soft) !important;
+}
+
+body.class-records-page .cr-context > div {
+    min-width: 0 !important;
+    flex: 1 1 180px;
+    gap: 0.35rem !important;
+}
+
+body.class-records-page .cr-context > div > span {
+    color: #49627c !important;
+    font-size: 0.7rem !important;
+    font-weight: 750 !important;
+    letter-spacing: 0.055em !important;
+    text-transform: uppercase;
+}
+
+body.class-records-page .cr-filters,
+body.class-records-page .cr-observed-tools {
+    gap: 0.75rem !important;
+    margin-bottom: 1.2rem !important;
+}
+
+body.class-records-page .cr-filters .form-group,
+body.class-records-page .cr-observed-tools .form-group {
+    min-width: 180px;
+    margin: 0;
+}
+
+body.class-records-page .cr-metrics {
+    gap: 0.75rem;
+    margin-bottom: 1.2rem !important;
+}
+
+body.class-records-page .cr-metric {
+    border: 1px solid var(--academic-line);
+    border-radius: 10px;
+    background: var(--academic-soft);
+    padding: 0.95rem 1rem;
+}
+
+body.class-records-page .cr-metric .k {
+    color: var(--academic-muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.07em;
+}
+
+body.class-records-page .cr-metric .v {
+    color: var(--academic-ink);
+    font-size: 1.35rem;
+}
+
+body.class-records-page .cr-grade-sheet-wrap,
+body.class-records-page #tblObservedValues + * {
+    border-color: var(--academic-line);
+    border-radius: 10px;
+    scrollbar-color: #b8c7d8 transparent;
+}
+
+body.class-records-page #tblGrades,
+body.class-records-page #tblObservedValues,
+body.class-records-page #tblHonors {
+    color: var(--academic-ink);
+}
+
+body.class-records-page #tblGrades thead th,
+body.class-records-page #tblObservedValues thead th,
+body.class-records-page #tblHonors thead th {
+    background: #e8f1f9 !important;
+    color: #49627c !important;
+    border-bottom-color: #dbe5ee !important;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+body.class-records-page #tblGrades td,
+body.class-records-page #tblObservedValues td,
+body.class-records-page #tblHonors td {
+    border-bottom-color: var(--academic-line) !important;
+    color: #334e68;
+}
+
+body.class-records-page #tblGrades tbody tr:hover,
+body.class-records-page #tblObservedValues tbody tr:hover,
+body.class-records-page #tblHonors tbody tr:hover {
+    background: #f1f7fc;
+}
+
+body.class-records-page #tblHonors .cr-honors-learner-name {
+    color: var(--academic-ink);
+    font-weight: 800;
+}
+
+body.class-records-page #tblHonors .cr-honors-learner-lrn {
+    margin-top: 3px;
+    color: #6b8298;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+body.class-records-page #tblGrades th:nth-child(1),
+body.class-records-page #tblGrades td:nth-child(1),
+body.class-records-page #tblGrades th:nth-child(2),
+body.class-records-page #tblGrades td:nth-child(2) {
+    background: var(--academic-surface);
+}
+
+body.class-records-page .cr-grade-input,
+body.class-records-page .cr-observed-select {
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #fff;
+    color: var(--academic-ink);
+}
+
+body.class-records-page .cr-grade-input:focus,
+body.class-records-page .cr-grade-input.cr-grade-active {
+    outline: 2px solid rgba(0, 85, 164, 0.42);
+    outline-offset: 1px;
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+}
+
+/* Report Cards */
+body.report-cards-page .rc-page-intro {
+    margin: 0 0 1.25rem;
+}
+
+body.report-cards-page .rc-page-title {
+    margin: 0;
+}
+
+body.report-cards-page .rc-controls {
+    display: grid;
+    grid-template-columns: minmax(170px, 0.85fr) minmax(200px, 1fr) minmax(240px, 1.35fr) auto auto;
+    gap: 0.65rem;
+    align-items: center;
+    margin: 0 0 1.15rem;
+    padding: 1.1rem;
+    border: 1px solid var(--academic-line);
+    border-radius: 10px;
+    background: var(--academic-soft);
+    box-shadow: none;
+}
+
+body.report-cards-page .rc-controls select,
+body.report-cards-page .rc-controls input {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+}
+
+body.report-cards-page .rc-controls .btn {
+    min-width: max-content;
+}
+
+body.report-cards-page .rc-main {
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 0;
+}
+
+body.report-cards-page .rc-student-list,
+body.report-cards-page .rc-content {
+    overflow: hidden;
+}
+
+body.report-cards-page .rc-list-header {
+    padding: 0.95rem 1.15rem;
+    border-bottom-color: var(--academic-line);
+    background: #e8f1f9;
+    color: #49627c;
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+}
+
+body.report-cards-page .rc-student-items {
+    max-height: calc(100vh - 250px);
+}
+
+body.report-cards-page .rc-student-item {
+    padding: 0.85rem 1rem;
+    border-bottom-color: var(--academic-line);
+}
+
+body.report-cards-page .rc-student-item:hover {
+    background: #f1f7fc;
+}
+
+body.report-cards-page .rc-student-item.active {
+    border-left: 0;
+    background: var(--academic-blue-soft);
+    box-shadow: inset 3px 0 0 var(--academic-blue);
+}
+
+body.report-cards-page .rc-content {
+    padding: 1.25rem;
+}
+
+body.report-cards-page .rc-student-header,
+body.report-cards-page .rc-learner-filter-bar,
+body.report-cards-page .rc-grades-section {
+    border-color: var(--academic-line);
+    border-radius: 10px;
+    background: var(--academic-soft);
+    box-shadow: none;
+}
+
+body.report-cards-page .rc-student-header {
+    padding: 1.1rem;
+}
+
+body.report-cards-page .rc-student-name-large,
+body.report-cards-page .rc-student-header-name,
+body.report-cards-page .rc-grades-section h3 {
+    color: var(--academic-ink);
+}
+
+body.report-cards-page .rc-student-section,
+body.report-cards-page .rc-student-meta {
+    color: var(--academic-muted);
+    text-decoration: none;
+}
+
+body.report-cards-page .rc-grade-table-wrap,
+body.report-cards-page .rc-grades-section {
+    overflow-x: auto;
+}
+
+body.report-cards-page .rc-grade-table,
+body.report-cards-page .rc-grades-table {
+    min-width: 620px;
+}
+
+body.report-cards-page .rc-grade-table thead th,
+body.report-cards-page .rc-grades-table th {
+    background: #e8f1f9;
+    color: #49627c;
+    border-bottom-color: #dbe5ee;
+}
+
+body.report-cards-page .rc-grade-table td,
+body.report-cards-page .rc-grades-table td {
+    border-bottom-color: var(--academic-line);
+    color: #334e68;
+}
+
+body.report-cards-page .rc-grade-table tbody tr:hover td,
+body.report-cards-page .rc-grades-table tr:hover td {
+    background: #f1f7fc;
+}
+
+@media (max-width: 980px) {
+    body.attendance-page .att-filters.attendance-filter-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.report-cards-page .rc-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.report-cards-page .rc-controls input {
+        grid-column: 1 / -1;
+    }
+
+    body.report-cards-page .rc-controls .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 720px) {
+    body.class-records-page #mainContent > .card > .card-header,
+    body.attendance-page .attendance-shell-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    body.class-records-page .cr-tabs,
+    body.attendance-page .att-right {
+        width: 100%;
+    }
+
+    body.class-records-page #mainContent > .card > .card-header > div:first-child {
+        width: 100%;
+    }
+
+    body.class-records-page .cr-tabs .btn,
+    body.attendance-page .att-right .btn,
+    body.class-records-page .cr-grade-controls #btnSave {
+        flex: 1 1 auto;
+    }
+
+    body.report-cards-page .rc-main {
+        grid-template-columns: 1fr;
+    }
+
+    body.report-cards-page .rc-student-items {
+        max-height: 18rem;
+    }
+
+    body.report-cards-page .rc-content {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 560px) {
+    body.attendance-page #mainContent,
+    body.class-records-page #mainContent,
+    body.report-cards-page #mainContent {
+        padding: 1rem 0.75rem;
+    }
+
+    body.attendance-page .att-filters.attendance-filter-grid,
+    body.report-cards-page .rc-controls {
+        grid-template-columns: 1fr;
+    }
+
+    body.class-records-page .cr-context > div {
+        flex-basis: 100%;
+    }
+
+    body.report-cards-page .rc-controls input {
+        grid-column: auto;
+    }
+
+    body.attendance-page .att-right {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    body.attendance-page .att-save-ind {
+        justify-content: flex-start;
+    }
+
+    body.class-records-page .cr-tabs {
+        flex-direction: column;
+    }
+
+    body.class-records-page .cr-tabs .btn,
+    body.class-records-page .cr-grade-controls #btnSave {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.attendance-page .btn,
+    body.class-records-page .btn,
+    body.report-cards-page .btn {
+        transition: none;
+    }
+}

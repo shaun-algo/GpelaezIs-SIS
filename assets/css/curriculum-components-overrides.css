@@ -1,0 +1,2539 @@
+/* Curriculum Components page-specific responsive and accessibility polish. */
+
+.content-header {
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-block: 0.5rem 0.75rem;
+}
+
+/* Curriculum Setup wizard layout. Present the curriculum, overview, and
+   subjects controls as one clear three-card workflow. */
+body.curriculum-components-page .content-header {
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+}
+
+body.curriculum-components-page .header-left {
+    min-width: 0;
+}
+
+body.curriculum-components-page .content-header .header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+body.curriculum-components-page .cc-header-menu .cc-step-menu-toggle {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+body.curriculum-components-page .cc-empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.55rem;
+    margin-top: 1rem;
+}
+
+body.curriculum-components-page .cc-empty-actions .btn {
+    margin-top: 0;
+}
+
+body.curriculum-components-page .cc-editor {
+    display: block;
+    min-height: 0;
+    overflow: visible;
+    background: transparent;
+    border: 0;
+}
+
+body.curriculum-components-page .cc-wizard-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+    padding: 0 1.45rem 1.25rem;
+    border: 1px solid var(--gray-200);
+    border-top: 0;
+    border-radius: 0 0 0.9rem 0.9rem;
+    background: var(--surface-0);
+}
+
+body.curriculum-components-page .cc-wizard-steps .cc-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 0.65rem;
+    padding: 0.72rem 0.8rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.62rem;
+    background: var(--gray-50);
+    color: var(--gray-600);
+    text-align: left;
+    transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+body.curriculum-components-page .cc-wizard-steps .cc-tab:hover,
+body.curriculum-components-page .cc-wizard-steps .cc-tab:focus-visible {
+    border-color: color-mix(in srgb, var(--deped-blue) 34%, var(--gray-200));
+    background: color-mix(in srgb, var(--deped-blue) 5%, var(--surface-0));
+    color: var(--gray-800);
+}
+
+body.curriculum-components-page .cc-wizard-steps .cc-tab:active {
+    transform: translateY(1px);
+}
+
+body.curriculum-components-page .cc-wizard-steps .cc-tab.active {
+    border-color: color-mix(in srgb, var(--deped-blue) 45%, var(--gray-200));
+    background: color-mix(in srgb, var(--deped-blue) 7%, var(--surface-0));
+    color: var(--gray-900);
+    box-shadow: 0 0.35rem 0.9rem rgba(0, 85, 164, 0.08);
+}
+
+body.curriculum-components-page .cc-wizard-steps .cc-tab.done {
+    border-color: color-mix(in srgb, #39714f 30%, var(--gray-200));
+    color: #39714f;
+}
+
+body.curriculum-components-page .cc-step-copy {
+    display: grid !important;
+    min-width: 0;
+    gap: 0.12rem;
+}
+
+body.curriculum-components-page .cc-step-copy strong {
+    overflow: hidden;
+    color: inherit;
+    font-size: 0.79rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.curriculum-components-page .cc-step-copy small {
+    overflow: hidden;
+    color: var(--gray-500);
+    font-size: 0.67rem;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.curriculum-components-page .cc-wizard-step-select {
+    width: 100%;
+    min-width: 0;
+    min-height: 2.25rem;
+    margin-top: 0.18rem;
+    padding: 0.42rem 0.55rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.42rem;
+    background: var(--surface-0);
+    color: var(--gray-800);
+    font-size: 0.68rem;
+    line-height: 1.25;
+}
+
+body.curriculum-components-page .cc-wizard-step-select:focus {
+    border-color: var(--deped-blue);
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.12);
+    outline: 0;
+}
+
+body.curriculum-components-page .cc-panel-actions {
+    align-items: flex-start;
+}
+
+body.curriculum-components-page .cc-step-menu {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+body.curriculum-components-page .cc-step-menu-toggle {
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.5rem;
+    background: var(--surface-0);
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+body.curriculum-components-page .cc-step-menu-toggle:hover,
+body.curriculum-components-page .cc-step-menu-toggle:focus-visible,
+body.curriculum-components-page .cc-step-menu.is-open .cc-step-menu-toggle {
+    border-color: color-mix(in srgb, var(--deped-blue) 38%, var(--gray-200));
+    background: color-mix(in srgb, var(--deped-blue) 6%, var(--surface-0));
+    color: var(--deped-blue);
+}
+
+body.curriculum-components-page .cc-step-menu-toggle:active {
+    transform: translateY(1px);
+}
+
+body.curriculum-components-page .cc-step-menu-panel {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    right: 0;
+    z-index: 80;
+    display: grid;
+    min-width: 12.5rem;
+    padding: 0.35rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.65rem;
+    background: var(--surface-0);
+    box-shadow: 0 0.8rem 1.8rem rgba(32, 64, 96, 0.14);
+}
+
+body.curriculum-components-page .cc-step-menu-panel[hidden] {
+    display: none;
+}
+
+body.curriculum-components-page .cc-step-menu-panel button {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    min-height: 2.35rem;
+    padding: 0.55rem 0.65rem;
+    border: 0;
+    border-radius: 0.4rem;
+    background: transparent;
+    color: var(--gray-700);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.78rem;
+    text-align: left;
+}
+
+body.curriculum-components-page .cc-step-menu-panel button:hover,
+body.curriculum-components-page .cc-step-menu-panel button:focus-visible {
+    background: var(--gray-50);
+    color: var(--deped-blue);
+    outline: 0;
+}
+
+body.curriculum-components-page .cc-step-menu-panel button i {
+    width: 1rem;
+    color: var(--deped-blue);
+    text-align: center;
+}
+
+body.curriculum-components-page .cc-panel-placeholder {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 1rem;
+    border: 1px dashed var(--gray-300);
+    border-radius: 0.65rem;
+    background: var(--gray-50);
+    color: var(--gray-600);
+}
+
+body.curriculum-components-page .cc-panel-placeholder > i {
+    margin-top: 0.1rem;
+    color: var(--deped-blue);
+}
+
+body.curriculum-components-page .cc-panel-placeholder strong,
+body.curriculum-components-page .cc-panel-placeholder span {
+    display: block;
+}
+
+body.curriculum-components-page .cc-panel-placeholder strong {
+    color: var(--gray-800);
+    font-size: 0.82rem;
+}
+
+body.curriculum-components-page .cc-panel-placeholder span {
+    margin-top: 0.18rem;
+    font-size: 0.76rem;
+}
+
+body.curriculum-components-page .cc-year-subject-edit-mark.cc-field-unsaved {
+    border-color: #d39a32 !important;
+    background: #fff8e7 !important;
+    box-shadow: 0 0 0 3px rgba(211, 154, 50, 0.14) !important;
+}
+
+body.curriculum-components-page .cc-tab.active .cc-step-copy small,
+body.curriculum-components-page .cc-tab.done .cc-step-copy small {
+    color: inherit;
+    opacity: 0.78;
+}
+
+body.curriculum-components-page .cc-panels {
+    max-height: none;
+    margin-top: 0.75rem;
+    overflow: visible;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.9rem;
+    background: var(--surface-0);
+}
+
+body.curriculum-components-page .cc-panels .cc-panel {
+    min-width: 0;
+    padding: 1.5rem 1.65rem 1.7rem;
+}
+
+@media (max-width: 768px) {
+    body.curriculum-components-page .content-header {
+        align-items: stretch;
+        margin-bottom: 0.9rem;
+    }
+
+    body.curriculum-components-page .cc-wizard-steps {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+        padding: 0 0.9rem 0.9rem;
+    }
+
+    body.curriculum-components-page .cc-wizard-steps .cc-tab {
+        gap: 0.4rem;
+        padding: 0.58rem 0.5rem;
+    }
+
+    body.curriculum-components-page .cc-step-copy strong {
+        font-size: 0.7rem;
+    }
+
+    body.curriculum-components-page .cc-step-copy small {
+        font-size: 0.59rem;
+    }
+
+    body.curriculum-components-page .cc-wizard-step-select {
+        font-size: 0.68rem;
+    }
+
+    body.curriculum-components-page .cc-panels {
+        margin-top: 0.6rem;
+    }
+
+    body.curriculum-components-page .cc-panels .cc-panel {
+        padding: 1rem 0.8rem 1.25rem !important;
+    }
+}
+
+@media (max-width: 420px) {
+    body.curriculum-components-page .cc-wizard-steps .cc-tab {
+        justify-content: center;
+        gap: 0.28rem;
+        padding-inline: 0.3rem;
+    }
+
+    body.curriculum-components-page .cc-step-copy small {
+        display: none !important;
+    }
+
+    body.curriculum-components-page .cc-step-copy strong {
+        font-size: 0.64rem;
+    }
+}
+
+.cc-curriculum-select {
+    min-width: min(420px, 100%);
+    min-height: 46px;
+    padding: 0.7rem 0.9rem;
+}
+
+.cc-editor {
+    margin-top: 0.75rem;
+}
+
+.cc-panel {
+    padding: 2rem 2.25rem 2.25rem;
+}
+
+.cc-panel-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+}
+
+.cc-panel-actions {
+    gap: 0.75rem;
+}
+
+.cc-info-card {
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+}
+
+.cc-toolbar-bar {
+    margin-top: 0.5rem;
+    margin-bottom: 2rem !important;
+    padding: 1.25rem !important;
+}
+
+.cc-table-wrap {
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 767px) {
+    .content-header {
+        align-items: stretch;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .cc-curriculum-select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .cc-panel {
+        padding: 1.5rem 1rem 1.75rem;
+    }
+
+    .cc-panel-header {
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cc-panel-actions {
+        flex-wrap: wrap;
+    }
+}
+
+.cc-empty-state--loading .cc-empty-icon {
+    color: var(--deped-blue);
+}
+
+.cc-empty-state--error .cc-empty-icon {
+    color: #b45309;
+}
+
+.cc-empty-state .btn {
+    margin-top: 1rem;
+}
+
+.cc-status-text {
+    display: block;
+    min-height: 1.25rem;
+}
+
+.cc-info-card[data-has-actions="true"] {
+    cursor: pointer;
+    transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.cc-info-card[data-has-actions="true"]:hover {
+    border-color: #b9cbe0;
+    background: #f7fbff;
+}
+
+.cc-info-card[data-has-actions="true"]:focus-visible {
+    outline: 3px solid rgba(0, 85, 164, .22);
+    outline-offset: 3px;
+}
+
+/* All-year-level subjects use a compact summary table. Detailed subject rows
+   appear only after a row action enters grade-level edit mode. */
+.cc-subjects-table[data-display-mode="summary"] tbody .cc-year-subject-row {
+    cursor: pointer;
+}
+
+.cc-subjects-table[data-display-mode="summary"] tbody .cc-year-subject-row:focus-visible {
+    outline: 3px solid rgba(0, 85, 164, .2);
+    outline-offset: -3px;
+    background: #f7fbff;
+}
+
+.cc-year-subject-count {
+    color: var(--gray-900);
+    font-size: 1rem;
+}
+
+.cc-year-subject-count-label {
+    color: var(--gray-500);
+    font-size: 0.8rem;
+}
+
+.cc-year-subject-row .mf-record-value {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    width: 100%;
+}
+
+.cc-subjects-table[data-display-mode="summary"] tbody .cc-year-subject-row > td {
+    vertical-align: middle;
+}
+
+.cc-year-subject-row .cc-year-level-value,
+.cc-year-subject-row .cc-year-subjects-value {
+    justify-content: flex-start;
+}
+
+.cc-year-subject-row .cc-year-subjects-value {
+    white-space: nowrap;
+}
+
+.cc-year-subject-row .cc-year-subject-summary {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    margin-left: 0;
+    color: var(--gray-600);
+    font-size: 0.8rem;
+}
+
+.cc-year-subject-row .mf-mobile-action-toggle {
+    position: static;
+    flex: 0 0 auto;
+    margin-left: 0.25rem;
+}
+
+/* Read-only year-level subject list modal. */
+.cc-year-subject-modal {
+    z-index: 10001;
+}
+
+.cc-year-subject-modal .modal-dialog {
+    width: min(100%, 560px);
+    margin: 0;
+}
+
+.cc-year-subject-modal-content {
+    max-width: none;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+}
+
+.cc-year-subject-modal-header {
+    align-items: flex-start;
+    padding: 1.25rem 1.35rem 1rem;
+}
+
+.cc-year-subject-modal-header h2 {
+    margin: 0.2rem 0 0.25rem;
+    color: var(--gray-900);
+    font-size: 1.2rem;
+}
+
+.cc-year-subject-modal-header p {
+    margin: 0;
+    color: var(--gray-500);
+    font-size: 0.8rem;
+}
+
+body.curriculum-components-page #cc-year-subject-modal-detail[hidden] {
+    display: none !important;
+}
+
+/* Row actions are portaled to <body>; keep them above the edit modal layer. */
+body.curriculum-components-page #mfContextMenu {
+    position: fixed !important;
+    z-index: 2147483001 !important;
+}
+
+.cc-year-subject-modal-body {
+    max-height: min(60vh, 460px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--surface-0);
+}
+
+.cc-year-subject-list {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.cc-year-subject-list-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 6rem 6rem;
+    gap: 0.75rem;
+    padding: 0 0.75rem 0.1rem;
+    color: var(--gray-500);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.cc-year-subject-list-heading span:last-child {
+    text-align: right;
+}
+
+.cc-year-subject-list-heading span:nth-last-child(-n + 2),
+.cc-year-subject-list-time {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+body.curriculum-components-page .cc-edit-subject-list-heading {
+    grid-template-columns: 1.65rem minmax(0, 1fr) 6rem 6rem;
+    padding-left: 0.75rem;
+}
+
+body.curriculum-components-page .cc-edit-select-all {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    min-width: 0;
+    color: var(--gray-600);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+body.curriculum-components-page .cc-edit-select-all span {
+    overflow: visible;
+    text-align: left;
+}
+
+body.curriculum-components-page .cc-edit-select-all input,
+body.curriculum-components-page .cc-edit-subject-check input {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    accent-color: var(--deped-blue);
+}
+
+.cc-year-subject-list-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 6rem 6rem;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.8rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.65rem;
+    background: var(--surface-0);
+}
+
+.cc-year-subject-list-name {
+    min-width: 0;
+    color: var(--gray-900);
+    font-size: 0.88rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.cc-year-subject-list-mark {
+    color: var(--gray-800);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-align: right;
+}
+
+.cc-year-subject-list-time {
+    color: var(--gray-700);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.cc-year-subject-list-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 8rem;
+    color: var(--gray-500);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* Keep the tab state light and usable on both wide and narrow screens. */
+.cc-tab {
+    border-left: 0;
+}
+
+.cc-tab.active {
+    border-left-color: transparent;
+    background: var(--surface-0);
+}
+
+.cc-tab:focus-visible {
+    outline: 2px solid var(--deped-blue);
+    outline-offset: -2px;
+}
+
+/* Labels are revealed by the mobile layout below; desktop keeps the compact grid. */
+.cc-mark-field {
+    display: contents;
+}
+
+.cc-mark-field label {
+    display: none;
+}
+
+.cc-mark-row select,
+.cc-mark-row input,
+.cc-mark-field {
+    min-width: 0;
+}
+
+.cc-soft-btn {
+    min-height: 2.4rem;
+    white-space: nowrap;
+}
+
+.cc-subject-picker-tools {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.cc-subject-picker-tools input {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .header-right {
+        width: 100%;
+        min-width: 0;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .cc-curriculum-select {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .cc-editor {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .cc-sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0.35rem;
+        border-right: 0;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .cc-tab {
+        flex: 1 0 auto;
+        justify-content: center;
+        padding: 0.65rem 0.8rem;
+        border-bottom: 2px solid transparent;
+        white-space: nowrap;
+    }
+
+    .cc-tab.active {
+        border-bottom-color: var(--deped-blue);
+    }
+
+    .cc-tab span {
+        display: inline-flex;
+    }
+
+    .cc-panels {
+        min-width: 0;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .cc-panel {
+        min-width: 0;
+    }
+
+    .cc-panel-header {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .cc-panel-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    }
+
+    .cc-panel-actions .btn {
+        min-height: 2.5rem;
+    }
+
+    .cc-mark-labels {
+        display: none;
+    }
+
+    .cc-mark-row {
+        position: relative;
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+        padding: 0.8rem 2.8rem 0.8rem 0.8rem;
+        margin-bottom: 0.65rem;
+        border: 1px solid var(--gray-200);
+        border-radius: 0.6rem;
+    }
+
+    .cc-mark-field {
+        display: grid;
+        gap: 0.25rem;
+    }
+
+    .cc-mark-field label {
+        display: block;
+        color: var(--gray-600);
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
+
+    .cc-mark-row .cc-row-remove {
+        position: absolute;
+        top: 0.7rem;
+        right: 0.45rem;
+        width: 2rem;
+        height: 2rem;
+    }
+
+    #ccAddSubjectModal.show {
+        align-items: flex-start;
+        padding: 0.5rem;
+    }
+
+    #ccAddSubjectModal.show > .modal-dialog {
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        margin: 0;
+    }
+
+    #ccAddSubjectModal.show .cc-subject-modal-content {
+        height: 100%;
+        max-height: calc(100dvh - 1rem);
+        border-radius: 0.8rem;
+    }
+
+    .cc-subject-modal-body {
+        min-height: 0;
+        overscroll-behavior: contain;
+    }
+
+    .cc-subject-modal-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .cc-subject-modal-footer .btn {
+        flex: 1 1 10rem;
+        min-height: 2.75rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .header-right {
+        flex-wrap: wrap;
+    }
+
+    .header-right .btn {
+        flex: 0 0 2.75rem;
+    }
+
+    .cc-subject-picker-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+    }
+
+    .cc-subject-picker-head > .cc-soft-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cc-subject-picker-tools {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cc-subject-picker-tools input {
+        grid-column: auto;
+    }
+
+    .cc-mapeh-preset-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+body.curriculum-components-page .cc-wizard-steps {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+body.curriculum-components-page .cc-wizard-steps .cc-curriculum-control {
+    align-items: center;
+    cursor: default;
+}
+
+body.curriculum-components-page .cc-curriculum-control-fields {
+    display: grid;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 0.12rem;
+}
+
+body.curriculum-components-page .cc-curriculum-control-fields > strong {
+    overflow: hidden;
+    color: var(--gray-900);
+    font-size: 0.79rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.curriculum-components-page .cc-curriculum-control .cc-wizard-step-select {
+    min-height: 2rem;
+    margin-top: 0.12rem;
+    padding: 0.34rem 0.48rem;
+    border-color: var(--gray-300);
+    border-radius: 0.38rem;
+    background: var(--surface-0);
+    color: var(--gray-800);
+    font-size: 0.7rem;
+}
+
+body.curriculum-components-page .cc-panels {
+    margin-top: 1rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+body.curriculum-components-page .cc-panels .cc-panel {
+    padding: 0;
+}
+
+body.curriculum-components-page #cc-panel-overview .cc-panel-header {
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.7rem;
+}
+
+body.curriculum-components-page #cc-panel-overview .cc-info-card {
+    margin: 0;
+}
+
+body.curriculum-components-page #cc-panel-subjects .cc-subjects-table thead th {
+    height: 4.25rem;
+    padding: 1.35rem 0.75rem;
+    vertical-align: middle;
+}
+
+body.curriculum-components-page #cc-panel-subjects .cc-subjects-heading-cell {
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    body.curriculum-components-page .cc-wizard-steps {
+        grid-template-columns: 1fr;
+    }
+
+    body.curriculum-components-page .cc-panels {
+        margin-top: 0.85rem;
+    }
+
+    body.curriculum-components-page #cc-panel-subjects .cc-subjects-table thead th {
+        height: 3.75rem;
+        padding: 1.1rem 0.55rem;
+    }
+
+    body.curriculum-components-page #cc-panel-subjects .cc-subjects-heading-cell {
+        padding-right: 0.55rem;
+    }
+}
+
+/* The shared masterfile mobile cascade turns subject tables into cards. Keep
+   the year-level summary as a readable three-column table instead. */
+@media (max-width: 700px) {
+    .cc-subjects-table[data-display-mode="summary"] {
+        display: table !important;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .cc-subjects-table[data-display-mode="summary"] thead {
+        display: table-header-group !important;
+    }
+
+    .cc-subjects-table[data-display-mode="summary"] tbody {
+        display: table-row-group !important;
+    }
+
+    .cc-subjects-table[data-display-mode="summary"] tbody .cc-year-subject-row {
+        display: table-row !important;
+        padding: 0 !important;
+    }
+
+    .cc-subjects-table[data-display-mode="summary"] tbody .cc-year-subject-row > td {
+        display: table-cell !important;
+        min-width: 0;
+        padding: 0.7rem 0.55rem;
+        border: 0;
+    }
+
+    .cc-subjects-table[data-display-mode="summary"] tbody .cc-year-subject-row > td:last-child {
+        text-align: left;
+    }
+
+    .cc-year-subject-modal .modal-dialog {
+        width: 100%;
+        max-width: none;
+    }
+
+    .cc-year-subject-modal-content {
+        border-radius: 0.8rem !important;
+    }
+
+    .cc-year-subject-modal-body {
+        max-height: calc(100dvh - 11rem);
+    }
+}
+
+/* Curriculum CRUD dialog follows the shared masterfile interaction pattern. */
+.cc-curriculum-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(15, 23, 42, 0.56);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 160ms ease, visibility 160ms ease;
+}
+
+.cc-curriculum-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cc-curriculum-modal-dialog {
+    width: min(100%, 720px);
+    max-height: min(90vh, 720px);
+    overflow: auto;
+    background: var(--surface-0, #fff);
+    border: 1px solid var(--gray-200);
+    border-radius: 1rem;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+    transform: translateY(10px) scale(0.985);
+    transition: transform 160ms ease;
+}
+
+.cc-curriculum-modal.show .cc-curriculum-modal-dialog {
+    transform: none;
+}
+
+.cc-curriculum-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.35rem 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.cc-curriculum-modal-header h2 {
+    margin: 0.2rem 0 0;
+    font-size: 1.2rem;
+}
+
+.cc-modal-kicker {
+    color: var(--deped-blue);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.cc-curriculum-form {
+    padding: 1.25rem 1.35rem 1.35rem;
+}
+
+.cc-curriculum-form .cc-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.cc-curriculum-form .cc-form-group {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.cc-curriculum-form .cc-form-group label {
+    color: var(--gray-700);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.cc-curriculum-form .cc-form-group-wide {
+    margin-top: 1rem;
+}
+
+.cc-curriculum-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+@media (max-width: 600px) {
+    .cc-curriculum-modal {
+        align-items: flex-start;
+        padding: 0.6rem;
+    }
+
+    .cc-curriculum-modal-dialog {
+        max-height: calc(100dvh - 1.2rem);
+        border-radius: 0.8rem;
+    }
+
+    .cc-curriculum-form .cc-form-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .cc-curriculum-modal-footer {
+        flex-direction: column-reverse;
+    }
+
+    .cc-curriculum-modal-footer .btn {
+        width: 100%;
+        min-height: 2.7rem;
+    }
+}
+
+/* Keep open curriculum selectors above the content cards and neighboring rows.
+   The editor/panel scroll layers stay intact during normal use; only the
+   active control rises while its Choices.js menu is being opened. */
+.content-header,
+.cc-editor,
+.cc-panel-header,
+.cc-toolbar-bar,
+.cc-mark-row,
+.cc-modal-detail-card {
+    position: relative;
+}
+
+.content-header {
+    z-index: 20;
+}
+
+.cc-editor {
+    z-index: 1;
+}
+
+.cc-panel-header,
+.cc-toolbar-bar,
+.cc-mark-row:focus-within,
+.cc-modal-detail-card:focus-within {
+    z-index: 50;
+}
+
+.content-header select:focus,
+.cc-editor select:focus,
+#ccAddSubjectModal select:focus,
+.cc-curriculum-modal select:focus {
+    position: relative;
+    z-index: 60;
+}
+
+/* Choices.js menus are absolutely positioned. Let an open menu escape the
+   editor and its scroll viewport instead of being clipped at the card edge. */
+#cc-editor:has(.choices.is-open),
+#cc-editor:has(.choices.is-open) .cc-panels {
+    overflow: visible;
+}
+
+#cc-editor .choices.is-open,
+#cc-editor .choices.is-open .choices__list--dropdown,
+#cc-editor .choices.is-open .choices__list[aria-expanded] {
+    z-index: 10060 !important;
+}
+
+#ccAddSubjectModal:has(.choices.is-open) .cc-subject-modal-content,
+#ccAddSubjectModal:has(.choices.is-open) .cc-subject-modal-body {
+    overflow: visible;
+}
+
+@media (min-width: 769px) {
+    .cc-mark-row,
+    .cc-mark-labels {
+        grid-template-columns: 180px 180px 100px 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    body.curriculum-components-page .main-content {
+        padding: 0.7rem 0.65rem !important;
+    }
+
+    body.curriculum-components-page .content-header {
+        gap: 0.55rem;
+        margin-bottom: 0.75rem;
+        padding-block: 0.2rem 0.55rem;
+    }
+
+    body.curriculum-components-page .content-header h1 {
+        margin: 0;
+        font-size: 1.15rem;
+        line-height: 1.25;
+    }
+
+    body.curriculum-components-page .content-header .header-right {
+        gap: 0.45rem;
+    }
+
+    body.curriculum-components-page .cc-curriculum-select {
+        flex: 1;
+        width: auto;
+        min-width: 0;
+        min-height: 42px;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.84rem;
+    }
+
+    body.curriculum-components-page .mf-archive-options {
+        flex: 0 0 42px;
+        width: 42px;
+        margin: 0;
+    }
+
+    body.curriculum-components-page .mf-archive-options .mf-options-icon-btn {
+        width: 42px;
+        min-width: 42px;
+        max-width: 42px;
+        height: 42px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+    }
+
+    body.curriculum-components-page .mf-archive-options .mf-options-icon-btn:focus-visible {
+        outline: 2px solid rgba(0, 85, 164, 0.35);
+        outline-offset: 1px;
+    }
+
+    body.curriculum-components-page #mfArchiveOptionsMenu #masterfileArchiveButton {
+        min-height: 48px;
+        padding: 0.65rem 0.9rem;
+        border: 0 !important;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        font: inherit;
+        font-size: 0.86rem;
+        text-align: left;
+    }
+
+    body.curriculum-components-page .cc-editor {
+        margin-top: 0.35rem;
+        border-radius: 0.65rem;
+    }
+
+    body.curriculum-components-page .cc-sidebar {
+        gap: 0.15rem;
+        padding: 0.25rem;
+    }
+
+    body.curriculum-components-page .cc-tab {
+        min-height: 42px;
+        gap: 0.4rem;
+        padding: 0.5rem 0.6rem;
+        font-size: 0.72rem;
+    }
+
+    body.curriculum-components-page .cc-tab span {
+        display: inline-flex;
+    }
+
+    body.curriculum-components-page .cc-tab i {
+        font-size: 0.82rem;
+    }
+
+    body.curriculum-components-page .cc-panel {
+        padding: 0.8rem !important;
+    }
+
+    body.curriculum-components-page .cc-panel-header {
+        align-items: center;
+        gap: 0.45rem;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.6rem;
+    }
+
+    body.curriculum-components-page .cc-panel-header h2 {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    body.curriculum-components-page .cc-panel-header p {
+        margin: 0.2rem 0 0;
+        font-size: 0.72rem;
+        line-height: 1.35;
+    }
+
+    body.curriculum-components-page .cc-panel-actions {
+        gap: 0.4rem;
+    }
+
+    body.curriculum-components-page .cc-panel-actions > .btn {
+        min-height: 40px;
+        padding: 0.45rem 0.65rem;
+        font-size: 0.78rem;
+    }
+
+    body.curriculum-components-page .cc-toolbar-bar {
+        margin: 0 0 0.65rem !important;
+        padding: 0.55rem !important;
+        border-radius: 0.6rem;
+    }
+
+    body.curriculum-components-page .cc-toolbar-bar .form-select {
+        min-height: 40px;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    body.curriculum-components-page .cc-subjects-table[data-display-mode="summary"] tbody .cc-year-subject-row > td {
+        padding: 0.55rem 0.35rem;
+        font-size: 0.72rem;
+    }
+
+    body.curriculum-components-page .cc-grade-chip {
+        min-height: 1.45rem;
+        padding: 0.1rem 0.35rem;
+        font-size: 0.67rem;
+    }
+
+    body.curriculum-components-page .cc-year-subject-count {
+        font-size: 0.85rem;
+    }
+
+    body.curriculum-components-page .cc-year-subject-count-label {
+        font-size: 0.66rem;
+    }
+
+    body.curriculum-components-page .cc-subjects-table tbody .cc-subject-record {
+        margin-bottom: 0.45rem;
+        padding: 0.6rem 0.65rem;
+        border: 1px solid #e8eef4;
+        border-radius: 0.6rem;
+        background: #fff;
+    }
+
+    body.curriculum-components-page .cc-subjects-table .mf-record-value {
+        min-height: 42px;
+        padding: 0.25rem 2.45rem 0.25rem 0;
+    }
+
+    body.curriculum-components-page .cc-subject-name {
+        font-size: 0.84rem;
+        line-height: 1.3;
+    }
+
+    body.curriculum-components-page .cc-subjects-table .mf-mobile-meta {
+        gap: 0.2rem;
+        margin-top: 0.3rem;
+    }
+
+    body.curriculum-components-page .cc-subjects-table .mf-meta-item {
+        font-size: 0.68rem;
+        line-height: 1.3;
+    }
+
+    body.curriculum-components-page .cc-subjects-table .mf-mobile-action-toggle {
+        top: 0;
+        right: 0;
+        display: grid;
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        min-height: 42px;
+        place-items: center;
+        border: 0;
+        border-radius: 50%;
+        background: #f4f7fa;
+        color: #42576d;
+        touch-action: manipulation;
+    }
+
+    body.curriculum-components-page .cc-subjects-table .mf-mobile-action-toggle:focus-visible {
+        outline: 2px solid rgba(0, 85, 164, 0.35);
+        outline-offset: 1px;
+    }
+
+    body.curriculum-components-page #mfContextMenu .mf-context-menu-item {
+        min-height: 48px;
+        padding: 0.7rem 1rem;
+        font-size: 0.86rem;
+    }
+
+    body.curriculum-components-page.mf-mobile-sheet-open::before {
+        z-index: 2147483000 !important;
+        pointer-events: none !important;
+    }
+
+    body.curriculum-components-page #mfContextMenu,
+    body.curriculum-components-page #mfArchiveOptionsMenu {
+        position: fixed !important;
+        z-index: 2147483001 !important;
+        inset: auto 0 0 0 !important;
+        width: 100% !important;
+        max-height: min(78dvh, 40rem) !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        touch-action: pan-y;
+        -webkit-overflow-scrolling: touch;
+        pointer-events: auto;
+    }
+
+    body.curriculum-components-page .cc-info-card {
+        margin: 0.25rem 0 0.75rem;
+        padding: 0.85rem;
+    }
+}
+
+@media (max-width: 380px) {
+    body.curriculum-components-page .cc-tab {
+        gap: 0.28rem;
+        padding-inline: 0.45rem;
+        font-size: 0.68rem;
+    }
+
+    body.curriculum-components-page .cc-tab i {
+        font-size: 0.75rem;
+    }
+
+    body.curriculum-components-page .cc-panel {
+        padding: 0.65rem !important;
+    }
+}
+
+body.curriculum-components-page .cc-subject-checklist-header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) 7rem 7rem;
+    gap: 0.7rem;
+    align-items: center;
+    min-height: 2.35rem;
+    padding: 0.3rem 0.25rem;
+    color: var(--gray-500);
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+body.curriculum-components-page .cc-checklist-select-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 1.8rem;
+    color: var(--gray-600);
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+body.curriculum-components-page .cc-checklist-select-all input {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    accent-color: var(--deped-blue);
+    cursor: pointer;
+}
+
+body.curriculum-components-page .cc-checklist-select-all input:disabled {
+    cursor: not-allowed;
+}
+
+body.curriculum-components-page .cc-selected-subject-count {
+    color: var(--deped-blue);
+    font-variant-numeric: tabular-nums;
+    text-transform: none;
+}
+
+body.curriculum-components-page #ccAddSubjectModal.cc-has-unsaved .cc-subject-modal-footer {
+    border-top-color: #e7b65c;
+    background: #fffdf5;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-selected-subject-count.cc-count-unsaved {
+    color: #9a6700;
+    outline: 2px solid rgba(211, 154, 50, 0.55);
+    outline-offset: 3px;
+    border-radius: 999px;
+    padding-inline: 0.35rem;
+}
+
+body.curriculum-components-page .cc-subject-checklist-header span:last-child {
+    text-align: right;
+}
+
+body.curriculum-components-page .cc-passing-mark-heading {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 1.8rem;
+    color: var(--gray-600);
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    text-align: right;
+    text-transform: none;
+    white-space: nowrap;
+}
+
+body.curriculum-components-page .cc-meeting-min-heading {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 1.8rem;
+    color: var(--gray-600);
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    text-align: right;
+    text-transform: none;
+    white-space: nowrap;
+}
+
+body.curriculum-components-page .cc-subject-checklist-section-label {
+    grid-column: 1 / -1;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-choice {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) 7rem 7rem;
+    align-items: center;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-choice-body {
+    min-width: 0;
+}
+
+body.curriculum-components-page .cc-subject-mark-field {
+    display: block;
+    min-width: 0;
+    margin: 0;
+}
+
+body.curriculum-components-page .cc-subject-passing-input {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 0.5rem;
+    text-align: right;
+}
+
+body.curriculum-components-page .cc-subject-passing-input:disabled {
+    background: var(--gray-100);
+    color: var(--gray-400);
+    cursor: not-allowed;
+}
+
+body.curriculum-components-page .cc-subject-time-field {
+    display: block;
+    min-width: 0;
+    margin: 0;
+}
+
+body.curriculum-components-page .cc-subject-time-input {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 0.5rem;
+    text-align: right;
+}
+
+body.curriculum-components-page .cc-subject-time-input:disabled {
+    background: var(--gray-100);
+    color: var(--gray-400);
+    cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+    body.curriculum-components-page .cc-subject-checklist-header {
+        grid-template-columns: auto minmax(0, 1fr) 6.25rem 6.25rem;
+    }
+
+    body.curriculum-components-page #ccAddSubjectModal .cc-subject-choice {
+        grid-template-columns: auto minmax(0, 1fr) 6.25rem 6.25rem;
+        gap: 0.5rem;
+        padding-inline: 0.65rem;
+    }
+
+}
+
+/* Add-subject flow and shared view/edit subject dialog. */
+body.curriculum-components-page .cc-subject-modal-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex: 0 0 auto;
+}
+
+body.curriculum-components-page .cc-new-master-trigger {
+    min-height: 2.25rem;
+    padding: 0.45rem 0.72rem;
+    border-width: 1px;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+body.curriculum-components-page .cc-new-master-trigger:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Keep step-specific modal actions out of the layout until their step is active. */
+body.curriculum-components-page #cc-toggle-create-subject-btn[hidden],
+body.curriculum-components-page #ccAddSubjectModalCancel[hidden],
+body.curriculum-components-page #ccAddSubjectModalSave[hidden] {
+    display: none !important;
+}
+
+body.curriculum-components-page .cc-add-subject-flow-step[hidden] {
+    display: none;
+}
+
+body.curriculum-components-page .cc-add-subject-flow-step {
+    display: grid;
+    gap: 0.95rem;
+}
+
+body.curriculum-components-page .cc-flow-step-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+}
+
+body.curriculum-components-page .cc-flow-step-heading--compact {
+    align-items: center;
+    justify-content: flex-start;
+}
+
+body.curriculum-components-page .cc-flow-step-heading > div:last-child,
+body.curriculum-components-page .cc-flow-step-heading--compact > div:last-child {
+    display: grid;
+    align-items: flex-start;
+    gap: 0.18rem;
+}
+
+body.curriculum-components-page .cc-flow-step-heading h6 {
+    margin: 0;
+    color: var(--gray-900);
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+body.curriculum-components-page .cc-flow-step-heading p {
+    margin: 0.18rem 0 0;
+    color: var(--gray-600);
+    font-size: 0.76rem;
+}
+
+body.curriculum-components-page .cc-flow-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2rem;
+    padding: 0.35rem 0.55rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.4rem;
+    background: var(--surface-0);
+    color: var(--gray-600);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+body.curriculum-components-page .cc-flow-back-btn:hover,
+body.curriculum-components-page .cc-flow-back-btn:focus-visible {
+    border-color: var(--deped-blue);
+    color: var(--deped-blue);
+    outline: 0;
+}
+
+body.curriculum-components-page .cc-target-field {
+    display: grid;
+    gap: 0.4rem;
+    max-width: 28rem;
+}
+
+body.curriculum-components-page .cc-target-field > span {
+    color: var(--gray-600);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+body.curriculum-components-page .cc-flow-step-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 0.2rem;
+}
+
+body.curriculum-components-page .cc-subject-checklist-section-label {
+    padding: 0.25rem 0.25rem 0;
+    color: var(--gray-500);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-category-divider,
+body.curriculum-components-page #cc-year-subject-modal .cc-subject-category-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: 0.65rem;
+    padding: 0.7rem 0.45rem 0.35rem;
+    color: var(--deped-blue);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: none;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-category-divider::after,
+body.curriculum-components-page #cc-year-subject-modal .cc-subject-category-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(20, 54, 92, 0.16);
+}
+
+body.curriculum-components-page .cc-mapeh-parent-choice.is-disabled {
+    opacity: 0.55;
+}
+
+body.curriculum-components-page .cc-mapeh-parent-choice .cc-subject-choice-title {
+    color: var(--deped-blue);
+}
+
+body.curriculum-components-page .cc-year-subject-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.55rem;
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+
+body.curriculum-components-page .cc-year-subject-modal-footer[hidden] {
+    display: none;
+}
+
+body.curriculum-components-page .cc-year-subject-modal-footer.cc-has-unsaved {
+    border-top-color: #e7b65c;
+    background: #fffdf5;
+}
+
+body.curriculum-components-page .cc-year-subject-modal-footer .cc-remove-selected-subjects {
+    margin-right: auto;
+    border-color: color-mix(in srgb, #b45309 38%, var(--gray-300));
+    color: #9a3412;
+}
+
+body.curriculum-components-page .cc-year-subject-modal-footer .cc-remove-selected-subjects:hover:not(:disabled),
+body.curriculum-components-page .cc-year-subject-modal-footer .cc-remove-selected-subjects:focus-visible:not(:disabled) {
+    border-color: #b45309;
+    background: #fff7ed;
+    color: #9a3412;
+}
+
+body.curriculum-components-page .cc-year-subject-modal-footer .cc-remove-selected-subjects:disabled {
+    border-color: var(--gray-200);
+    color: var(--gray-400);
+    cursor: not-allowed;
+}
+
+body.curriculum-components-page .cc-remove-selected-subjects span {
+    margin-left: 0.18rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+body.curriculum-components-page #cc-year-subject-modal.cc-has-unsaved .cc-modal-kicker::after {
+    content: 'Unsaved';
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.16rem 0.38rem;
+    border: 1px solid rgba(211, 154, 50, 0.42);
+    border-radius: 0.3rem;
+    background: #fff4cf;
+    color: #8a5b08;
+    font-size: 0.62rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+body.curriculum-components-page .cc-year-subject-edit-row {
+    position: relative;
+    grid-template-columns: 1.65rem minmax(0, 1fr) 6rem 6rem;
+    cursor: grab;
+    transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease, transform 180ms ease;
+}
+
+body.curriculum-components-page .cc-year-subject-edit-row:hover,
+body.curriculum-components-page .cc-year-subject-edit-row:focus-visible {
+    border-color: color-mix(in srgb, var(--deped-blue) 35%, var(--gray-200));
+    background: color-mix(in srgb, var(--deped-blue) 4%, var(--surface-0));
+    outline: 0;
+}
+
+body.curriculum-components-page .cc-edit-subject-check {
+    display: grid;
+    width: 1.65rem;
+    min-height: 1.65rem;
+    place-items: center;
+    cursor: pointer;
+}
+
+body.curriculum-components-page .cc-edit-subject-list-heading {
+    grid-template-columns: 1.65rem minmax(0, 1fr) 6rem 6rem;
+}
+
+body.curriculum-components-page .cc-subject-drag-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    margin-right: 0.45rem;
+    color: var(--gray-400, #94a3b8);
+    cursor: grab;
+}
+
+body.curriculum-components-page .cc-year-subject-edit-row:active .cc-subject-drag-handle,
+body.curriculum-components-page .cc-subject-drag-handle:hover {
+    color: var(--deped-blue, #0055a4);
+}
+
+body.curriculum-components-page .cc-subject-order-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.72rem 0.8rem;
+    border: 1px solid #ead18d;
+    border-radius: 0.58rem;
+    background: #fffaf0;
+    color: #765719;
+    font-size: 0.76rem;
+    line-height: 1.4;
+}
+
+body.curriculum-components-page .cc-subject-order-note > i {
+    margin-top: 0.12rem;
+    color: #b7791f;
+}
+
+body.curriculum-components-page .cc-subject-order-note strong,
+body.curriculum-components-page .cc-subject-order-note span {
+    display: block;
+}
+
+body.curriculum-components-page .cc-subject-order-note strong {
+    color: #5e4310;
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+body.curriculum-components-page .cc-subject-order-note span {
+    margin-top: 0.12rem;
+}
+
+body.curriculum-components-page .cc-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+body.curriculum-components-page .cc-year-subject-edit-row.cc-is-dragging {
+    opacity: 0.48;
+    cursor: grabbing;
+    transform: scale(0.99);
+}
+
+body.curriculum-components-page .cc-year-subject-edit-row.cc-order-exchange-active {
+    z-index: 2;
+    border-color: color-mix(in srgb, var(--deped-blue) 46%, var(--gray-200));
+    background: color-mix(in srgb, var(--deped-blue) 5%, var(--surface-0));
+    box-shadow: 0 0.8rem 1.6rem color-mix(in srgb, var(--deped-blue) 13%, transparent);
+    animation: cc-order-exchange 360ms cubic-bezier(0.22, 0.9, 0.27, 1);
+    will-change: transform, opacity;
+}
+
+@keyframes cc-order-exchange {
+    0% {
+        opacity: 0.82;
+        transform: translate3d(0, var(--cc-order-exchange-offset), 0) scale(0.985);
+    }
+    58% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1.012);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.curriculum-components-page .cc-year-subject-edit-row.cc-order-exchange-active,
+    body.curriculum-components-page .cc-order-exchange-active {
+        animation: none;
+    }
+}
+
+/* Selection is an intentional secondary mode: editing stays uncluttered until
+   a row is clicked once. */
+body.curriculum-components-page #cc-year-subject-modal:not(.cc-selection-mode) .cc-edit-select-all,
+body.curriculum-components-page #cc-year-subject-modal:not(.cc-selection-mode) .cc-edit-subject-check,
+body.curriculum-components-page #cc-year-subject-modal:not(.cc-selection-mode) .cc-remove-selected-subjects {
+    display: none;
+}
+
+body.curriculum-components-page #cc-year-subject-modal:not(.cc-selection-mode) .cc-edit-subject-list-heading,
+body.curriculum-components-page #cc-year-subject-modal:not(.cc-selection-mode) .cc-year-subject-edit-row {
+    grid-template-columns: minmax(0, 1fr) 6rem 6rem;
+}
+
+body.curriculum-components-page .cc-year-subject-edit-row.cc-drop-before::before,
+body.curriculum-components-page .cc-year-subject-edit-row.cc-drop-after::after {
+    position: absolute;
+    right: 0.45rem;
+    left: 0.45rem;
+    height: 0.18rem;
+    border-radius: 999px;
+    background: var(--deped-blue);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--deped-blue) 10%, transparent);
+    content: '';
+    pointer-events: none;
+    animation: cc-subject-drop-line-in 140ms ease-out;
+}
+
+@keyframes cc-subject-drop-line-in {
+    from {
+        opacity: 0;
+        transform: scaleX(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+body.curriculum-components-page .cc-year-subject-edit-row.cc-drop-before::before {
+    top: -0.25rem;
+}
+
+body.curriculum-components-page .cc-year-subject-edit-row.cc-drop-after::after {
+    bottom: -0.25rem;
+}
+
+body.curriculum-components-page .cc-year-subject-edit-mark {
+    width: 100%;
+    min-width: 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+body.curriculum-components-page .cc-year-subject-edit-time {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 0.35rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+body.curriculum-components-page .cc-new-subject-modal {
+    z-index: 10002;
+}
+
+body.curriculum-components-page .cc-new-subject-modal-dialog {
+    width: min(100%, 430px);
+    margin: 0;
+}
+
+body.curriculum-components-page .cc-new-subject-modal-content {
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.85rem;
+    background: var(--surface-0);
+    box-shadow: var(--shadow-lg);
+}
+
+body.curriculum-components-page .cc-new-subject-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem 0.95rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+
+body.curriculum-components-page .cc-new-subject-modal-header h2 {
+    margin: 0.2rem 0 0;
+    color: var(--gray-900);
+    font-size: 1.1rem;
+}
+
+body.curriculum-components-page .cc-new-subject-modal-body {
+    display: grid;
+    gap: 0.45rem;
+    padding: 1.1rem 1.25rem;
+}
+
+body.curriculum-components-page .cc-new-subject-field {
+    display: grid;
+    gap: 0.35rem;
+}
+
+body.curriculum-components-page .cc-new-subject-modal-body label {
+    color: var(--gray-700);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+body.curriculum-components-page .cc-new-subject-field-help {
+    color: var(--gray-500);
+    font-size: 0.68rem;
+    line-height: 1.35;
+}
+
+body.curriculum-components-page .cc-new-subject-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.55rem;
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+
+@media (max-width: 700px) {
+    body.curriculum-components-page .cc-subject-modal-header-actions {
+        gap: 0.3rem;
+    }
+
+    body.curriculum-components-page .cc-new-master-trigger {
+        padding-inline: 0.5rem;
+        font-size: 0.68rem;
+    }
+
+    body.curriculum-components-page .cc-flow-step-heading--compact {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    body.curriculum-components-page .cc-flow-step-heading--compact > div:last-child {
+        flex: 1 1 calc(100% - 4.5rem);
+    }
+
+    body.curriculum-components-page .cc-flow-step-actions,
+    body.curriculum-components-page .cc-year-subject-modal-footer,
+    body.curriculum-components-page .cc-new-subject-modal-footer {
+        justify-content: stretch;
+    }
+
+    body.curriculum-components-page .cc-flow-step-actions .btn,
+    body.curriculum-components-page .cc-year-subject-modal-footer .btn,
+    body.curriculum-components-page .cc-new-subject-modal-footer .btn {
+        flex: 1 1 0;
+    }
+}
+
+/* Anchored action popovers -------------------------------------------------
+   Keep the three-dot actions attached to their trigger without allowing the
+   table's overflow layer to clip them on small screens. The JS positions the
+   open panel against the viewport and keeps it below the trigger whenever
+   there is room. */
+body.curriculum-components-page .cc-step-menu-panel.is-anchored {
+    position: fixed;
+    top: 0;
+    right: auto;
+    z-index: 1300;
+    width: max-content;
+    min-width: min(12.5rem, calc(100vw - 1rem));
+    max-width: calc(100vw - 1rem);
+    max-height: min(20rem, calc(100dvh - 1rem));
+    overflow-y: auto;
+    transform-origin: top right;
+}
+
+body.curriculum-components-page .cc-step-menu-panel.is-anchored.is-open {
+    animation: cc-step-menu-pop-in 140ms ease-out both;
+}
+
+body.curriculum-components-page .cc-row-action-menu {
+    position: fixed;
+    z-index: 2147483001;
+    width: min(17rem, calc(100vw - 1rem));
+    max-height: min(22rem, calc(100dvh - 1rem));
+    overflow-y: auto;
+    padding: 0.35rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.7rem;
+    background: var(--surface-0);
+    box-shadow: 0 1rem 2.25rem rgba(15, 45, 79, 0.2);
+    animation: cc-step-menu-pop-in 140ms ease-out both;
+}
+
+body.curriculum-components-page .cc-row-action-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.75rem;
+    border: 0;
+    border-radius: 0.4rem;
+    background: transparent;
+    color: var(--gray-700);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.82rem;
+    text-align: left;
+}
+
+body.curriculum-components-page .cc-row-action-menu-item:hover,
+body.curriculum-components-page .cc-row-action-menu-item:focus-visible {
+    background: var(--gray-50);
+    color: var(--deped-blue);
+    outline: 0;
+}
+
+body.curriculum-components-page .cc-row-action-menu-item i {
+    width: 1rem;
+    color: var(--deped-blue);
+    text-align: center;
+}
+
+@keyframes cc-step-menu-pop-in {
+    from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 768px) {
+    body.curriculum-components-page .content-header {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    body.curriculum-components-page .content-header .header-left {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    body.curriculum-components-page .content-header .header-right {
+        width: auto;
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
+
+    body.curriculum-components-page .cc-header-menu .cc-step-menu-toggle {
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 0.65rem;
+    }
+
+    body.curriculum-components-page .cc-step-menu-panel.is-anchored {
+        min-width: min(16rem, calc(100vw - 1rem));
+        padding: 0.5rem;
+        border-radius: 0.8rem;
+        box-shadow: 0 1rem 2.25rem rgba(15, 45, 79, 0.2);
+    }
+
+    body.curriculum-components-page .cc-step-menu-panel.is-anchored button {
+        min-height: 3rem;
+        padding: 0.7rem 0.8rem;
+        font-size: 0.84rem;
+    }
+
+    body.curriculum-components-page .cc-row-action-menu {
+        width: min(17rem, calc(100vw - 1rem));
+        padding: 0.45rem;
+    }
+
+    body.curriculum-components-page .cc-row-action-menu-item {
+        min-height: 3rem;
+        padding: 0.75rem 0.8rem;
+        font-size: 0.86rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.curriculum-components-page .cc-step-menu-panel.is-anchored.is-open,
+    body.curriculum-components-page .cc-row-action-menu {
+        animation: none;
+    }
+}
+
+/* Curriculum selector -----------------------------------------------------
+   Keep the enhanced selector aligned with the native control and make the
+   option list readable without depending on fragile HTML option markup. */
+body.curriculum-components-page .cc-curriculum-control .choices {
+    width: 100%;
+    min-width: 0;
+    margin-top: 0.12rem;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices__inner {
+    min-height: 2rem;
+    padding: 0.34rem 2rem 0.34rem 0.48rem;
+    border-color: var(--gray-300);
+    border-radius: 0.38rem;
+    font-size: 0.7rem;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices__list--single {
+    padding: 0;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices__list--dropdown {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-height: min(18rem, 48dvh);
+    overflow-y: auto;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices__list--dropdown .choices__item--choice {
+    min-height: 2.45rem;
+    padding: 0.58rem 0.7rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+@media (max-width: 768px) {
+    body.curriculum-components-page .cc-curriculum-control .choices {
+        margin-top: 0.12rem;
+    }
+
+    body.curriculum-components-page .cc-curriculum-control .choices__inner {
+        min-height: 2.5rem;
+        padding-block: 0.55rem;
+        font-size: 0.82rem;
+    }
+}
+
+/* Curriculum selector layer ---------------------------------------------
+   The wizard is also the mobile sidebar. Its horizontal-scroll overflow can
+   clip Choices' absolutely positioned dropdown, while sibling wizard fields
+   can paint above it. Keep the shell open and make the option list, rather
+   than the whole wizard, the scroll boundary. */
+body.curriculum-components-page .cc-wizard-steps {
+    position: relative;
+    overflow: visible;
+    isolation: isolate;
+}
+
+body.curriculum-components-page .cc-curriculum-control,
+body.curriculum-components-page .cc-curriculum-control-fields {
+    position: relative;
+    min-width: 0;
+    overflow: visible;
+}
+
+body.curriculum-components-page .cc-curriculum-control {
+    z-index: 120;
+}
+
+body.curriculum-components-page .cc-curriculum-control-fields {
+    z-index: 121;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices {
+    position: relative;
+    z-index: 10060;
+    overflow: visible;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices.is-open {
+    z-index: 10061 !important;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices.is-open .choices__list--dropdown,
+body.curriculum-components-page .cc-curriculum-control .choices.is-open .choices__list[aria-expanded="true"] {
+    z-index: 10062 !important;
+}
+
+@media (max-width: 768px) {
+    body.curriculum-components-page .cc-wizard-steps {
+        overflow: visible !important;
+        overflow-x: visible !important;
+    }
+
+    body.curriculum-components-page .cc-curriculum-control {
+        z-index: 100;
+    }
+
+    body.curriculum-components-page .cc-curriculum-control .choices__list--dropdown .choices__list,
+    body.curriculum-components-page .cc-curriculum-control .choices__list[aria-expanded] .choices__list {
+        max-height: min(18rem, calc(100dvh - 14rem));
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Final selector paint order: keep the complete selector layer above the
+   adjacent Overview and Subjects tabs without creating a page-wide overlay. */
+body.curriculum-components-page .cc-wizard-steps > .cc-curriculum-control {
+    position: relative;
+    z-index: 40 !important;
+}
+
+body.curriculum-components-page .cc-wizard-steps {
+    position: relative;
+    z-index: 10 !important;
+}
+
+body.curriculum-components-page .cc-panels {
+    position: relative;
+    z-index: 1;
+}
+
+body.curriculum-components-page .cc-wizard-steps > .cc-tab:not(.cc-curriculum-control) {
+    position: relative;
+    z-index: 1 !important;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices.is-open {
+    position: relative;
+    z-index: 41 !important;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices.is-open .choices__list--dropdown,
+body.curriculum-components-page .cc-curriculum-control .choices.is-open .choices__list[aria-expanded="true"] {
+    z-index: 42 !important;
+}
+
+body.curriculum-components-page .cc-curriculum-control .choices.is-open .choices__list--dropdown {
+    border-color: color-mix(in srgb, var(--deped-blue) 35%, var(--gray-300));
+    box-shadow: 0 1rem 2rem rgba(15, 45, 79, 0.18);
+}
+
+@media (max-width: 768px) {
+    body.curriculum-components-page .cc-curriculum-control .choices__list--dropdown {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+/* Direct year-level subject picker ---------------------------------------
+   The row action supplies the target grade, so the modal can stay focused
+   on a compact, breathable subject-selection surface. */
+body.curriculum-components-page #ccAddSubjectModal .modal-dialog {
+    width: min(860px, calc(100vw - 2rem));
+    max-width: 860px;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-modal-content {
+    width: 100%;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-modal-body {
+    padding: 0.9rem 1rem 1rem;
+    gap: 0.65rem;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-modal-grade-detail {
+    margin-top: 0.35rem;
+    color: var(--deped-blue);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-picker {
+    border-radius: 0.55rem;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-picker-tools {
+    padding: 0.65rem 0.75rem;
+    background: var(--gray-50);
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-checklist {
+    max-height: min(26rem, 58dvh);
+    padding: 0.45rem;
+    gap: 0.4rem;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-choice {
+    min-height: 3.1rem;
+    gap: 0.6rem;
+    padding: 0.62rem 0.7rem;
+    border-radius: 0.48rem;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-choice-title {
+    font-size: 0.8rem;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-choice-desc {
+    margin-top: 0.18rem;
+    font-size: 0.7rem;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-passing-input {
+    min-height: 2.15rem;
+    font-size: 0.75rem;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-modal-footer {
+    padding: 0.7rem 1rem;
+    gap: 0.45rem;
+}
+
+/* Keep the setup cards visually aligned while allowing the headings to
+   breathe after the secondary helper text is removed. */
+body.curriculum-components-page .cc-wizard-steps {
+    gap: 0.65rem;
+    padding-bottom: 1.05rem;
+}
+
+body.curriculum-components-page .cc-wizard-steps .cc-tab {
+    min-height: 3.1rem;
+    padding: 0.8rem 0.9rem;
+}
+
+body.curriculum-components-page .cc-step-copy {
+    gap: 0;
+}
+
+body.curriculum-components-page .cc-panels {
+    margin-top: 1.1rem;
+}
+
+body.curriculum-components-page .cc-panel-header {
+    align-items: center;
+    min-height: 2.8rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+}
+
+body.curriculum-components-page .cc-panel-header > div {
+    display: grid;
+    gap: 0.2rem;
+}
+
+body.curriculum-components-page .cc-panel-header h2 {
+    margin: 0;
+    line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+    body.curriculum-components-page .cc-wizard-steps {
+        gap: 0.45rem;
+        padding-bottom: 0.85rem;
+    }
+
+    body.curriculum-components-page .cc-wizard-steps .cc-tab {
+        min-height: 2.8rem;
+        padding: 0.68rem 0.75rem;
+    }
+
+    body.curriculum-components-page .cc-panels {
+        margin-top: 0.9rem;
+    }
+
+    body.curriculum-components-page .cc-panel-header {
+        min-height: 2.45rem;
+        margin-bottom: 0.85rem;
+        padding-bottom: 0.65rem;
+    }
+
+    body.curriculum-components-page .cc-year-subject-modal-footer {
+        flex-wrap: wrap;
+    }
+
+    body.curriculum-components-page .cc-year-subject-modal-footer .cc-remove-selected-subjects {
+        flex: 1 0 100%;
+        margin-right: 0;
+    }
+
+    body.curriculum-components-page .cc-edit-subject-list-heading,
+    body.curriculum-components-page .cc-year-subject-edit-row {
+        grid-template-columns: 1.35rem minmax(0, 1fr) 5rem 5rem;
+        gap: 0.45rem;
+        padding-inline: 0.55rem;
+    }
+
+    body.curriculum-components-page #cc-year-subject-modal:not(.cc-selection-mode) .cc-edit-subject-list-heading,
+    body.curriculum-components-page #cc-year-subject-modal:not(.cc-selection-mode) .cc-year-subject-edit-row {
+        grid-template-columns: minmax(0, 1fr) 5rem 5rem;
+    }
+
+    body.curriculum-components-page .cc-year-subject-edit-mark {
+        padding-inline: 0.35rem;
+    }
+}
+
+/* Final overrides for the category-driven subject picker. */
+body.curriculum-components-page .cc-subject-checklist-header {
+    grid-template-columns: auto minmax(0, 1fr) 7rem 7rem;
+}
+
+body.curriculum-components-page #ccAddSubjectModal .cc-subject-choice {
+    grid-template-columns: auto minmax(0, 1fr) 7rem 7rem;
+}
+
+body.curriculum-components-page .cc-year-subjects-value {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    white-space: normal;
+}
+
+@media (max-width: 700px) {
+    body.curriculum-components-page .cc-subject-checklist-header {
+        grid-template-columns: auto minmax(7.5rem, 1fr) 6.25rem 6.25rem;
+        min-width: 24rem;
+    }
+
+    body.curriculum-components-page #ccAddSubjectModal .cc-subject-choice {
+        grid-template-columns: auto minmax(7.5rem, 1fr) 6.25rem 6.25rem;
+        min-width: 24rem;
+    }
+}
+
+/* The add-subject picker stays uncluttered until a row is clicked once. */
+body.curriculum-components-page #ccAddSubjectModal:not(.cc-selection-mode) .cc-checklist-select-all,
+body.curriculum-components-page #ccAddSubjectModal:not(.cc-selection-mode) .cc-subject-checkbox {
+    display: none;
+}
+
+body.curriculum-components-page #ccAddSubjectModal:not(.cc-selection-mode) .cc-subject-checklist-header,
+body.curriculum-components-page #ccAddSubjectModal:not(.cc-selection-mode) .cc-subject-choice {
+    grid-template-columns: minmax(0, 1fr) 7rem 7rem;
+}
+
+@media (max-width: 700px) {
+    body.curriculum-components-page #ccAddSubjectModal:not(.cc-selection-mode) .cc-subject-checklist-header,
+    body.curriculum-components-page #ccAddSubjectModal:not(.cc-selection-mode) .cc-subject-choice {
+        grid-template-columns: minmax(7.5rem, 1fr) 6.25rem 6.25rem;
+    }
+}

@@ -1,0 +1,856 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
+
+/*
+ * Analytics-only visual refresh.
+ * Scoped to body.analytics-modern to avoid affecting non-analytics modules.
+ */
+body.analytics-modern {
+    background: var(--app-canvas);
+    color: #1f2937;
+    font-family: 'Public Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body.analytics-modern .main-content {
+    padding: 1.75rem 2rem 2rem;
+    animation: analyticsPageIn 0.35s ease-out;
+}
+
+body.analytics-modern .main-content > * {
+    max-width: 1320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@keyframes analyticsPageIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body.analytics-modern .page-header {
+    margin-bottom: 1.4rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid #dbe2ea;
+}
+
+body.analytics-modern.analytics-overview .page-header {
+    justify-content: center;
+    text-align: center;
+    border-bottom: 0;
+    padding-bottom: 0.15rem;
+}
+
+body.analytics-modern .page-title {
+    font-size: 1.55rem;
+    letter-spacing: -0.01em;
+    color: #0f172a;
+}
+
+body.analytics-modern .page-subtitle {
+    margin-top: 0.35rem;
+    font-size: 0.92rem;
+    color: #5b6777;
+}
+
+body.analytics-modern .card {
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 2px 9px rgba(15, 23, 42, 0.05);
+}
+
+body.analytics-modern .card-header {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #e7edf4;
+}
+
+body.analytics-modern .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+body.analytics-modern .card-body {
+    padding: 1.2rem;
+}
+
+body.analytics-modern .summary-cards {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+body.analytics-modern .summary-card .card-content {
+    padding: 1.15rem;
+}
+
+body.analytics-modern .card-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+}
+
+body.analytics-modern .card-value {
+    font-size: 1.7rem;
+    margin: 0.4rem 0 0.2rem;
+}
+
+body.analytics-modern .card-trend {
+    font-size: 0.82rem;
+}
+
+body.analytics-modern .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    font-size: 1.15rem;
+}
+
+body.analytics-modern .card-icon.bg-blue {
+    background: rgba(0, 85, 164, 0.12);
+    color: #0055a4;
+}
+
+body.analytics-modern .card-icon.bg-green {
+    background: rgba(16, 185, 129, 0.14);
+    color: #0f766e;
+}
+
+body.analytics-modern .card-icon.bg-purple {
+    background: rgba(71, 85, 105, 0.14);
+    color: #334155;
+}
+
+body.analytics-modern .card-icon.bg-orange {
+    background: rgba(245, 158, 11, 0.16);
+    color: #b45309;
+}
+
+body.analytics-modern .charts-row {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+body.analytics-modern .chart-card,
+body.analytics-modern .performance-card,
+body.analytics-modern .alerts-card {
+    min-height: 430px;
+}
+
+body.analytics-modern .dashboard-row {
+    grid-template-columns: 1.1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+body.analytics-modern .chart-card .card-body,
+body.analytics-modern .performance-card .card-body {
+    min-height: 360px;
+}
+
+body.analytics-modern canvas {
+    height: 380px !important;
+    max-height: 460px;
+}
+
+body.analytics-modern .alerts-list {
+    display: grid;
+    gap: 0.65rem;
+}
+
+body.analytics-modern .alert-item {
+    margin-bottom: 0;
+    border: 0;
+    border-radius: 10px;
+    background: #f8fafc;
+    box-shadow: var(--shadow-sm);
+}
+
+body.analytics-modern .btn {
+    border-radius: 10px;
+    border-width: 1px;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+body.analytics-modern .btn-primary {
+    background: #0055a4;
+    border-color: #0055a4;
+}
+
+body.analytics-modern .btn-outline {
+    border-color: #94a3b8;
+    color: #334155;
+}
+
+body.analytics-modern .btn-outline:hover {
+    background: #334155;
+    border-color: #334155;
+    color: #ffffff;
+}
+
+body.analytics-modern .quick-actions {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+}
+
+body.analytics-modern .footer {
+    background: transparent;
+    border-top: 1px solid #dbe2ea;
+}
+
+body.analytics-modern .footer-content p {
+    color: #64748b;
+}
+
+/* Risk Assessment analytics */
+body.risk-analytics-page .risk-analytics-header {
+    justify-content: center;
+    text-align: center;
+}
+
+body.risk-analytics-page .risk-filter-grid {
+    grid-template-columns: repeat(4, minmax(170px, 1fr));
+}
+
+body.risk-analytics-page .risk-required-marker {
+    color: #b91c1c;
+}
+
+body.risk-analytics-page .risk-period-note {
+    margin: 0 1.2rem 1rem;
+    color: #64748b;
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+body.risk-analytics-page .risk-analytics-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(190px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+body.risk-analytics-page .risk-kpi {
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    background: #fff;
+    padding: 1.05rem;
+    box-shadow: 0 2px 9px rgba(15, 23, 42, 0.05);
+}
+
+body.risk-analytics-page .risk-kpi span {
+    display: block;
+    color: #64748b;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+body.risk-analytics-page .risk-kpi strong {
+    display: block;
+    margin-top: 0.35rem;
+    color: #0f172a;
+    font-size: 1.65rem;
+    line-height: 1;
+}
+
+body.risk-analytics-page .risk-kpi small {
+    display: block;
+    margin-top: 0.45rem;
+    color: #475569;
+    font-size: 0.82rem;
+}
+
+body.risk-analytics-page .risk-insight-strip {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+body.risk-analytics-page .risk-insight {
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 1.1rem 1.2rem;
+}
+
+body.risk-analytics-page .risk-insight h3 {
+    color: #0f172a;
+    font-size: 1rem;
+    margin: 0 0 0.35rem;
+}
+
+body.risk-analytics-page .risk-insight p {
+    color: #475569;
+    line-height: 1.55;
+    margin: 0;
+}
+
+body.risk-analytics-page .risk-analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+body.risk-analytics-page .risk-year-level-card {
+    grid-column: 1 / -1;
+}
+
+body.risk-analytics-page .risk-section-card {
+    grid-column: 1 / -1;
+}
+
+body.risk-analytics-page .risk-analytics-grid-wide {
+    grid-template-columns: 1fr 1.15fr;
+}
+
+body.risk-analytics-page .risk-minimal-panel {
+    background: transparent;
+}
+
+body.risk-analytics-page .risk-minimal-header {
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 0.2rem;
+}
+
+body.risk-analytics-page .risk-recommendations,
+body.risk-analytics-page .risk-watchlist {
+    display: grid;
+}
+
+body.risk-analytics-page .risk-recommendation,
+body.risk-analytics-page .risk-watch-item {
+    border-bottom: 1px solid #e2e8f0;
+    background: transparent;
+    padding: 0.8rem 0;
+}
+
+body.risk-analytics-page .risk-recommendation:last-child,
+body.risk-analytics-page .risk-watch-item:last-child {
+    border-bottom: 0;
+}
+
+body.risk-analytics-page .risk-row-title {
+    display: block;
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+body.risk-analytics-page .risk-recommendation p,
+body.risk-analytics-page .risk-watch-item p {
+    color: #475569;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    margin: 0;
+}
+
+body.risk-analytics-page .risk-watch-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+body.risk-analytics-page .risk-signal-list {
+    display: grid;
+    gap: 0.22rem;
+    margin-top: 0.45rem;
+    color: #475569;
+    font-size: 0.8rem;
+    line-height: 1.35;
+}
+
+body.risk-analytics-page .risk-signal-list span:first-child {
+    color: #0f172a;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+body.risk-analytics-page .risk-empty {
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    color: #64748b;
+    padding: 1rem;
+    text-align: center;
+}
+
+@media (max-width: 1100px) {
+    body.risk-analytics-page .risk-filter-grid,
+    body.risk-analytics-page .risk-analytics-summary,
+    body.risk-analytics-page .risk-insight-strip,
+    body.risk-analytics-page .risk-analytics-grid,
+    body.risk-analytics-page .risk-analytics-grid-wide {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dashboard overview: larger cards with clearer structure */
+body.analytics-modern.analytics-overview .summary-cards {
+    grid-template-columns: repeat(4, minmax(240px, 1fr));
+    gap: 1.15rem;
+    margin-bottom: 1.4rem;
+}
+
+body.analytics-modern.analytics-overview .summary-card {
+    min-height: 170px;
+}
+
+body.analytics-modern.analytics-overview .summary-card .card-content {
+    padding: 1.35rem;
+    height: 100%;
+}
+
+body.analytics-modern.analytics-overview .card-value {
+    font-size: 2.05rem;
+}
+
+body.analytics-modern.analytics-overview .trend-descriptor-value,
+body.analytics-modern.analytics-overview .trend-tip-value {
+    font-size: 1.35rem;
+    line-height: 1.25;
+}
+
+body.analytics-modern.analytics-overview .trend-tip-card .card-trend {
+    line-height: 1.35;
+}
+
+body.analytics-modern.analytics-overview .charts-row {
+    gap: 1.15rem;
+    margin-bottom: 1.15rem;
+}
+
+body.analytics-modern.analytics-overview .chart-card {
+    min-height: 500px;
+}
+
+body.analytics-modern.analytics-overview .dashboard-row-single {
+    grid-template-columns: 1fr;
+}
+
+body.analytics-modern .analytics-filter-card {
+    margin-bottom: 1.2rem;
+    overflow: visible;
+    position: relative;
+    z-index: 20;
+}
+
+body.analytics-modern .analytics-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 280px));
+    gap: 0.85rem;
+    align-items: end;
+    padding: 1rem 1.2rem;
+    overflow: visible;
+}
+
+body.analytics-modern.risk-analytics-page .risk-filter-grid {
+    grid-template-columns: minmax(220px, 470px);
+    justify-content: center;
+}
+
+body.analytics-modern .analytics-filter-grid .form-group {
+    margin: 0;
+    position: relative;
+    z-index: 21;
+    overflow: visible;
+}
+
+body.analytics-modern .analytics-filter-grid .form-group:focus-within {
+    z-index: 10060;
+}
+
+body.analytics-modern .analytics-filter-grid label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.analytics-modern .analytics-filter-grid .form-control {
+    height: 40px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #0f172a;
+    position: relative;
+    z-index: 22;
+}
+
+body.analytics-modern .analytics-filter-card .choices {
+    position: relative;
+    z-index: 22;
+}
+
+body.analytics-modern .analytics-filter-card .choices.is-open {
+    z-index: 10060 !important;
+}
+
+body.analytics-modern .analytics-filter-card .choices__list--dropdown,
+body.analytics-modern .analytics-filter-card .choices__list[aria-expanded] {
+    z-index: 10061 !important;
+}
+
+body.analytics-modern .analytics-filter-actions {
+    display: flex;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+body.analytics-modern .analytics-filter-note {
+    align-self: end;
+    margin: 0 0 0.65rem;
+    color: #64748b;
+    font-size: 0.76rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+body.analytics-modern .analytics-filter-note i {
+    color: #0f766e;
+    margin-right: 0.25rem;
+}
+
+body.analytics-modern .analytics-chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 78px;
+}
+
+body.analytics-modern .analytics-card-kicker {
+    margin: 0 0 0.25rem;
+    color: #64748b;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.analytics-modern .analytics-breakdown-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+body.analytics-modern .analytics-breakdown-chart {
+    min-height: 390px;
+}
+
+body.analytics-modern .analytics-breakdown-filter {
+    display: grid;
+    grid-template-columns: auto minmax(220px, 320px);
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 470px;
+    margin: 0 auto;
+    padding-top: 0.9rem;
+    border-top: 1px solid #e7edf4;
+}
+
+body.analytics-modern .analytics-breakdown-filter label {
+    color: #475569;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+body.analytics-modern .analytics-breakdown-filter .form-control {
+    height: 40px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #0f172a;
+}
+
+body.analytics-modern .analytics-bottom-controls {
+    width: 100%;
+    margin: 0 auto 1.2rem;
+    overflow: visible;
+}
+
+body.analytics-modern .analytics-bottom-controls-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+}
+
+body.analytics-modern .analytics-bottom-controls--single .analytics-bottom-controls-grid {
+    grid-template-columns: minmax(220px, 470px);
+    justify-content: center;
+}
+
+body.analytics-modern .analytics-bottom-controls .analytics-breakdown-filter {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding-top: 0;
+    border-top: 0;
+    gap: 0.45rem;
+    align-items: stretch;
+}
+
+body.analytics-modern .analytics-toggle-card {
+    margin-bottom: 1.2rem;
+    width: 100%;
+}
+
+body.analytics-modern .analytics-view-toggle {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    gap: 0.55rem;
+    padding: 0.65rem;
+}
+
+body.analytics-modern .analytics-toggle-btn {
+    min-height: 44px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #334155;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.86rem;
+    font-weight: 700;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+body.analytics-modern .analytics-toggle-btn:hover {
+    background: #eef6ff;
+    border-color: #94bce3;
+    color: #0055a4;
+}
+
+body.analytics-modern .analytics-toggle-btn.active {
+    background: #0055a4;
+    border-color: #0055a4;
+    color: #ffffff;
+}
+
+body.analytics-modern .analytics-panel {
+    display: none;
+    width: 100%;
+}
+
+body.analytics-modern .analytics-panel.active {
+    display: block;
+}
+
+body.analytics-modern .analytics-kpi-row {
+    grid-template-columns: repeat(3, minmax(230px, 1fr));
+}
+
+body.analytics-modern .analytics-kpi-row-single {
+    grid-template-columns: minmax(260px, 360px);
+    justify-content: center;
+}
+
+body.analytics-modern.analytics-overview .analytics-kpi-row {
+    grid-template-columns: repeat(3, minmax(230px, 1fr));
+}
+
+body.analytics-modern.analytics-overview .analytics-kpi-row-single {
+    grid-template-columns: minmax(260px, 360px);
+    justify-content: center;
+}
+
+body.analytics-modern.analytics-overview .analytics-kpi-row-single .summary-card .card-content {
+    justify-content: center;
+    text-align: center;
+}
+
+body.analytics-modern.analytics-overview .analytics-kpi-row-single .card-icon {
+    display: none;
+}
+
+body.analytics-modern .learner-detail-card {
+    min-height: 500px;
+}
+
+body.analytics-modern .analytics-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+body.analytics-modern .analytics-count-badge {
+    padding: 0.25rem 0.55rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    color: #475569;
+    background: #f8fafc;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+body.analytics-modern .analytics-table-wrap {
+    max-height: 390px;
+    overflow: auto;
+}
+
+body.analytics-modern .analytics-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+}
+
+body.analytics-modern .analytics-table-note {
+    caption-side: top;
+    padding: 0 0.7rem 0.7rem;
+    color: #64748b;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    text-align: left;
+}
+
+body.analytics-modern .analytics-table th,
+body.analytics-modern .analytics-table td {
+    padding: 0.65rem 0.7rem;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+    white-space: nowrap;
+}
+
+body.analytics-modern .analytics-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.analytics-modern .analytics-subject-summary-table th {
+    position: static;
+    z-index: auto;
+}
+
+body.analytics-modern .learner-detail-card {
+    min-height: 0;
+}
+
+body.analytics-modern .analytics-prof-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+@media (max-width: 1100px) {
+    body.analytics-modern .analytics-filter-grid {
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
+    }
+
+    body.analytics-modern .analytics-view-toggle {
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    body.analytics-modern .analytics-filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.analytics-modern .analytics-filter-note {
+        margin: 0;
+    }
+
+    body.analytics-modern .analytics-filter-actions {
+        flex-wrap: wrap;
+    }
+
+    body.analytics-modern .analytics-breakdown-filter {
+        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: none;
+        gap: 0.45rem;
+    }
+
+    body.analytics-modern .analytics-bottom-controls-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.analytics-modern .analytics-view-toggle,
+    body.analytics-modern .analytics-kpi-row,
+    body.analytics-modern .analytics-kpi-row-single,
+    body.analytics-modern.analytics-overview .analytics-kpi-row,
+    body.analytics-modern.analytics-overview .analytics-kpi-row-single {
+        grid-template-columns: 1fr;
+    }
+}
+
+body.analytics-modern.analytics-overview .performance-card {
+    min-height: 520px;
+}
+
+body.analytics-modern.analytics-overview canvas {
+    height: 430px !important;
+    max-height: 560px;
+}
+
+@media (max-width: 1024px) {
+    body.analytics-modern .main-content {
+        padding: 1.25rem 1rem 1.5rem;
+    }
+
+    body.analytics-modern .dashboard-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    body.analytics-modern .page-title {
+        font-size: 1.3rem;
+    }
+
+    body.analytics-modern .summary-cards {
+        grid-template-columns: 1fr;
+    }
+
+    body.analytics-modern .charts-row {
+        grid-template-columns: 1fr;
+    }
+
+    body.analytics-modern canvas {
+        height: 320px !important;
+        max-height: 380px;
+    }
+
+    body.analytics-modern.analytics-overview .summary-cards {
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    body.analytics-modern.analytics-overview .summary-cards {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,916 @@
+body.grading-periods-page {
+    --gp-ink: #18324b;
+    --gp-muted: #65788b;
+    --gp-line: #e3eaf1;
+    --gp-accent: #075aa7;
+    --gp-soft: #f4f8fc;
+}
+
+body.grading-periods-page .gp-toolbar {
+    grid-template-columns: minmax(220px, 1fr) minmax(220px, 280px);
+}
+
+body.grading-periods-page .gp-search-box { grid-column: 1; }
+body.grading-periods-page .gp-filter-group { grid-column: 2; }
+
+body.grading-periods-page .data-table { min-width: 580px; }
+body.grading-periods-page .data-table th:last-child,
+body.grading-periods-page .data-table td:last-child { width: auto; }
+
+body.grading-periods-page .gp-year-row { cursor: pointer; }
+body.grading-periods-page .gp-school-year {
+    display: inline-block;
+    color: #183b59;
+    font-size: 0.96rem;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+}
+body.grading-periods-page .gp-year-value,
+body.grading-periods-page .gp-period-value {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+body.grading-periods-page .gp-active-label {
+    display: inline-flex;
+    margin-left: 0.55rem;
+    padding: 0.18rem 0.48rem;
+    border-radius: 999px;
+    background: #eef7f1;
+    color: #26734c;
+    font-size: 0.66rem;
+    font-weight: 750;
+    text-transform: uppercase;
+}
+body.grading-periods-page .gp-system-label { color: #425c74; font-weight: 600; }
+body.grading-periods-page .gp-system-inline { display: none; }
+body.grading-periods-page .gp-period-count {
+    color: #203e58;
+    font-size: 0.93rem;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+}
+body.grading-periods-page .gp-period-count-label { margin-left: 0.3rem; color: var(--gp-muted); font-size: 0.82rem; }
+body.grading-periods-page .gp-row-action { text-align: right; }
+body.grading-periods-page .gp-view-button,
+body.grading-periods-page .gp-edit-button,
+body.grading-periods-page .gp-save-button,
+body.grading-periods-page .gp-cancel-button {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.42rem;
+    padding: 0.45rem 0.72rem;
+    border: 1px solid #d8e4ef;
+    border-radius: 8px;
+    background: #fff;
+    color: #315d83;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+body.grading-periods-page .gp-view-button:hover,
+body.grading-periods-page .gp-edit-button:hover { border-color: #a9c7e0; background: #f3f8fc; }
+body.grading-periods-page .gp-save-button { border-color: #075aa7; background: #075aa7; color: #fff; }
+body.grading-periods-page .gp-save-button:hover { background: #064983; }
+body.grading-periods-page .gp-cancel-button { border-color: transparent; color: #617487; }
+body.grading-periods-page .gp-save-button:disabled { opacity: 0.65; cursor: wait; }
+body.grading-periods-page .gp-empty { padding: 2rem 1rem !important; color: #718397 !important; }
+body.grading-periods-page .gp-error { color: #a33d3d !important; }
+
+body.grading-periods-page .gp-periods-modal { z-index: 1300; }
+body.grading-periods-page .gp-periods-modal .modal-content {
+    width: min(1040px, calc(100vw - 2rem));
+    max-height: min(86vh, 820px);
+    overflow: hidden;
+    border: 1px solid #dce6ef;
+    border-radius: 16px;
+    box-shadow: 0 24px 70px rgba(13, 39, 63, 0.22);
+}
+body.grading-periods-page .gp-modal-header {
+    align-items: flex-start;
+    padding: 1.3rem 1.5rem 1.1rem;
+    border-bottom: 1px solid var(--gp-line);
+    background: #fbfdff;
+}
+body.grading-periods-page .gp-modal-kicker {
+    margin: 0 0 0.25rem;
+    color: var(--gp-accent);
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+body.grading-periods-page .gp-modal-header .modal-title { color: var(--gp-ink); font-size: 1.3rem; }
+body.grading-periods-page .gp-modal-body { overflow: auto; padding: 1rem 1.5rem 1.3rem; }
+body.grading-periods-page .gp-modal-intro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+    color: #38536c;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+body.grading-periods-page .gp-edit-note { color: #718397; font-size: 0.76rem; font-weight: 500; }
+body.grading-periods-page .gp-edit-note i { margin-right: 0.25rem; }
+body.grading-periods-page .gp-periods-table-wrap { overflow-x: auto; border: 1px solid var(--gp-line); border-radius: 10px; }
+body.grading-periods-page .gp-periods-table { min-width: 760px; }
+body.grading-periods-page .gp-periods-table th { white-space: nowrap; }
+body.grading-periods-page .gp-periods-table td { vertical-align: middle; }
+body.grading-periods-page .gp-periods-table .gp-period-number { display: inline-flex; min-width: 1.9rem; justify-content: center; color: #49637c; font-weight: 700; }
+body.grading-periods-page .gp-periods-table .gp-period-name { color: #1e3d59; font-weight: 650; }
+body.grading-periods-page .gp-period-action { text-align: right; white-space: nowrap; }
+body.grading-periods-page .gp-edit-input {
+    width: 100%;
+    min-width: 128px;
+    min-height: 38px;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid #cbd9e6;
+    border-radius: 7px;
+    background: #fff;
+    color: #294761;
+    font: inherit;
+    font-size: 0.8rem;
+}
+body.grading-periods-page .gp-edit-actions { min-width: 155px; }
+body.grading-periods-page .gp-modal-footer { padding: 0.9rem 1.5rem; border-top: 1px solid var(--gp-line); }
+body.grading-periods-page .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+body.grading-periods-page .main-content {
+    padding-top: clamp(1.25rem, 2.5vw, 2.25rem);
+}
+
+body.grading-periods-page .gp-page-header {
+    margin-bottom: 1.2rem;
+    padding: 0 0.1rem;
+}
+
+body.grading-periods-page .gp-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.35rem;
+    color: var(--gp-accent);
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.09em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+body.grading-periods-page .gp-eyebrow i {
+    font-size: 0.78rem;
+}
+
+body.grading-periods-page .page-title {
+    margin: 0;
+    color: var(--gp-ink);
+    line-height: 1.2;
+}
+
+body.grading-periods-page .page-subtitle {
+    max-width: 620px;
+    margin: 0.45rem 0 0;
+    color: var(--gp-muted);
+    line-height: 1.5;
+}
+
+body.grading-periods-page .gp-card {
+    border-color: var(--gp-line);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(24, 50, 75, 0.055);
+}
+
+body.grading-periods-page .gp-toolbar {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) max-content minmax(220px, 250px) 44px;
+    align-items: end;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom-color: var(--gp-line);
+    background: #fbfdff;
+}
+
+body.grading-periods-page .gp-search-box,
+body.grading-periods-page .gp-filter-group {
+    display: grid;
+    min-width: 0;
+    max-width: none;
+    gap: 0.42rem;
+    margin: 0;
+}
+
+body.grading-periods-page .gp-search-box {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+body.grading-periods-page .gp-filter-group {
+    grid-column: 3;
+    grid-row: 1;
+    width: 100%;
+}
+
+body.grading-periods-page .gp-toolbar .mf-bulk-controls {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+body.grading-periods-page .gp-control-label {
+    display: block;
+    color: #50667b;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.055em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+body.grading-periods-page .gp-search-control,
+body.grading-periods-page .gp-select-control {
+    position: relative;
+    min-width: 0;
+}
+
+body.grading-periods-page .gp-search-control > i {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 0.85rem;
+    color: #8294a6;
+    font-size: 0.85rem;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+body.grading-periods-page .gp-search-box .search-input,
+body.grading-periods-page .gp-filter-group .form-control {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    margin: 0;
+    border: 1px solid #d6e0ea;
+    border-radius: 9px;
+    background: #fff;
+    color: var(--gp-ink);
+    font-size: 0.88rem;
+    box-shadow: none;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+body.grading-periods-page .gp-search-box .search-input {
+    padding: 0.65rem 0.8rem 0.65rem 2.45rem;
+}
+
+body.grading-periods-page .gp-search-box .search-input::placeholder {
+    color: #91a0af;
+}
+
+body.grading-periods-page .gp-filter-group .form-control {
+    appearance: none;
+    padding: 0.65rem 2.45rem 0.65rem 0.85rem;
+    cursor: pointer;
+}
+
+body.grading-periods-page .gp-search-box .search-input:focus,
+body.grading-periods-page .gp-filter-group .form-control:focus {
+    border-color: #4c91ce;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(7, 90, 167, 0.11);
+}
+
+body.grading-periods-page .gp-select-chevron {
+    position: absolute;
+    top: 50%;
+    right: 0.85rem;
+    color: #8294a6;
+    font-size: 0.72rem;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+body.grading-periods-page .gp-toolbar #addButton.mf-options-icon-btn {
+    display: inline-flex;
+    grid-column: 4;
+    grid-row: 1;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #d3e2f0;
+    border-radius: 9px;
+    background: #edf5fc;
+    color: var(--gp-accent);
+    box-shadow: none;
+}
+
+body.grading-periods-page .gp-toolbar #addButton.mf-options-icon-btn:hover {
+    border-color: #b7d1e8;
+    background: #e2effa;
+    color: #064983;
+}
+
+body.grading-periods-page .gp-toolbar .mf-options-menu {
+    position: absolute;
+    z-index: 5;
+    right: 1.25rem;
+    border-color: var(--gp-line);
+    border-radius: 10px;
+    box-shadow: 0 12px 28px rgba(24, 50, 75, 0.14);
+}
+
+body.grading-periods-page .table-container {
+    background: #fff;
+}
+
+body.grading-periods-page .data-table {
+    min-width: 760px;
+}
+
+body.grading-periods-page .data-table thead {
+    background: #f4f8fc;
+}
+
+body.grading-periods-page .data-table th {
+    padding: 0.9rem 1.15rem;
+    border-bottom: 1px solid var(--gp-line);
+    background: #f4f8fc;
+    color: #64788c;
+    font-size: 0.68rem;
+    font-weight: 750;
+    letter-spacing: 0.075em;
+}
+
+body.grading-periods-page .data-table th:hover {
+    background: #edf4fa;
+    color: var(--gp-accent);
+}
+
+body.grading-periods-page .data-table tbody tr {
+    border-bottom-color: #edf1f5;
+}
+
+body.grading-periods-page .data-table tbody tr:hover {
+    background: #f8fbfe;
+}
+
+body.grading-periods-page .data-table td {
+    padding: 1rem 1.15rem;
+    color: #425a70;
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+
+body.grading-periods-page .gp-school-year {
+    color: #3d5872;
+    font-weight: 650;
+    white-space: nowrap;
+}
+
+body.grading-periods-page .gp-period-number {
+    display: inline-flex;
+    min-width: 2rem;
+    min-height: 1.8rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem 0.45rem;
+    border: 1px solid #dce8f3;
+    border-radius: 7px;
+    background: #f4f8fc;
+    color: #536c84;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+body.grading-periods-page .gp-period-name {
+    color: #1e3d59;
+    font-weight: 650;
+}
+
+body.grading-periods-page .gp-date {
+    color: #536b81;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+body.grading-periods-page .gp-status {
+    display: inline-flex;
+    min-height: 1.75rem;
+    align-items: center;
+    gap: 0.42rem;
+    padding: 0.22rem 0.62rem;
+    border: 1px solid #dfe8f0;
+    border-radius: 999px;
+    background: #f5f8fb;
+    color: #53687c;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+body.grading-periods-page .gp-status-dot {
+    width: 0.42rem;
+    height: 0.42rem;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+body.grading-periods-page .gp-status--open {
+    border-color: #ccebdc;
+    background: #f0faf5;
+    color: #18734a;
+}
+
+body.grading-periods-page .gp-status--submitted {
+    border-color: #d6e4f5;
+    background: #f1f6fc;
+    color: #3c6593;
+}
+
+body.grading-periods-page .gp-status--approved {
+    border-color: #ccebdc;
+    background: #f0faf5;
+    color: #18734a;
+}
+
+body.grading-periods-page .gp-status--locked {
+    border-color: #e2e6eb;
+    background: #f3f5f7;
+    color: #5c6874;
+}
+
+body.grading-periods-page .pagination-section {
+    min-height: 64px;
+    border-top-color: var(--gp-line);
+    background: #fff;
+}
+
+body.grading-periods-page .pagination-btn {
+    border-color: #d7e1ea;
+    background: #fff;
+    color: #45617c;
+}
+
+body.grading-periods-page .pagination-btn:not(:disabled):hover {
+    border-color: #b8cfe3;
+    background: #f3f8fc;
+}
+
+@media (max-width: 768px) {
+    body.grading-periods-page .gp-toolbar {
+        grid-template-columns: minmax(0, 1fr) minmax(140px, 0.8fr);
+        align-items: end;
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+
+    body.grading-periods-page .gp-search-box {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    body.grading-periods-page .gp-filter-group {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    body.grading-periods-page .gp-toolbar .mf-bulk-controls {
+        grid-column: 1 / -1;
+        grid-row: 3;
+        justify-self: start;
+        flex-wrap: wrap;
+    }
+
+    body.grading-periods-page .data-table {
+        min-width: 0;
+    }
+
+    body.grading-periods-page .data-table tbody .mf-record-row {
+        border-bottom-color: var(--gp-line);
+    }
+
+    body.grading-periods-page .mf-mobile-meta {
+        gap: 0.4rem;
+        margin-top: 0.7rem;
+    }
+
+    body.grading-periods-page .mf-mobile-meta .mf-meta-item {
+        color: #62788d;
+        font-size: 0.82rem;
+        line-height: 1.45;
+    }
+
+    body.grading-periods-page .gp-period-name {
+        font-size: 0.98rem;
+    }
+
+    body.grading-periods-page .pagination-section {
+        padding: 0.75rem 1rem;
+    }
+    body.grading-periods-page .gp-periods-modal .modal-content { width: calc(100vw - 1rem); max-height: 92vh; }
+    body.grading-periods-page .gp-modal-header { padding: 1rem; }
+    body.grading-periods-page .gp-modal-body { padding: 0.85rem 1rem 1rem; }
+    body.grading-periods-page .gp-modal-intro { align-items: flex-start; flex-direction: column; gap: 0.25rem; }
+    body.grading-periods-page .gp-modal-footer { padding: 0.8rem 1rem; }
+}
+
+body.grading-periods-page .gp-year-row { cursor: pointer; }
+body.grading-periods-page .gp-year-row:focus-visible,
+body.grading-periods-page .gp-period-row:focus-visible {
+    outline: 2px solid #4c91ce;
+    outline-offset: -2px;
+}
+body.grading-periods-page .gp-period-row { cursor: pointer; }
+body.grading-periods-page .gp-period-row:hover { background: #f3f8fc; }
+body.grading-periods-page .gp-periods-table { min-width: 740px; }
+body.grading-periods-page .gp-edit-actions { display: flex; gap: 0.4rem; margin-top: 0.5rem; }
+body.grading-periods-page #gpPeriodContextMenu { z-index: 1400; }
+body.grading-periods-page .gp-modal-footer [hidden] { display: none !important; }
+body.grading-periods-page .gp-date-edit-field { min-width: 165px; }
+body.grading-periods-page .gp-date-trigger {
+    display: flex;
+    width: 100%;
+    min-height: 38px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.45rem;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid #cbd9e6;
+    border-radius: 7px;
+    background: #fbfdff;
+    color: #748296;
+    font: inherit;
+    font-size: 0.78rem;
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+}
+body.grading-periods-page .gp-date-trigger:hover,
+body.grading-periods-page .gp-date-trigger:focus-visible {
+    border-color: #075aa7;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(7, 90, 167, 0.11);
+}
+body.grading-periods-page .gp-date-trigger.has-value { color: #18324b; font-weight: 600; }
+body.grading-periods-page .gp-date-trigger > i { flex: 0 0 auto; color: #075aa7; }
+body.grading-periods-page .mf-academic-date-picker button:disabled { color: #a5afba; opacity: 0.45; cursor: not-allowed; }
+
+@media (max-width: 380px) {
+    body.grading-periods-page .gp-toolbar {
+        gap: 0.65rem;
+    }
+
+    body.grading-periods-page .gp-filter-group .form-control {
+        padding-left: 0.75rem;
+        font-size: 0.82rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.grading-periods-page .gp-search-box .search-input,
+    body.grading-periods-page .gp-filter-group .form-control {
+        transition: none;
+    }
+}
+
+/* The grading-periods page has a focused school-year list, not masterfile CRUD. */
+body.grading-periods-page .gp-toolbar { grid-template-columns: minmax(220px, 1fr) minmax(220px, 280px); }
+body.grading-periods-page .gp-search-box { grid-column: 1; }
+body.grading-periods-page .gp-filter-group { grid-column: 2; }
+body.grading-periods-page .data-table { min-width: 580px; }
+body.grading-periods-page .data-table th:last-child,
+body.grading-periods-page .data-table td:last-child { width: 112px; }
+
+@media (max-width: 768px) {
+    body.grading-periods-page .gp-toolbar { grid-template-columns: minmax(0, 1fr) minmax(140px, 0.8fr); }
+    body.grading-periods-page .gp-search-box { grid-column: 1 / -1; grid-row: 1; }
+    body.grading-periods-page .gp-filter-group { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* Compact mobile cards for seeded school-year and term rows. Keep the
+   desktop tables unchanged, but expose each value beside its label on phones
+   so neither table needs horizontal scrolling. */
+@media (max-width: 768px) {
+    body.grading-periods-page .gp-card > .table-container {
+        overflow: visible;
+        padding: 0 0.35rem 0.35rem;
+    }
+
+    body.grading-periods-page #dataTable {
+        display: block;
+        width: 100%;
+        min-width: 0 !important;
+        border-collapse: separate;
+    }
+
+    body.grading-periods-page #dataTable thead {
+        display: none;
+    }
+
+    body.grading-periods-page #dataTable tbody {
+        display: grid;
+        gap: 0.55rem;
+        padding: 0.65rem 0.35rem 0.35rem;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.35rem 0.8rem;
+        padding: 0.7rem 0.75rem;
+        border: 1px solid #e2eaf2;
+        border-radius: 0.7rem;
+        background: #fff;
+        box-shadow: 0 4px 14px rgba(24, 50, 75, 0.045);
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row > td {
+        display: grid;
+        grid-template-columns: minmax(5.4rem, auto) minmax(0, 1fr);
+        gap: 0.55rem;
+        min-width: 0;
+        align-items: center;
+        padding: 0.18rem 0;
+        border: 0;
+        font-size: 0.78rem;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row > td::before,
+    body.grading-periods-page .gp-periods-table tbody td[data-label]::before {
+        color: #718397;
+        content: attr(data-label);
+        font-size: 0.64rem;
+        font-weight: 750;
+        letter-spacing: 0.055em;
+        line-height: 1.2;
+        text-transform: none;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row > td:first-child {
+        grid-column: 1;
+        padding-bottom: 0.55rem;
+        border-bottom: 1px solid #edf1f5;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row > td:nth-child(2) {
+        display: none !important;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row > td:last-child {
+        justify-self: stretch;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-school-year,
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-system-label {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-school-year {
+        font-size: 0.9rem;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-year-value {
+        display: grid;
+        gap: 0.12rem;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-system-inline {
+        display: block;
+        color: #62788d;
+        font-size: 0.68rem;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-active-label {
+        margin-left: 0;
+        padding: 0.14rem 0.38rem;
+        font-size: 0.58rem;
+        vertical-align: middle;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-period-count {
+        font-size: 0.84rem;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-period-count-label {
+        margin-left: 0.25rem;
+        font-size: 0.68rem;
+    }
+
+    body.grading-periods-page #dataTable tbody tr:not(.gp-year-row) {
+        display: block;
+        border: 0;
+    }
+
+    body.grading-periods-page #dataTable tbody tr:not(.gp-year-row) > td {
+        display: block;
+        padding: 1.25rem 0.5rem;
+        border: 0;
+    }
+
+    body.grading-periods-page .gp-modal-body {
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    body.grading-periods-page .gp-periods-table-wrap {
+        overflow: visible;
+        border: 0;
+    }
+
+    body.grading-periods-page .gp-periods-table {
+        display: block;
+        width: 100%;
+        min-width: 0 !important;
+        border-collapse: separate;
+    }
+
+    body.grading-periods-page .gp-periods-table thead {
+        display: none;
+    }
+
+    body.grading-periods-page .gp-periods-table tbody {
+        display: grid;
+        gap: 0.55rem;
+    }
+
+    body.grading-periods-page .gp-periods-table tbody tr {
+        display: grid;
+        gap: 0.38rem;
+        padding: 0.7rem 0.75rem;
+        border: 1px solid #e2eaf2;
+        border-radius: 0.7rem;
+        background: #fff;
+    }
+
+    body.grading-periods-page .gp-periods-table tbody td {
+        display: grid;
+        grid-template-columns: minmax(4.8rem, 0.42fr) minmax(0, 1fr);
+        gap: 0.55rem;
+        min-width: 0;
+        align-items: center;
+        padding: 0.22rem 0;
+        border: 0;
+        font-size: 0.78rem;
+    }
+
+    body.grading-periods-page .gp-periods-table .gp-period-name,
+    body.grading-periods-page .gp-periods-table .gp-date,
+    body.grading-periods-page .gp-periods-table .gp-status {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    body.grading-periods-page .gp-periods-table .gp-status {
+        justify-self: start;
+        min-height: 1.55rem;
+        padding: 0.18rem 0.5rem;
+        font-size: 0.68rem;
+    }
+
+    body.grading-periods-page .gp-periods-table .gp-date-edit-field {
+        width: 100%;
+        min-width: 0;
+    }
+
+    body.grading-periods-page .gp-periods-table .gp-date-trigger {
+        min-height: 36px;
+        padding: 0.38rem 0.5rem;
+        font-size: 0.72rem;
+        white-space: normal;
+    }
+
+    body.grading-periods-page .gp-modal-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    body.grading-periods-page .gp-modal-footer .btn {
+        flex: 1 1 8rem;
+        min-height: 40px;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.78rem;
+    }
+
+    body.grading-periods-page #gpPeriodContextMenu {
+        min-height: 0;
+        max-height: min(40dvh, 16rem);
+        padding: 0.35rem 0 max(0.35rem, env(safe-area-inset-bottom)) !important;
+    }
+
+    body.grading-periods-page #gpPeriodContextMenu .mf-context-menu-item {
+        min-height: 44px;
+        padding: 0.65rem 1rem;
+        font-size: 0.84rem;
+    }
+}
+
+/* On phones, keep the two visible main-table headings together at the top,
+   then place each school-year value row directly underneath. */
+@media (max-width: 768px) {
+    body.grading-periods-page #dataTable thead {
+        display: block;
+        background: #f4f8fc;
+        border-bottom: 1px solid var(--gp-line);
+    }
+
+    body.grading-periods-page #dataTable thead tr {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(4.6rem, auto);
+        gap: 0.8rem;
+        padding: 0.7rem 0.75rem;
+    }
+
+    body.grading-periods-page #dataTable thead th {
+        display: block;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #64788c;
+        font-size: 0.68rem;
+        letter-spacing: 0.055em;
+        text-transform: none;
+    }
+
+    body.grading-periods-page #dataTable thead th:nth-child(2) {
+        display: none;
+    }
+
+    body.grading-periods-page #dataTable thead th:last-child {
+        text-align: right;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row {
+        grid-template-columns: minmax(0, 1fr) minmax(4.6rem, auto);
+        align-items: start;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row > td {
+        display: block;
+        grid-column: auto;
+        padding: 0;
+        border: 0;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row > td::before {
+        display: none;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row > td:first-child {
+        grid-column: 1;
+        padding-bottom: 0;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row > td:last-child {
+        grid-column: 2;
+        align-self: start;
+        text-align: right;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-year-value {
+        display: grid;
+        gap: 0.12rem;
+    }
+
+    body.grading-periods-page #dataTable tbody .gp-year-row .gp-period-value {
+        justify-content: flex-end;
+    }
+
+    body.grading-periods-page .gp-modal-footer[hidden] {
+        display: none !important;
+    }
+}

@@ -1,0 +1,203 @@
+.academic-date-trigger {
+    display: flex;
+    width: 100%;
+    min-height: 40px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--gray-300, #cbd5e1);
+    border-radius: 0.375rem;
+    background: var(--surface-0, #fff);
+    color: var(--gray-500, #64748b);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.academic-date-trigger:hover,
+.academic-date-trigger:focus-visible {
+    border-color: var(--deped-blue, #0055a4);
+    background: var(--surface-0, #fff);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+}
+
+.academic-date-trigger.has-value {
+    color: var(--gray-800, #1e293b);
+    font-weight: 600;
+}
+
+.academic-date-trigger > i {
+    flex: 0 0 auto;
+    color: var(--deped-blue, #0055a4);
+}
+
+.academic-date-trigger.error {
+    border-color: var(--color-danger, #dc2626);
+    background: #fff7f7;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.academic-date-picker[hidden] {
+    display: none !important;
+}
+
+.academic-date-picker {
+    position: fixed;
+    z-index: 1400;
+    width: min(320px, calc(100vw - 24px));
+    padding: 0.85rem;
+    border: 1px solid #d7e0e8;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 36px rgba(23, 38, 58, 0.18);
+}
+
+.academic-date-picker-header {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 34px 34px;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.academic-date-year {
+    color: #243447;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.academic-date-nav,
+.academic-date-close {
+    display: inline-flex;
+    width: 34px;
+    min-height: 34px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: #516174;
+    cursor: pointer;
+}
+
+.academic-date-close {
+    grid-column: 4;
+    grid-row: 1;
+}
+
+.academic-date-nav:hover,
+.academic-date-close:hover {
+    border-color: #dbe5ef;
+    background: #f3f8fe;
+    color: var(--deped-blue, #0055a4);
+}
+
+.academic-date-picker-hint {
+    margin: 0.55rem 0 0.65rem;
+    color: #64748b;
+    font-size: 0.77rem;
+    text-align: center;
+}
+
+.academic-date-month-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+}
+
+.academic-date-month-grid button,
+.academic-date-day-grid button {
+    min-width: 0;
+    min-height: 36px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: #f7fafc;
+    color: #334155;
+    font: inherit;
+    font-size: 0.79rem;
+    cursor: pointer;
+}
+
+.academic-date-month-grid button:hover,
+.academic-date-day-grid button:hover {
+    border-color: #b8d1e9;
+    background: #eef6fd;
+    color: var(--deped-blue, #0055a4);
+}
+
+.academic-date-nav:disabled,
+.academic-date-day-grid button:disabled,
+.academic-date-day-grid button:disabled:hover {
+    border-color: transparent;
+    background: #edf1f5;
+    color: #a0acb9;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.academic-date-month-grid button.is-current,
+.academic-date-day-grid button.is-selected {
+    border-color: var(--deped-blue, #0055a4);
+    background: var(--deped-blue, #0055a4);
+    color: #fff;
+    font-weight: 700;
+}
+
+.academic-date-month-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0.45rem 0 0.7rem;
+    color: #243447;
+}
+
+.academic-date-month-heading > button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 34px;
+    padding: 0 0.45rem;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--deped-blue, #0055a4);
+    font: inherit;
+    font-size: 0.76rem;
+    cursor: pointer;
+}
+
+.academic-date-month-heading > button:hover {
+    background: #eef6fd;
+}
+
+.academic-date-day-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.25rem;
+}
+
+.academic-date-weekday {
+    display: grid;
+    min-height: 28px;
+    place-items: center;
+    color: #64748b;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.academic-date-empty {
+    min-height: 36px;
+}
+
+@media (max-width: 480px) {
+    .academic-date-picker {
+        padding: 0.7rem;
+    }
+
+    .academic-date-month-grid button,
+    .academic-date-day-grid button {
+        min-height: 38px;
+    }
+}

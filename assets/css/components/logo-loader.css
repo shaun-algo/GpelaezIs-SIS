@@ -1,0 +1,145 @@
+/* ============================================
+   Logo Loader Component - Reusable Loading Screen
+   ============================================ */
+
+:root {
+    --loader-surface: #d7d9dc;
+}
+
+.logo-loader {
+    position: fixed;
+    inset: 0;
+    background: var(--loader-surface);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    transition: opacity 0.35s ease, visibility 0.35s;
+}
+
+.logo-loader-active {
+    overflow: hidden;
+}
+
+.logo-loader.loaded {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.logo-loader-content {
+    position: relative;
+    width: clamp(124px, 18vw, 180px);
+    height: clamp(124px, 18vw, 180px);
+    display: grid;
+    place-items: center;
+}
+
+.logo-loader-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    object-fit: contain;
+    background: transparent;
+    box-shadow: none;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: loaderLogoReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+}
+
+.logo-loader-content::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 3px solid rgba(0, 85, 164, 0.18);
+    border-top-color: #0055a4;
+    opacity: 1;
+    animation: loaderSpin 0.8s linear infinite;
+}
+
+.logo-loader.loaded .logo-loader-content::before {
+    animation: none;
+    opacity: 0;
+}
+
+.logo-loader-label {
+    position: absolute;
+    top: calc(100% + 1.25rem);
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    color: #3e464e;
+    font: 600 0.78rem/1.2 "Source Sans 3", "Segoe UI", sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+@keyframes loaderLogoReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes loaderSpinnerReveal {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes loaderSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .logo-loader-image {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: scale(1) !important;
+    }
+
+    .logo-loader-content::before {
+        animation: none !important;
+        opacity: 0 !important;
+    }
+
+    .logo-loader {
+        transition: none;
+    }
+}
+
+/* Give the school mark enough presence to remain legible on compact screens. */
+@media (max-width: 768px) {
+    .logo-loader-content {
+        width: clamp(150px, 30vw, 220px);
+        height: clamp(150px, 30vw, 220px);
+    }
+}
+
+@media (max-width: 560px) {
+    .logo-loader-content {
+        width: clamp(160px, 48vw, 220px);
+        height: clamp(160px, 48vw, 220px);
+    }
+
+    .logo-loader-content::before {
+        inset: -14px;
+    }
+
+    .logo-loader-label {
+        top: calc(100% + 1.15rem);
+    }
+}

@@ -1,0 +1,411 @@
+/* Shared soft button layer
+ *
+ * This is loaded after module styles so buttons across the dashboard share the
+ * same quiet, Masterfiles-inspired treatment without changing their markup or
+ * click behavior.
+ */
+
+html.app-button-polish {
+    --button-radius: 10px;
+    --button-ease: cubic-bezier(.22, 1, .36, 1);
+    --button-blue: #0055a4;
+    --button-blue-hover: #004b90;
+    --button-blue-soft: #e8f2ff;
+    --button-blue-line: #cfe3fb;
+    --button-ink: #294b68;
+    --button-line: #d7e1eb;
+    --button-surface: #ffffff;
+    --button-control-line-hover: #9bb3c8;
+    --button-control-hover: #f7fafc;
+    --button-focus-ring: rgba(0, 85, 164, .18);
+}
+
+/* Keep every dashboard button optically quiet before its variant is applied. */
+html.app-button-polish :where(button, a.btn) {
+    -webkit-tap-highlight-color: transparent;
+}
+
+html.app-button-polish .btn {
+    min-height: 42px;
+    padding: .6rem 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--button-radius);
+    font-weight: 650;
+    line-height: 1.2;
+    box-shadow: 0 1px 2px rgba(20, 48, 72, .04);
+    transition: transform 160ms var(--button-ease),
+        background-color 160ms var(--button-ease),
+        border-color 160ms var(--button-ease),
+        color 160ms var(--button-ease),
+        box-shadow 160ms var(--button-ease);
+}
+
+html.app-button-polish .btn-primary {
+    border-color: var(--button-blue);
+    background: var(--button-blue);
+    color: #fff;
+}
+
+html.app-button-polish .btn-primary:hover:not(:disabled),
+html.app-button-polish .btn-primary:focus-visible:not(:disabled) {
+    border-color: var(--button-blue-hover);
+    background: var(--button-blue-hover);
+    box-shadow: 0 5px 14px rgba(0, 85, 164, .16);
+    transform: translateY(-1px);
+}
+
+html.app-button-polish .btn-secondary,
+html.app-button-polish .btn-success {
+    border-color: #cfe4b8;
+    background: #eef7e8;
+    color: #416326;
+}
+
+html.app-button-polish .btn-secondary:hover:not(:disabled),
+html.app-button-polish .btn-secondary:focus-visible:not(:disabled),
+html.app-button-polish .btn-success:hover:not(:disabled),
+html.app-button-polish .btn-success:focus-visible:not(:disabled) {
+    border-color: #b9d69c;
+    background: #e4f1d8;
+    box-shadow: 0 5px 14px rgba(75, 116, 37, .1);
+    transform: translateY(-1px);
+}
+
+html.app-button-polish .btn-outline {
+    border-color: var(--button-line);
+    background: var(--button-surface);
+    color: var(--button-ink);
+}
+
+html.app-button-polish .btn-outline:hover:not(:disabled),
+html.app-button-polish .btn-outline:focus-visible:not(:disabled) {
+    border-color: var(--button-blue-line);
+    background: #f1f7fd;
+    color: var(--button-blue);
+    box-shadow: 0 4px 12px rgba(20, 48, 72, .07);
+    transform: translateY(-1px);
+}
+
+html.app-button-polish .btn-danger,
+html.app-button-polish .btn--danger {
+    border-color: #f0c7c5;
+    background: #fff0ef;
+    color: #9b3b38;
+}
+
+html.app-button-polish .btn-danger:hover:not(:disabled),
+html.app-button-polish .btn-danger:focus-visible:not(:disabled),
+html.app-button-polish .btn--danger:hover:not(:disabled),
+html.app-button-polish .btn--danger:focus-visible:not(:disabled) {
+    border-color: #e5aaa7;
+    background: #ffe5e3;
+    color: #85302d;
+    box-shadow: 0 5px 14px rgba(155, 59, 56, .1);
+    transform: translateY(-1px);
+}
+
+html.app-button-polish .btn:active:not(:disabled),
+html.app-button-polish .btn--danger:active:not(:disabled) {
+    box-shadow: none;
+    transform: scale(.98);
+}
+
+html.app-button-polish .btn:disabled,
+html.app-button-polish .btn[aria-disabled="true"] {
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: .55;
+}
+
+html.app-button-polish .btn-sm {
+    min-height: 36px;
+    padding: .48rem .78rem;
+    border-radius: 8px;
+    font-size: .82rem;
+}
+
+/* Compact data actions use the same soft pastel vocabulary as Masterfiles. */
+html.app-button-polish .action-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    box-shadow: none;
+    transition: transform 160ms var(--button-ease),
+        background-color 160ms var(--button-ease),
+        border-color 160ms var(--button-ease),
+        color 160ms var(--button-ease);
+}
+
+html.app-button-polish .action-btn:hover:not(:disabled),
+html.app-button-polish .action-btn:focus-visible:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+html.app-button-polish .action-btn:active:not(:disabled) {
+    transform: scale(.97);
+}
+
+html.app-button-polish .action-btn.edit {
+    border-color: var(--button-blue-line);
+    background: var(--button-blue-soft);
+    color: #155eaa;
+}
+
+html.app-button-polish .action-btn.edit:hover:not(:disabled),
+html.app-button-polish .action-btn.edit:focus-visible:not(:disabled) {
+    background: #d7eaff;
+    color: #0b4b88;
+}
+
+html.app-button-polish .action-btn.delete,
+html.app-button-polish .action-btn.archive {
+    border-color: #f5d99e;
+    background: #fff4df;
+    color: #9a5b00;
+}
+
+html.app-button-polish .action-btn.delete:hover:not(:disabled),
+html.app-button-polish .action-btn.delete:focus-visible:not(:disabled),
+html.app-button-polish .action-btn.archive:hover:not(:disabled),
+html.app-button-polish .action-btn.archive:focus-visible:not(:disabled) {
+    background: #ffebc2;
+    color: #7a4700;
+}
+
+html.app-button-polish .action-btn.view {
+    border-color: #dfe2ff;
+    background: #eef0ff;
+    color: #5146a8;
+}
+
+html.app-button-polish .action-btn.view:hover:not(:disabled),
+html.app-button-polish .action-btn.view:focus-visible:not(:disabled) {
+    background: #e2e5ff;
+    color: #3f368f;
+}
+
+html.app-button-polish .pagination-btn,
+html.app-button-polish .btn-icon,
+html.app-button-polish .modal-close {
+    border: 1px solid var(--button-line);
+    border-radius: 10px;
+    background: var(--button-surface);
+    color: var(--button-ink);
+    transition: transform 160ms var(--button-ease),
+        background-color 160ms var(--button-ease),
+        border-color 160ms var(--button-ease),
+        color 160ms var(--button-ease);
+}
+
+html.app-button-polish .pagination-btn:not(:disabled):hover,
+html.app-button-polish .pagination-btn:not(:disabled):focus-visible,
+html.app-button-polish .btn-icon:hover:not(:disabled),
+html.app-button-polish .btn-icon:focus-visible:not(:disabled),
+html.app-button-polish .modal-close:hover:not(:disabled),
+html.app-button-polish .modal-close:focus-visible:not(:disabled) {
+    border-color: var(--button-blue-line);
+    background: #f1f7fd;
+    color: var(--button-blue);
+    transform: translateY(-1px);
+}
+
+html.app-button-polish .pagination-btn:active:not(:disabled),
+html.app-button-polish .btn-icon:active:not(:disabled),
+html.app-button-polish .modal-close:active:not(:disabled) {
+    transform: scale(.97);
+}
+
+/* Small module controls that are not named .btn still receive the same motion. */
+html.app-button-polish :where(.menu-toggle, .notification-btn, .user-btn,
+    .profile-options-toggle, .advanced-toggle, .icon-btn, .cs-options-button,
+    .cs-type-btn, .day-icon, .risk-print-btn, .risk-mechanics-btn,
+    .settings-nav-button, .audit-details-button) {
+    border-radius: 10px;
+    transition: transform 160ms var(--button-ease),
+        background-color 160ms var(--button-ease),
+        border-color 160ms var(--button-ease),
+        color 160ms var(--button-ease),
+        box-shadow 160ms var(--button-ease);
+}
+
+html.app-button-polish :where(.menu-toggle, .notification-btn, .user-btn,
+    .profile-options-toggle, .advanced-toggle, .icon-btn, .cs-options-button,
+    .cs-type-btn, .day-icon, .risk-print-btn, .risk-mechanics-btn,
+    .settings-nav-button, .audit-details-button):active:not(:disabled) {
+    transform: scale(.98);
+}
+
+html.app-button-polish :where(button, a.btn, .action-btn, .pagination-btn,
+    .btn-icon, .modal-close):focus-visible {
+    outline: 3px solid rgba(0, 85, 164, .24);
+    outline-offset: 2px;
+}
+
+/* Risk Assessment control language, shared with every dashboard page. */
+html.app-button-polish :where(.form-control, .audience-select, .modal-content select) {
+    min-height: 44px;
+    border: 1px solid var(--button-line);
+    border-radius: var(--button-radius);
+    background-color: var(--button-surface);
+    color: var(--button-ink);
+    transition: border-color 160ms var(--button-ease),
+        background-color 160ms var(--button-ease),
+        box-shadow 160ms var(--button-ease);
+}
+
+html.app-button-polish :where(select.form-control, .audience-select, .modal-content select) {
+    border-color: var(--button-line);
+    background-color: var(--button-surface);
+}
+
+html.app-button-polish :where(.form-control, .audience-select, .modal-content select):hover:not(:disabled) {
+    border-color: var(--button-control-line-hover);
+    background-color: var(--button-control-hover);
+}
+
+html.app-button-polish :where(.form-control, .audience-select, .modal-content select):focus:not(:disabled) {
+    border-color: var(--button-blue);
+    background-color: var(--button-surface);
+    box-shadow: 0 0 0 4px var(--button-focus-ring);
+    outline: none;
+}
+
+html.app-button-polish :where(.form-control, .audience-select, .modal-content select):disabled {
+    cursor: not-allowed;
+    opacity: .6;
+}
+
+/* Choices.js mirrors the native trigger instead of introducing a second
+   visual system. The runtime override in dashboard.js repeats these rules
+   after the vendor stylesheet is injected. */
+html.app-button-polish .choices {
+    min-width: 0;
+    margin-bottom: 0;
+    font-size: inherit;
+}
+
+html.app-button-polish .choices__inner {
+    min-height: 44px;
+    padding: .67rem 2.5rem .67rem .8rem;
+    border: 1px solid var(--button-line);
+    border-radius: var(--button-radius);
+    background: var(--button-surface);
+    color: var(--button-ink);
+    box-shadow: none;
+    transition: border-color 160ms var(--button-ease),
+        background-color 160ms var(--button-ease),
+        box-shadow 160ms var(--button-ease);
+}
+
+html.app-button-polish .choices:hover .choices__inner {
+    border-color: var(--button-control-line-hover);
+    background: var(--button-control-hover);
+}
+
+html.app-button-polish .choices.is-focused .choices__inner,
+html.app-button-polish .choices.is-open .choices__inner {
+    border-color: var(--button-blue);
+    background: var(--button-surface);
+    box-shadow: 0 0 0 4px var(--button-focus-ring);
+}
+
+html.app-button-polish .choices[data-type*="select-one"]::after {
+    border-color: var(--button-ink) transparent transparent transparent;
+}
+
+html.app-button-polish :where(.choices__list--dropdown, .choices__list[aria-expanded]) {
+    margin-top: .35rem;
+    overflow: hidden;
+    border: 1px solid var(--button-line);
+    border-radius: var(--button-radius);
+    background: var(--button-surface);
+    box-shadow: 0 14px 32px rgba(15, 45, 79, .12);
+}
+
+html.app-button-polish :where(.choices__list--dropdown .choices__item--selectable,
+    .choices__list[aria-expanded] .choices__item--selectable) {
+    min-height: 40px;
+    padding: .62rem .8rem;
+    color: var(--button-ink);
+    transition: background-color 160ms var(--button-ease), color 160ms var(--button-ease);
+}
+
+html.app-button-polish :where(.choices__list--dropdown .choices__item--selectable.is-highlighted,
+    .choices__list[aria-expanded] .choices__item--selectable.is-highlighted) {
+    background: var(--button-blue-soft);
+    color: var(--button-blue);
+}
+
+html.app-button-polish .choices__input {
+    min-height: 40px;
+    margin: .45rem;
+    padding: .55rem .65rem;
+    border: 1px solid var(--button-line);
+    border-radius: 8px;
+    background: var(--button-surface);
+    color: var(--button-ink);
+}
+
+html.app-button-polish .choices__list--multiple .choices__item {
+    border: 1px solid var(--button-blue-line);
+    border-radius: 7px;
+    background: var(--button-blue-soft);
+    color: var(--button-ink);
+}
+
+/* Header and profile menus use the same restrained surface treatment. */
+html.app-button-polish :where(.notification-dropdown, .user-dropdown, .profile-options-menu) {
+    border-color: var(--button-line);
+    border-radius: var(--button-radius);
+    box-shadow: 0 14px 32px rgba(15, 45, 79, .12);
+}
+
+html.app-button-polish :where(.user-dropdown a, .profile-options-menu a):focus-visible {
+    outline: 3px solid var(--button-focus-ring);
+    outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+html.app-button-polish :where(.btn, .action-btn, .pagination-btn, .btn-icon,
+    .modal-close, .menu-toggle, .notification-btn, .user-btn,
+    .profile-options-toggle, .advanced-toggle, .icon-btn, .cs-options-button,
+        .cs-type-btn, .day-icon, .risk-print-btn, .risk-mechanics-btn,
+        .settings-nav-button, .audit-details-button) {
+        transition: none;
+    }
+
+    html.app-button-polish :where(.btn, .action-btn, .pagination-btn, .btn-icon,
+        .modal-close, .menu-toggle, .notification-btn, .user-btn,
+        .profile-options-toggle, .advanced-toggle, .icon-btn, .cs-options-button,
+        .cs-type-btn, .day-icon, .risk-print-btn, .risk-mechanics-btn,
+        .settings-nav-button, .audit-details-button):hover,
+    html.app-button-polish :where(.btn, .action-btn, .pagination-btn, .btn-icon,
+        .modal-close, .menu-toggle, .notification-btn, .user-btn,
+        .profile-options-toggle, .advanced-toggle, .icon-btn, .cs-options-button,
+        .cs-type-btn, .day-icon, .risk-print-btn, .risk-mechanics-btn,
+        .settings-nav-button, .audit-details-button):active {
+        transform: none;
+    }
+}
+
+@media screen and (max-width: 48rem) {
+    html.app-button-polish .btn {
+        min-height: 44px;
+        padding-inline: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    html.app-button-polish .action-btn,
+    html.app-button-polish .pagination-btn,
+    html.app-button-polish .btn-icon,
+    html.app-button-polish .modal-close {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    html.app-button-polish .action-btn {
+        width: 44px;
+        height: 44px;
+    }
+}

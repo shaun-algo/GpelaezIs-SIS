@@ -1,0 +1,264 @@
+{
+  "subjects": {
+    "pk": "subject_id",
+    "fields": [
+      "subject_name",
+      "description"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "subject_categories": {
+    "pk": "subject_category_id",
+    "fields": [
+      "category_name",
+      "description",
+      "sort_order",
+      "is_active"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "roles": {
+    "pk": "role_id",
+    "fields": [
+      "role_name",
+      "description"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "positions": {
+    "pk": "position_id",
+    "fields": [
+      "position_name",
+      "description"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "education_levels": {
+    "pk": "education_level_id",
+    "fields": [
+      "level_name"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "grade_levels": {
+    "pk": "grade_level_id",
+    "fields": [
+      "grade_name",
+      "education_level_id"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "school_years": {
+    "pk": "school_year_id",
+    "fields": [
+      "year_label",
+      "year_start",
+      "year_end",
+      "date_start",
+      "date_end",
+      "is_active"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "sections": {
+    "pk": "section_id",
+    "fields": [
+      "section_name",
+      "grade_level_id",
+      "school_year_id",
+      "adviser_id",
+      "max_capacity"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "honor_levels": {
+    "pk": "honor_level_id",
+    "fields": [
+      "honor_name",
+      "min_average",
+      "max_average"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "name_extensions": {
+    "pk": "extension_id",
+    "fields": [
+      "extension_name"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "risk_levels": {
+    "pk": "risk_level_id",
+    "fields": [
+      "risk_name"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": false
+  },
+  "risk_action_rules": {
+    "pk": "risk_action_rule_id",
+    "fields": [
+      "indicator_catalog_id",
+      "risk_band",
+      "recommended_action",
+      "is_active"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "intervention_statuses": {
+    "pk": "intervention_status_id",
+    "fields": [
+      "status_name"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "employees": {
+    "pk": "employee_id",
+    "fields": [
+      "employee_number",
+      "first_name",
+      "middle_name",
+      "last_name",
+      "name_extension",
+      "email",
+      "position_id",
+      "user_id"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "users": {
+    "pk": "user_id",
+    "fields": [
+      "username",
+      "role_id",
+      "is_active"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "learners": {
+    "pk": "learner_id",
+    "fields": [
+      "lrn",
+      "first_name",
+      "middle_name",
+      "last_name",
+      "name_extension",
+      "gender",
+      "date_of_birth"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": false
+  },
+  "curricula": {
+    "pk": "curriculum_id",
+    "fields": [
+      "curriculum_code",
+      "curriculum_name",
+      "description",
+      "effective_from",
+      "effective_until",
+      "is_active"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": true
+  },
+  "curriculum_subjects": {
+    "pk": "curriculum_subject_id",
+    "fields": [
+      "curriculum_id",
+      "grade_level_id",
+      "subject_id",
+      "is_required",
+      "weekly_minutes"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": false
+  },
+  "curriculum_grade_levels": {
+    "pk": "cgl_id",
+    "fields": [
+      "curriculum_id",
+      "grade_level_id"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": false
+  },
+  "curriculum_passing_marks": {
+    "pk": "passing_mark_id",
+    "fields": [
+      "curriculum_id",
+      "grade_level_id",
+      "subject_id",
+      "passing_mark",
+      "notes"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": false
+  },
+  "curriculum_school_year_map": {
+    "pk": "map_id",
+    "fields": [
+      "curriculum_id",
+      "school_year_id",
+      "is_primary"
+    ],
+    "roles": [
+      "admin"
+    ],
+    "restore": false
+  }
+}

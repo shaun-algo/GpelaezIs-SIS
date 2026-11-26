@@ -1,0 +1,9 @@
+<?php
+// Copy this file to config.local.php on the host. Do not commit real values.
+return [
+    'db_host' => 'sql###.infinityfree.com',
+    'db_port' => 3306,
+    'db_name' => 'if0_42969594_school_database',
+    'db_user' => 'if0_42969594',
+    'db_password' => 'REPLACE_WITH_INFINITYFREE_DATABASE_PASSWORD',
+];

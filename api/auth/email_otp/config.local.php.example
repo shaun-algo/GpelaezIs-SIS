@@ -1,0 +1,16 @@
+<?php
+// Copy this file to config.local.php on the host. Do not commit real values.
+// Database values are inherited from api/database/config.local.php.
+return [
+    'smtp_host' => 'smtp.gmail.com',
+    'smtp_port' => 587,
+    'smtp_encryption' => 'tls',
+    'smtp_username' => 'YOUR_SENDER@gmail.com',
+    'smtp_password' => 'REPLACE_WITH_A_PROVIDER_APP_PASSWORD',
+    'smtp_from_email' => 'YOUR_SENDER@gmail.com',
+    'smtp_from_name' => 'G. Pelaez Integrated School',
+    'email_logo_url' => 'https://YOUR-HTTPS-DOMAIN/assets/img/logo/logo.png',
+    'cors_origins' => [
+        'https://YOUR-HTTPS-DOMAIN',
+    ],
+];

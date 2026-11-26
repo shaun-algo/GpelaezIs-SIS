@@ -1,0 +1,2 @@
+-- Retired seed: LIS-imported address text is the application source of truth.
+-- The former geo_* lookup tables were removed and must not be recreated.

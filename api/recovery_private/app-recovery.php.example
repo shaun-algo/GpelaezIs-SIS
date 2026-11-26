@@ -1,0 +1,9 @@
+<?php
+// Copy this file to app-recovery.php on the deployed host.
+// Keep the actual file inside api/recovery_private; its .htaccess blocks direct access.
+return [
+    'enabled' => false,
+    'base_url' => 'https://YOUR-DOMAIN',
+    'allow_local_http' => false,
+    'transport' => 'none',
+];

@@ -1,0 +1,4 @@
+-- Retired migration: the application stores LIS birthplace and address values
+-- as text and no longer uses PSGC lookup tables. This file intentionally has
+-- no CREATE TABLE statements so a fresh migration run does not recreate the
+-- retired geo_* tables.

@@ -1,0 +1,3 @@
+<FilesMatch "^(config\.php|config\.local\.php|recovery_helpers\.php|db_schema\.sql|README\.md)$">
+    Require all denied
+</FilesMatch>

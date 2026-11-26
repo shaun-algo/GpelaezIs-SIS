@@ -1,0 +1,55 @@
+// Shared confirmation surface for active and archived masterfile records.
+(() => {
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = new URL('../../assets/css/masterfile-dialog.css?v=20260913-alerts', document.currentScript.src).href;
+    document.head.append(stylesheet);
+    window.mfConfirm = ({ title, message, confirmLabel = 'Confirm', intent = 'default', eyebrow = '' }) => new Promise(resolve => {
+        const previousFocus = document.activeElement;
+        const dialog = document.createElement('dialog');
+        dialog.className = 'mf-confirm';
+        dialog.dataset.intent = intent;
+        dialog.setAttribute('aria-labelledby', 'mfConfirmTitle');
+        dialog.setAttribute('aria-describedby', 'mfConfirmMessage');
+        const header = document.createElement('div');
+        header.className = 'mf-confirm-header';
+        const kicker = document.createElement('p');
+        kicker.className = 'mf-confirm-kicker';
+        kicker.textContent = eyebrow || ({ archive: 'Archive record', restore: 'Restore from archive', delete: 'Delete record' }[intent] || 'Confirm action');
+        const heading = document.createElement('h2');
+        heading.id = 'mfConfirmTitle';
+        heading.textContent = title;
+        const body = document.createElement('p');
+        body.id = 'mfConfirmMessage';
+        body.textContent = message;
+        header.append(kicker, heading, body);
+        const footer = document.createElement('div');
+        footer.className = 'mf-confirm-actions';
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.textContent = 'Cancel';
+        cancel.autofocus = true;
+        const confirm = document.createElement('button');
+        confirm.type = 'button';
+        confirm.className = 'mf-confirm-primary';
+        confirm.textContent = confirmLabel;
+        footer.append(cancel, confirm);
+        dialog.append(header, footer);
+        let settled = false;
+        const finish = accepted => {
+            if (settled) return;
+            settled = true;
+            dialog.close();
+            dialog.remove();
+            if (previousFocus?.isConnected) previousFocus.focus();
+            resolve(accepted);
+        };
+        cancel.addEventListener('click', () => finish(false));
+        confirm.addEventListener('click', () => finish(true));
+        dialog.addEventListener('cancel', event => { event.preventDefault(); finish(false); });
+        dialog.addEventListener('close', () => finish(false));
+        document.body.append(dialog);
+        dialog.showModal();
+        cancel.focus();
+    });
+})();

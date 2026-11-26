@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>DepEd Academic Monitoring System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+
+    <!-- Axios -->
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../assets/css/unsaved-changes-dialog.css?v=20260930-unsaved-dialog-v2">
+    <link rel="stylesheet" href="../assets/css/print-preview.css?v=20261005-print-preview-v3">
+
+    <style>
+        :root {
+            --co-primary: #1E3A5F;
+            --co-primary-soft: #E7ECF2;
+            --co-ok: #4F7A5D;
+            --co-ok-soft: #E6EFE8;
+            --co-warn: #B9832E;
+            --co-warn-soft: #F6EDDC;
+            --co-over: #A8493A;
+            --co-over-soft: #F5E7E4;
+            --co-radius: 8px;
+        }
+
+        .co-unified-header {
+            background: var(--surface-0);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: flex-end;
+        }
+
+        .co-header-field {
+            flex: 1 1 180px;
+            min-width: 180px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .co-header-field label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.055em;
+            line-height: 1.2;
+            color: #50667b;
+            font-weight: 700;
+            margin: 0;
+            display: block;
+        }
+
+        .co-header-select {
+            width: 100%;
+            padding: 0.65rem 2.45rem 0.65rem 0.85rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            border: 1px solid #d6e0ea;
+            border-radius: 9px;
+            background-color: var(--surface-0);
+            min-width: 0;
+            min-height: 44px;
+        }
+
+        .co-search-box {
+            position: relative;
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .co-search-box i {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        .co-search-input {
+            width: 100%;
+            height: 38px;
+            padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            background: var(--surface-0);
+            color: var(--gray-800);
+            font-size: 0.875rem;
+        }
+
+        .co-search-input:focus {
+            outline: none;
+            border-color: var(--deped-blue, #0055a4);
+            box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+        }
+
+        .co-filter-empty {
+            grid-column: 1 / -1;
+            padding: 1.5rem 1rem;
+            color: var(--gray-500);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .co-adviser-field {
+            flex-basis: 220px;
+        }
+
+        .co-header-field--unsaved .co-header-select,
+        .co-header-field--unsaved .choices__inner {
+            border-color: #d39a32 !important;
+            box-shadow: 0 0 0 3px rgba(211, 154, 50, 0.14) !important;
+        }
+
+        .co-header-field .choices__inner {
+            width: 100%;
+        }
+
+        .co-header-field .choices__list--dropdown,
+        .co-header-field .choices__list[aria-expanded] {
+            z-index: 10060;
+        }
+
+        .co-subject-search-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: 1.15rem 1.25rem 0;
+        }
+
+        .co-subject-search-label {
+            margin: 0;
+            color: var(--gray-700);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .co-subject-search-toolbar .co-search-box {
+            width: min(360px, 100%);
+            flex: 0 1 360px;
+        }
+
+        /* Bulk fill toolbar styles */
+        .co-bulk-toolbar-redesign {
+            background: var(--co-warn-soft);
+            border: 1px solid #E2D2A8;
+            border-radius: var(--co-radius);
+            padding: 1rem 1.25rem;
+            margin: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .co-bulk-toolbar-redesign .bulk-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin: 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6B531A;
+        }
+
+        .co-bulk-toolbar-redesign select:disabled {
+            border-color: var(--gray-300);
+            background-color: var(--gray-100);
+        }
+
+        .btn-co-bulk-apply:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .co-bulk-toolbar-redesign select {
+            padding: 0.65rem 2.45rem 0.65rem 0.85rem;
+            border-radius: 9px;
+            border: 1px solid #d6e0ea;
+            background: #fff;
+            color: var(--gray-800);
+            font-size: 0.88rem;
+            font-weight: 600;
+            min-width: 220px;
+            min-height: 44px;
+        }
+
+        /* Keep selects consistent with the shared dashboard form controls. */
+        .co-header-select,
+        .co-bulk-toolbar-redesign select,
+        .co-teacher-filter select {
+            min-width: 0;
+            min-height: 44px;
+            height: auto;
+            padding-right: 2.75rem;
+            border: 1px solid #d6e0ea;
+            border-radius: 9px;
+            background-color: var(--surface-0);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.9rem center;
+            background-size: 12px 12px;
+            color: var(--gray-900);
+            font-family: inherit;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+
+        .co-header-select:hover:not(:disabled),
+        .co-bulk-toolbar-redesign select:hover:not(:disabled),
+        .co-teacher-filter select:hover:not(:disabled) {
+            border-color: #4c91ce;
+        }
+
+        .co-header-select:focus-visible,
+        .co-bulk-toolbar-redesign select:focus-visible,
+        .co-teacher-filter select:focus-visible {
+            outline: none;
+            border-color: #4c91ce;
+            box-shadow: 0 0 0 3px rgba(7, 90, 167, 0.11);
+        }
+
+        .co-header-select:disabled,
+        .co-bulk-toolbar-redesign select:disabled,
+        .co-teacher-filter select:disabled {
+            background-color: var(--gray-100);
+            color: var(--gray-400);
+            cursor: not-allowed;
+        }
+
+        .co-header-field .choices,
+        .co-teacher-filter .choices {
+            width: 100%;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+
+        .co-bulk-toolbar-redesign .choices {
+            flex: 0 1 260px;
+            min-width: min(220px, 100%);
+            margin-bottom: 0;
+        }
+
+        .btn-co-bulk-apply {
+            background: var(--co-warn);
+            color: #fff;
+            border: none;
+            padding: 0.45rem 1rem;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            height: 34px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-co-bulk-apply:hover {
+            background: #8F6417;
+        }
+
+        .co-bulk-note {
+            width: 100%;
+            font-size: 11px;
+            color: #7A6329;
+            margin: 4px 0 0 0;
+        }
+
+        /* Modern Custom Grid Table */
+        .co-grid-table {
+            margin: 1.25rem;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--co-radius);
+            background: var(--surface-0);
+            overflow: visible;
+        }
+
+        .co-grid-header {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr;
+            padding: 0.85rem 1.25rem;
+            background: var(--gray-50);
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: var(--gray-500);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .co-grid-row {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr;
+            padding: 1.1rem 1.25rem;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-200);
+            position: relative;
+        }
+
+        .co-grid-row:last-child {
+            border-bottom: none;
+        }
+
+        .co-grid-row--unsaved {
+            background: #fff8d6;
+            box-shadow: none;
+        }
+
+        .co-unsaved-note {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            color: #9a6700;
+            font-size: 0.64rem;
+            font-weight: 750;
+            letter-spacing: 0.02em;
+        }
+
+        .co-subject-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .co-subject-name {
+            font-weight: 700;
+            color: var(--gray-900);
+            font-size: 0.925rem;
+        }
+
+        .co-subject-code {
+            font-family: monospace;
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+
+        .co-teacher-cell {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Chips and Buttons */
+        .co-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--co-primary-soft);
+            border: 1px solid #C7D5E3;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--co-primary);
+        }
+
+        .co-chip-toggle {
+            font-family: inherit;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .co-chip-toggle:hover,
+        .co-chip-toggle[aria-expanded="true"] {
+            background: #e8f0f8;
+            border-color: var(--co-primary);
+        }
+
+        .co-chip-toggle:focus-visible {
+            outline: 2px solid var(--co-primary);
+            outline-offset: 2px;
+        }
+
+        .co-chip-chevron {
+            margin-left: 2px;
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .co-chip .load-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--co-primary);
+            flex-shrink: 0;
+        }
+
+        .co-teacher-cell > button.btn-remove-teacher {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.55;
+            font-size: 14px;
+            line-height: 1;
+            padding: 0;
+            margin-left: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .co-teacher-cell > button.btn-remove-teacher:hover {
+            opacity: 1;
+        }
+
+        .co-btn-action {
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--gray-300);
+            background: #fff;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .co-btn-action:hover {
+            border-color: var(--co-primary);
+            color: var(--co-primary);
+            background: var(--co-primary-soft);
+        }
+
+        /* Teacher change popover */
+        .co-dropdown-panel {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            width: min(360px, calc(100vw - 32px));
+            overflow: visible;
+            background: var(--surface-0);
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+            z-index: 120;
+            padding: 0.85rem;
+        }
+
+        .co-teacher-search {
+            width: 100%;
+            min-height: var(--control-min-height, 40px);
+            padding: 0.55rem 0.7rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            background: var(--surface-0);
+            color: var(--gray-800);
+            font: inherit;
+            outline: none;
+        }
+
+        .co-teacher-search:focus {
+            border-color: var(--co-primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+        }
+
+        .co-teacher-options {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-height: 220px;
+            margin-top: 0.45rem;
+            overflow-y: auto;
+        }
+
+        .co-teacher-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.55rem 0.65rem;
+            border: 0;
+            border-radius: 0.35rem;
+            background: transparent;
+            color: var(--gray-800);
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .co-teacher-option:hover,
+        .co-teacher-option:focus-visible {
+            outline: none;
+            background: var(--co-primary-soft);
+            color: var(--co-primary);
+        }
+
+        .co-teacher-option.is-current {
+            background: var(--co-primary-soft);
+            color: var(--co-primary);
+            font-weight: 600;
+        }
+
+        .co-teacher-option-role {
+            color: var(--gray-500);
+            font-size: 0.82em;
+            font-weight: 400;
+        }
+
+        .co-teacher-options [hidden] {
+            display: none !important;
+        }
+
+        .co-teacher-option-empty {
+            margin: 0;
+            padding: 0.7rem 0.65rem;
+            color: var(--gray-700);
+            font-size: 0.82rem;
+        }
+
+        .co-teacher-option-empty[hidden] {
+            display: none;
+        }
+
+        @media (max-width: 520px) {
+            .co-dropdown-panel {
+                left: auto;
+                right: 0;
+            }
+        }
+
+        /* Bottom Save Toolbar */
+        .co-save-bar {
+            margin: 1.25rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .co-soft-save-btn {
+            border: 1px solid var(--deped-blue-light);
+            border-radius: 0.625rem;
+            background: var(--deped-blue-light);
+            color: var(--deped-blue);
+            font-size: 0.8125rem;
+            padding: 0.45rem 0.85rem;
+            box-shadow: none;
+        }
+
+        .co-soft-save-btn:hover {
+            border-color: var(--deped-blue);
+            background: #d9ecfa;
+            color: var(--deped-blue-dark);
+        }
+
+        .co-change-badge {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--co-warn);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .co-change-badge i {
+            animation: co-pulse 1.5s infinite;
+        }
+
+        @keyframes co-pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        .co-assign-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--gray-500);
+            background: var(--gray-50);
+            border: 1px dashed var(--gray-300);
+            border-radius: var(--co-radius);
+            margin: 1.25rem;
+        }
+
+        .co-assign-empty i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray-400);
+        }
+
+        .co-assign-empty p {
+            margin: 0;
+            max-width: 400px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .co-teacher-view[hidden] { display: none; }
+
+        .co-teacher-view {
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            z-index: 1;
+            overflow: visible;
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            box-shadow: 0 16px 42px rgba(15, 23, 42, 0.08);
+        }
+
+        .co-teacher-view-head {
+            display: grid;
+            grid-template-columns: 1fr;
+            align-items: start;
+            gap: 1rem;
+            padding: 2rem 2.4rem 1.7rem;
+            border-bottom: 1px solid var(--gray-200);
+            position: relative;
+            z-index: 3;
+        }
+
+        .co-teacher-view-copy {
+            display: grid;
+            min-height: 4.5rem;
+            place-items: center;
+            text-align: center;
+        }
+
+        .co-teacher-view-title {
+            margin: 0;
+            color: var(--gray-900);
+            font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .co-teacher-view-tools {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.65rem;
+            justify-self: stretch;
+            width: 100%;
+            max-width: none;
+            min-width: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .co-teacher-filter {
+            display: grid;
+            gap: 0.45rem;
+            flex: 1 1 auto;
+            min-width: 0;
+            color: var(--gray-600);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .co-teacher-filter select {
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            min-height: 44px;
+            padding: 0.65rem 2.45rem 0.65rem 0.85rem;
+            border: 1px solid #d6e0ea;
+            border-radius: 9px;
+            background-color: var(--surface-0);
+            color: var(--gray-800);
+            font: inherit;
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-transform: none;
+            white-space: nowrap;
+        }
+
+        .co-teacher-filter .choices {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .co-teacher-filter .choices__inner {
+            min-width: 0;
+            min-height: 44px;
+            height: 44px;
+            overflow: hidden;
+        }
+
+        .co-teacher-filter .choices__list--single {
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .co-teacher-filter .choices__list--single .choices__item {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .co-teacher-filter .choices__list--dropdown {
+            z-index: 3010;
+            min-width: 100%;
+            max-width: min(430px, calc(100vw - 2rem));
+        }
+
+        .co-teacher-filter .choices__list--dropdown .choices__item {
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        .co-teacher-filter select:focus {
+            outline: none;
+            border-color: #4c91ce;
+            box-shadow: 0 0 0 3px rgba(7, 90, 167, 0.11);
+        }
+
+        .co-teacher-print {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            flex: 0 0 auto;
+            gap: 0.45rem;
+            padding: 0.65rem 0.85rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 9px;
+            background: var(--surface-0);
+            color: var(--gray-700);
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .co-teacher-print:hover {
+            border-color: var(--co-primary);
+            background: var(--co-primary-soft);
+            color: var(--co-primary);
+        }
+
+        .co-teacher-print:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .co-teacher-print:disabled:hover {
+            border-color: var(--gray-300);
+            background: var(--surface-0);
+            color: var(--gray-700);
+        }
+
+        .co-teacher-table-wrap {
+            overflow-x: auto;
+            padding: 0 2.4rem 2.5rem;
+        }
+
+        .co-teacher-table {
+            width: 100%;
+            min-width: 520px;
+            border-collapse: collapse;
+            color: var(--gray-800);
+            font-size: 0.95rem;
+        }
+
+        .co-teacher-table th {
+            padding: 1.1rem 0.9rem;
+            border-bottom: 1px solid var(--gray-300);
+            color: var(--gray-500);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-align: left;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .co-teacher-table td {
+            padding: 1.25rem 0.9rem;
+            border-bottom: 1px solid var(--gray-200);
+            vertical-align: middle;
+        }
+
+        .co-teacher-table th:first-child,
+        .co-teacher-table td:first-child {
+            width: 4.5rem;
+            text-align: center;
+        }
+
+        .co-teacher-table th:nth-child(3),
+        .co-teacher-table td:nth-child(3) {
+            white-space: nowrap;
+        }
+
+        .co-enrollment-status {
+            display: inline-flex;
+            align-items: center;
+            min-height: 1.7rem;
+            padding: 0.25rem 0.6rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 999px;
+            background: var(--gray-50);
+            color: var(--gray-700);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        .co-enrollment-status-enrolled {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .co-enrollment-status-completed {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .co-enrollment-status-dropped,
+        .co-enrollment-status-transferred-out {
+            border-color: #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .co-enrollment-status-not-set {
+            border-color: #fde68a;
+            background: #fffbeb;
+            color: #92400e;
+        }
+
+        .co-teacher-gender-row td {
+            padding: 0.7rem 0.9rem;
+            border-top: 2px solid var(--co-primary);
+            border-bottom: 1px solid var(--gray-300);
+            background: var(--co-primary-soft);
+            color: var(--co-primary);
+            font-size: 0.72rem;
+            font-weight: 850;
+            letter-spacing: 0.1em;
+            text-align: left;
+            text-transform: uppercase;
+        }
+
+        .co-teacher-table tbody tr:hover { background: var(--gray-50); }
+
+        .co-teacher-table tbody tr {
+            transition: background-color 180ms ease;
+        }
+
+        .co-teacher-empty {
+            margin: 0 2.4rem 2.5rem;
+            padding: 4rem 1.5rem;
+            border: 1px dashed var(--gray-300);
+            background: var(--gray-50);
+            color: var(--gray-500);
+            text-align: center;
+        }
+
+        .co-teacher-empty i {
+            display: block;
+            margin-bottom: 0.6rem;
+            color: var(--gray-400);
+            font-size: 1.6rem;
+        }
+
+        .co-teacher-empty p {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        @media print {
+            @page { margin: 0.55in; }
+            .topbar,
+            .sidebar,
+            #coManagePanel,
+            .co-teacher-view-tools {
+                display: none !important;
+            }
+            .main-content {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .co-teacher-view {
+                display: block !important;
+                width: 100%;
+                max-width: none;
+                margin: 0;
+                border: 0;
+                box-shadow: none;
+            }
+            .co-teacher-view-head {
+                display: block;
+                padding: 0 0 0.8rem;
+                border-bottom: 1px solid #111;
+            }
+            .co-teacher-view-copy { min-height: 0; padding-bottom: 0.8rem; }
+            .co-teacher-view-title { font-size: 1.45rem; color: #111; }
+            .co-teacher-table-wrap {
+                padding: 0;
+                overflow: visible;
+            }
+            .co-teacher-table {
+                min-width: 0;
+                font-size: 0.78rem;
+            }
+            .co-teacher-table th,
+            .co-teacher-table td {
+                padding: 0.45rem 0.5rem;
+                border-color: #777;
+            }
+            .co-teacher-empty {
+                margin: 1rem 0 0;
+                padding: 2rem 0;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .co-teacher-view-head { grid-template-columns: 1fr; }
+            .co-teacher-view-tools {
+                justify-self: stretch;
+                max-width: none;
+            }
+            .co-teacher-table-wrap { padding-inline: 1.5rem; }
+            .co-teacher-empty { margin-inline: 1.5rem; }
+        }
+
+        @media (max-width: 640px) {
+            .co-unified-header { padding: 0.9rem; gap: 0.75rem; }
+            .co-header-field { flex: 1 1 100%; min-width: 0; }
+            .co-adviser-field { flex-basis: 100%; }
+            .co-subject-search-toolbar {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 0.45rem;
+                margin: 0.9rem 0.9rem 0;
+            }
+            .co-subject-search-toolbar .co-search-box {
+                width: 100%;
+                flex-basis: auto;
+            }
+            .co-teacher-view { border-radius: 12px; }
+            .co-teacher-view-head { padding: 1.35rem 1rem 1.15rem; gap: 1.4rem; }
+            .co-teacher-view-tools {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                align-items: stretch;
+                flex-basis: auto;
+            }
+            .co-teacher-filter { flex: 1 1 auto; }
+            .co-teacher-print {
+                width: 100%;
+                grid-column: 1 / -1;
+            }
+            .co-teacher-table-wrap { padding: 0 1rem 1.5rem; }
+            .co-teacher-table { min-width: 520px; table-layout: fixed; }
+            .co-teacher-table th,
+            .co-teacher-table td { padding: 0.9rem 0.55rem; }
+            .co-teacher-table th:nth-child(1) { width: 3.5rem; }
+            .co-teacher-empty { margin: 0 1rem 1.5rem; padding: 3rem 1rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body>
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <!-- Role Detection and Navigation Adjustment -->
+    <script>
+    // Wait for dashboard.js to set the global role variables
+    function waitForRoleDetection() {
+        if (typeof window.CURRENT_ROLE_NAME !== 'undefined' && window.CURRENT_ROLE_NAME) {
+            const roleName = String(window.CURRENT_ROLE_NAME).toLowerCase();
+
+            // If user is teacher, update the page to show teacher-appropriate navigation
+            if (roleName.includes('teacher')) {
+                // Update logo text
+                const logoText = document.querySelector('.logo-text p');
+                if (logoText) logoText.textContent = 'Teacher Portal';
+
+                // Hide admin-specific navigation items
+                const adminItems = document.querySelectorAll('[data-masterfile-link="roles"], [data-masterfile-link="employees"], [data-masterfile-link="positions"]');
+                adminItems.forEach(item => item.style.display = 'none');
+
+                // Update dashboard link
+                const dashboardLink = document.querySelector('.nav-list > .nav-item > .nav-link');
+                if (dashboardLink) dashboardLink.href = '../dashboard/teacher_dashboard.html';
+            }
+        } else {
+            // Role not loaded yet, wait and try again
+            setTimeout(waitForRoleDetection, 100);
+        }
+    }
+
+    // Start role detection after DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', waitForRoleDetection);
+    } else {
+        waitForRoleDetection();
+    }
+    </script>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notificationCount" style="display:none">0</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="page-header" hidden>
+            <div>
+                <h1 class="page-title" id="pageTitle"></h1>
+                <p class="page-subtitle" id="pageSubtitle"></p>
+            </div>
+        </div>
+
+        <section class="card co-teacher-view" id="coTeacherViewPanel" hidden aria-labelledby="coTeacherViewTitle">
+            <div class="co-teacher-view-head">
+                <div class="co-teacher-view-copy">
+                    <h2 class="co-teacher-view-title" id="coTeacherViewTitle">Select a section</h2>
+                </div>
+                <div class="co-teacher-view-tools">
+                    <label class="co-teacher-filter" for="coTeacherSchoolYear">
+                        <span>School Year</span>
+                        <select id="coTeacherSchoolYear" aria-label="Filter by school year">
+                            <option value="">Loading...</option>
+                        </select>
+                    </label>
+                    <label class="co-teacher-filter" for="coTeacherSection">
+                        <span>Section</span>
+                        <select id="coTeacherSection" aria-label="Filter by assigned section">
+                            <option value="">Select school year first</option>
+                        </select>
+                    </label>
+                    <button class="co-teacher-print" id="coTeacherPrint" type="button" title="Print this class list">
+                        <i class="fas fa-print" aria-hidden="true"></i>
+                        <span>Print</span>
+                    </button>
+                </div>
+            </div>
+            <div class="co-teacher-table-wrap">
+                <table class="co-teacher-table">
+                    <caption class="sr-only">Learners in your assigned section</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Learner</th>
+                            <th scope="col">LRN</th>
+                            <th scope="col">Enrollment Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coTeacherRows"></tbody>
+                </table>
+            </div>
+            <div class="co-teacher-empty" id="coTeacherEmpty" hidden>
+                <video class="mp4-surface-blend context-empty-video" autoplay loop muted playsinline preload="metadata" aria-hidden="true"><source src="../assets/icons/teacher.mp4" type="video/mp4"></video>
+                <p id="coTeacherEmptyText">No assigned class list found for this school year.</p>
+            </div>
+        </section>
+
+        <div class="modal print-preview-modal" id="coTeacherPrintModal" aria-hidden="true">
+            <div class="modal-content modal-xl" role="dialog" aria-modal="true" aria-labelledby="coTeacherPrintModalTitle">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="coTeacherPrintModalTitle">Class list preview</h2>
+                    <button class="modal-close" id="btnCloseCoTeacherPrintPreview" type="button" aria-label="Close class list preview">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="print-preview-scroll" tabindex="0" aria-label="Class list paper preview">
+                        <iframe class="print-preview-frame" id="coTeacherPrintFrame" data-print-preview-items=".co-teacher-print-sheet" title="Class list preview"></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" id="btnCloseCoTeacherPrintPreviewFooter" type="button">Close</button>
+                    <button class="btn btn-primary" id="btnPrintCoTeacherPreview" type="button">
+                        <i class="fas fa-print" aria-hidden="true"></i> Print
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-overflow-visible" id="coManagePanel">
+            <!-- Header selection context -->
+            <div class="co-unified-header">
+                <div class="co-header-field">
+                    <label for="co-mgr-school-year">School Year</label>
+                    <select id="co-mgr-school-year" class="co-header-select" data-search-enabled="true" data-search-placeholder="Search school years..." aria-label="School year"></select>
+                </div>
+                <div class="co-header-field">
+                    <label for="co-mgr-grade-level">Grade Level</label>
+                    <select id="co-mgr-grade-level" class="co-header-select" data-search-enabled="true" data-search-placeholder="Search grade levels..." aria-label="Grade level">
+                        <option value="">— select grade level —</option>
+                    </select>
+                </div>
+                <div class="co-header-field">
+                    <label for="co-mgr-section">Section</label>
+                    <select id="co-mgr-section" class="co-header-select" data-search-enabled="true" data-search-placeholder="Search sections..." aria-label="Section">
+                        <option value="">— select school year first —</option>
+                    </select>
+                </div>
+                <div class="co-header-field co-adviser-field">
+                    <label for="co-mgr-adviser">Homeroom adviser</label>
+                    <select id="co-mgr-adviser" class="co-header-select" data-search-enabled="true" data-search-placeholder="Search advisers..." aria-label="Homeroom adviser">
+                        <option value="">— select section first —</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Apply the selected section adviser across this section's subjects -->
+            <div class="co-bulk-toolbar-redesign" id="co-bulk-block" style="display: none;">
+                <label class="bulk-label" for="co-bulk-teacher"><i class="fas fa-fill-drip" aria-hidden="true"></i> Quick-fill Teacher</label>
+                <select id="co-bulk-teacher" data-search-enabled="true" data-search-placeholder="Search teachers..." aria-label="Teacher for quick-fill"></select>
+                <button type="button" class="btn-co-bulk-apply" id="co-bulk-apply">Apply to all subjects</button>
+                <p class="co-bulk-note">Choose from all teachers, then apply the selection to every subject. Individual assignments can be changed below.</p>
+            </div>
+
+            <!-- Main List / Table -->
+            <div class="co-assign-table" id="co-assign-table-wrap" style="display: none;">
+                <div class="co-subject-search-toolbar">
+                    <label class="co-subject-search-label" for="coSubjectSearch">Search subjects</label>
+                    <div class="co-search-box">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="search" id="coSubjectSearch" class="co-search-input" placeholder="Search subjects..." aria-label="Search subjects">
+                    </div>
+                </div>
+                <div class="co-grid-table">
+                    <div class="co-grid-header">
+                        <span>Subject</span>
+                        <span>Assigned Teacher</span>
+                    </div>
+                    <div id="co-assign-subjects-body">
+                        <!-- Subject rows will be rendered here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Footer / Save Actions -->
+                <div class="co-save-bar">
+                    <div class="co-change-badge" id="co-unsaved-badge" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i> Unsaved changes
+                    </div>
+                    <button type="button" class="btn co-soft-save-btn" id="co-mgr-finalize"><i class="fas fa-save"></i> Save Assignments</button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="co-assign-empty" id="co-assign-empty">
+                <video class="mp4-surface-blend context-empty-video" autoplay loop muted playsinline preload="metadata" aria-hidden="true"><source src="../assets/icons/search.mp4" type="video/mp4"></video>
+                <p id="co-assign-empty-text">Select a school year and section to load subjects from the curriculum.</p>
+            </div>
+        </div>
+    </main>
+
+
+<script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+<script src="../assets/js/components/unsaved-changes-dialog.js?v=20260930-unsaved-dialog-v2"></script>
+    <script src="../assets/js/print-preview-fit.js?v=20261012-mobile-fit-v5"></script>
+    <script src="../js/masterfiles/class-offerings.js?v=20261105-teacher-adviser-signature-v4"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

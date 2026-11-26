@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Recommended Actions - DepEd Academic Monitoring System</title>
+    <link rel="stylesheet" href="../../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/datatable.css">
+    <link rel="stylesheet" href="../../assets/css/modal.css">
+    <link rel="stylesheet" href="../../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+    <script src="../../assets/vendor/axios/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .risk-action-search-stack {
+            display: grid;
+            gap: 8px;
+            min-width: min(100%, 360px);
+            flex: 1 1 360px;
+        }
+        .risk-action-guidance {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 0;
+            padding: 9px 12px;
+            border: 1px solid #f2c94c;
+            border-radius: 8px;
+            background: #fff8d6;
+            color: #7a4b00;
+            font-size: .82rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+        .risk-action-guidance i {
+            margin-top: 2px;
+            color: #b77900;
+        }
+        .risk-action-band {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: .78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .risk-action-band--high { background: #fee2e2; color: #991b1b; }
+        .risk-action-band--medium { background: #fef3c7; color: #92400e; }
+        .risk-action-band--low { background: #dcfce7; color: #166534; }
+        .risk-action-preview {
+            display: -webkit-box;
+            max-width: 520px;
+            overflow: hidden;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-height: 1.45;
+        }
+        #field-recommended_action { min-height: 130px; resize: vertical; }
+    </style>
+</head>
+<body>
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content"><img src="../../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image"></div>
+    </div>
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+            <div class="logo">
+                <img src="../../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text"><h1>G.Pelaez Integrated School</h1><p>Administrative Dashboard</p></div>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn" aria-label="Notifications"><i class="fas fa-bell"></i><span class="notification-badge">3</span></button>
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-info"><span class="user-name">Admin User</span><span class="user-role">Administrator</span></div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="../profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="../settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <main class="main-content" id="mainContent">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title" id="pageTitle">Recommended Actions</h1>
+                <p class="page-subtitle" id="pageSubtitle"></p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="table-header-section">
+                <div class="risk-action-search-stack">
+                    <div class="search-box">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="search" id="searchInput" placeholder="Search indicators or actions..." class="search-input" aria-label="Search recommended actions">
+                    </div>
+                    <p class="risk-action-guidance" role="note"><i class="fas fa-circle-exclamation" aria-hidden="true"></i> Set up Each Indicator's <strong>RECOMMENDED ACTION</strong> notes.</p>
+                </div>
+                <button class="btn btn-primary" id="addButton" type="button"><i class="fas fa-plus"></i><span id="addButtonLabel">Add Action Rule</span></button>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="dataTable">
+                    <thead><tr id="dataTableHead"><th>Loading...</th></tr></thead>
+                    <tbody id="dataTableBody"><tr><td colspan="6" class="text-center"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading action rules...</div></td></tr></tbody>
+                </table>
+            </div>
+            <div class="pagination-section">
+                <div class="pagination-info">Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span id="totalRecords">0</span> entries</div>
+                <div class="pagination">
+                    <button class="pagination-btn" id="prevBtn" type="button" aria-label="Previous page"><i class="fas fa-chevron-left"></i></button>
+                    <span class="pagination-info">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+                    <button class="pagination-btn" id="nextBtn" type="button" aria-label="Next page"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="recordModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add Action Rule</h2>
+                <button class="modal-close" type="button" onclick="closeModal()" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="recordForm"><input type="hidden" id="recordId"><div id="dynamicFields"></div></form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" type="button" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" type="button" onclick="saveRecord()"><i class="fas fa-save"></i><span id="saveButtonText">Save Action Rule</span></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../../js/masterfiles/masterfile-dialog.js?v=20260913-alerts"></script>
+    <script src="../../js/masterfiles/masterfile-common.js?v=20261008-empty-media-v1"></script>
+    <script src="../../js/masterfiles/risk-actions.js?v=20261005-risk-actions-v6"></script>
+    <script src="../../js/masterfiles/archive.js?v=20261005-users-position-restore-v1" data-modules="risk_action_rules"></script>
+    <script src="../../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

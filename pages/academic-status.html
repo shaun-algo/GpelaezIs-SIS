@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" data-density="compact" data-ui-scale="small">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>My Academic Status - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/academic-modules-premium.css?v=20260928-attendance-year-level-v1">
+    <link rel="stylesheet" href="../assets/css/learner-academic-status.css?v=20261013-period-status-mobile-v1">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+</head>
+<body class="learner-academic-status-page learner-mobile-topbar">
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image">
+        </div>
+    </div>
+
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation"><i class="fas fa-bars"></i></button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Learner Portal</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn" type="button" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notificationCount" style="display:none">0</span>
+            </button>
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn" type="button" aria-label="Open profile menu" aria-haspopup="true" aria-expanded="false">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-info">
+                        <span class="user-name">Learner</span>
+                        <span class="user-role">Learner</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Account Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <main class="main-content" id="mainContent">
+        <div class="card academic-status-shell">
+            <div class="card-header academic-status-header">
+                <h1 class="page-title">My Academic Status</h1>
+            </div>
+
+            <div id="academicStatusLoading" class="academic-status-message" role="status">
+                <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Loading your academic status...
+            </div>
+
+            <div id="academicStatusApp" hidden>
+                <div class="academic-status-periods" id="academicStatusPeriods" role="tablist" aria-label="Terms or grading periods"></div>
+
+                <section class="academic-status-card" id="academicStatusPanel" aria-live="polite">
+                    <div class="academic-status-card-header">
+                        <div>
+                            <h2 class="academic-status-period-label" id="academicStatusPeriodLabel">—</h2>
+                        </div>
+                        <div class="academic-status-primary-status" aria-live="polite">
+                            <span class="academic-status-primary-label">Current status</span>
+                            <span class="academic-status-badge is-not-assessed" id="academicStatusBadge">Not assessed</span>
+                        </div>
+                    </div>
+
+                    <section class="academic-status-section" aria-labelledby="academicStatusIndicatorsTitle">
+                        <h3 id="academicStatusIndicatorsTitle">Status indicators</h3>
+                        <ul class="academic-status-indicators" id="academicStatusIndicators"></ul>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/learner-academic-status.js?v=20261014-risk-status-labels-v1"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

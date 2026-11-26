@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Summary Analytics - DepEd Academic Monitoring System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/analytics-clean.css?v=20261009-population-polish-v3">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Axios -->
+    <script src="../../assets/vendor/axios/axios.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="analytics-modern analytics-overview">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Portal</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notificationCount">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="../profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="../settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Dashboard Analytics</h1>
+            </div>
+        </div>
+
+        <section class="analytics-panel active" data-analytics-panel="population">
+            <section class="card analytics-bottom-controls analytics-panel-filters" aria-label="Population analytics filters">
+                <div class="analytics-bottom-controls-grid">
+                    <div class="analytics-breakdown-filter">
+                        <label for="filterSchoolYearPopulation">School Year</label>
+                        <select id="filterSchoolYearPopulation" class="form-control"></select>
+                    </div>
+                    <div class="analytics-breakdown-filter">
+                        <label for="learnerBreakdownMode">View learners by</label>
+                        <select id="learnerBreakdownMode" class="form-control">
+                            <option value="grade_level">Learners by Year Level</option>
+                            <option value="section">Learners by Section</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <div class="card chart-card analytics-population-card" data-animate="fade-up" data-animate-delay="0ms">
+                <div class="card-header analytics-chart-header">
+                    <div>
+                        <p class="analytics-card-kicker">Learner population</p>
+                        <h3 class="card-title" id="learnerBreakdownTitle">Learners by Year Level</h3>
+                    </div>
+                </div>
+                <div class="card-body analytics-breakdown-body">
+                    <div class="analytics-breakdown-chart">
+                        <canvas id="learnerBreakdownChart" role="img" aria-label="Learners by Year Level chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="analytics-panel" data-analytics-panel="proficiency">
+            <section class="card analytics-bottom-controls analytics-panel-filters" aria-label="Proficiency analytics filters">
+                <div class="analytics-bottom-controls-grid">
+                    <div class="analytics-breakdown-filter">
+                        <label for="filterSchoolYearProficiency">School Year</label>
+                        <select id="filterSchoolYearProficiency" class="form-control"></select>
+                    </div>
+                    <div class="analytics-breakdown-filter">
+                        <label for="filterSubjectProficiency">Subject</label>
+                        <select id="filterSubjectProficiency" class="form-control"></select>
+                    </div>
+                </div>
+            </section>
+
+            <div class="charts-row">
+                <div class="card performance-card" data-animate="fade-up" data-animate-delay="0ms">
+                    <div class="card-header">
+                        <h3 class="card-title">Proficiency Level</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="proficiencyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card learner-detail-card" data-animate="fade-up" data-animate-delay="120ms">
+                    <div class="card-header analytics-table-header">
+                        <h3 class="card-title">Proficiency Summary</h3>
+                        <span id="proficiencySummaryCount" class="analytics-count-badge">0 learners</span>
+                    </div>
+                    <div class="card-body analytics-table-wrap">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Range</th>
+                                    <th>Count</th>
+                                    <th>Percent</th>
+                                </tr>
+                            </thead>
+                            <tbody id="proficiencySummaryBody">
+                                <tr><td colspan="4"><div class="analytics-empty-state" role="status"><video class="mp4-surface-blend analytics-empty-video" autoplay loop muted playsinline preload="metadata" aria-hidden="true"><source src="../../assets/icons/search.mp4" type="video/mp4"></video><span>No proficiency data found.</span></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-row">
+                <div class="card chart-card" data-animate="fade-up" data-animate-delay="0ms">
+                    <div class="card-header">
+                        <h3 class="card-title">Proficiency by Year Level</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="proficiencyGradeChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card chart-card" data-animate="fade-up" data-animate-delay="120ms">
+                    <div class="card-header">
+                        <h3 class="card-title">Proficiency by Subject</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="proficiencySubjectChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-row">
+                <div class="card learner-detail-card" data-animate="fade-up" data-animate-delay="0ms">
+                    <div class="card-header analytics-table-header">
+                        <h3 class="card-title">Subject Summary</h3>
+                    </div>
+                    <div class="card-body analytics-table-wrap">
+                        <table class="analytics-table analytics-subject-summary-table">
+                            <caption class="analytics-table-note">N = learners with a computed subject average · Proficient+ = Advanced + Proficient · Beginning = 74 and below · Developing = 75–79</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Subject</th>
+                                    <th scope="col" title="Learners with a computed subject average">N</th>
+                                    <th scope="col" title="Advanced and Proficient learners combined">Proficient+</th>
+                                    <th scope="col" title="Learners with grades of 74 and below">Beginning</th>
+                                    <th scope="col" title="Learners with grades from 75 to 79">Developing</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subjectSummaryBody">
+                                <tr><td colspan="5"><div class="analytics-empty-state" role="status"><video class="mp4-surface-blend analytics-empty-video" autoplay loop muted playsinline preload="metadata" aria-hidden="true"><source src="../../assets/icons/search.mp4" type="video/mp4"></video><span>No subject data found.</span></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="analytics-panel" data-analytics-panel="trends">
+            <section class="card analytics-bottom-controls analytics-bottom-controls--single analytics-panel-filters" aria-label="Enrollment trend filters">
+                <div class="analytics-bottom-controls-grid">
+                    <div class="analytics-breakdown-filter">
+                        <label for="filterSchoolYearTrends">School Year</label>
+                        <select id="filterSchoolYearTrends" class="form-control"></select>
+                    </div>
+                </div>
+            </section>
+
+            <div class="charts-row">
+                <div class="card chart-card" data-animate="fade-up" data-animate-delay="0ms">
+                    <div class="card-header">
+                        <h3 class="card-title">Enrollment Trend</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="yearlyTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JavaScript -->
+    <script src="../../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../../js/analytics/dashboard-overview.js?v=20261009-population-polish-v5"></script>
+    <script src="../../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

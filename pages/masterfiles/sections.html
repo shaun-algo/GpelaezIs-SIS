@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Sections - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/datatable.css">
+    <link rel="stylesheet" href="../../assets/css/modal.css">
+
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+    <script src="../../assets/vendor/axios/axios.min.js"></script>
+
+    <style>
+        /* Filter bar with cascading selects */
+        .sm-filter-bar {
+            background: var(--surface-0);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.5rem;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-end;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .sm-filter-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .sm-filter-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .sm-filter-group select {
+            min-height: var(--control-min-height);
+            font-size: var(--control-font-size);
+            padding: var(--control-padding-y) var(--control-padding-x);
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            background: var(--surface-0);
+            color: var(--gray-800);
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+        .sm-filter-group select:focus {
+            outline: none;
+            border-color: var(--deped-blue);
+            box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+        }
+        .sm-filter-group select:disabled {
+            background: var(--gray-100);
+            color: var(--gray-400);
+            cursor: not-allowed;
+        }
+
+        /* Context badge */
+        .sm-context-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--deped-blue-light);
+            border: 1px solid var(--deped-blue);
+            color: var(--deped-blue);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.4rem 0.75rem;
+            border-radius: 99px;
+        }
+
+        /* Toolbar */
+        .sm-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .sm-toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .sm-toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-left: auto;
+        }
+        .sm-page-actions {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+        .sm-page-actions .mf-options-icon-btn {
+            width: 44px;
+            min-width: 44px;
+            height: 44px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        .sm-page-actions .mf-options-menu {
+            right: 0;
+            min-width: 220px;
+        }
+        .sm-sections-header {
+            align-items: flex-end;
+        }
+        body.academic-setup-page .sm-sections-card,
+        body.academic-setup-page .setup-modal-content,
+        body.academic-setup-page .setup-modal-body {
+            overflow: visible;
+        }
+        body.academic-setup-page .setup-field .choices {
+            margin-bottom: 0;
+        }
+        .sm-sections-header .sm-filter-group {
+            flex: 1 1 190px;
+            min-width: 180px;
+        }
+        .sm-sections-header .sm-filter-group select {
+            width: 100%;
+        }
+        .sm-header-tools {
+            display: flex;
+            align-items: flex-end;
+            flex: 1.35 1 300px;
+            min-width: 280px;
+            gap: 0.75rem;
+        }
+        .sm-header-tools .search-box {
+            flex: 1 1 auto;
+            max-width: none;
+        }
+        .sm-sections-header .sm-header-tools .search-box {
+            order: 0;
+        }
+        .sm-sections-header .sm-header-tools .sm-page-actions {
+            order: 1;
+        }
+        @media (max-width: 560px) {
+            .sm-header-tools {
+                width: 100%;
+                min-width: 0;
+            }
+            .sm-page-actions .mf-options-menu {
+                right: 0.25rem;
+                width: min(260px, calc(100vw - 2rem));
+            }
+        }
+
+        /* Occupancy mini bar */
+        .occupancy-bar-wrap { display: flex; align-items: center; gap: 0.5rem; min-width: 100px; }
+        .occupancy-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .occupancy-bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            transition: width 0.4s ease;
+        }
+        .occupancy-bar-fill.low  { background: var(--color-success); }
+        .occupancy-bar-fill.mid  { background: var(--color-warning); }
+        .occupancy-bar-fill.high { background: var(--color-danger); }
+        .occupancy-pct { font-size: 0.78rem; color: var(--gray-500); white-space: nowrap; }
+
+        /* Stats chips */
+        .sm-stats {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+        }
+        .sm-stat {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.4rem;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.82rem;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .sm-stat strong {
+            color: var(--gray-800);
+            font-size: 0.95rem;
+        }
+
+        /* Empty state */
+        .sm-empty-prompt {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--gray-400);
+        }
+        .sm-empty-prompt i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--gray-300);
+        }
+        .sm-empty-prompt h3 {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+        .sm-empty-prompt p {
+            font-size: 0.9rem;
+        }
+
+        /* Loading skeleton */
+        .sm-skeleton {
+            background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.2s infinite;
+            border-radius: 0.4rem;
+            height: 100px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Error validation border */
+        .form-control.error {
+            border-color: var(--color-danger);
+        }
+        .error-message {
+            color: var(--color-danger);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+    <link rel="stylesheet" href="../../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/academic-setup.css?v=20260929-grade-dropdown-error-state">
+</head>
+<body class="academic-setup-page">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="../profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="../settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- ── Main Content ── -->
+    <main class="main-content" id="mainContent">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Sections</h1>
+            </div>
+        </div>
+
+        <div class="card card-overflow-visible sm-sections-card">
+            <div class="table-header-section sm-sections-header">
+                <div class="sm-filter-group setup-field">
+                    <label for="filterSY">School Year</label>
+                    <select id="filterSY" onchange="smOnSYChange()">
+                        <option value="">— Loading... —</option>
+                    </select>
+                </div>
+                <div class="sm-filter-group setup-field">
+                    <label for="filterGL">Grade Level</label>
+                    <select id="filterGL" disabled onchange="smOnGLChange()">
+                        <option value="">— Select School Year First —</option>
+                    </select>
+                </div>
+                <div class="sm-header-tools">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="sectionSearch" placeholder="Search sections..." class="search-input" aria-label="Search sections">
+                    </div>
+                    <div class="sm-page-actions">
+                        <button class="btn btn-outline mf-options-icon-btn" id="smOptionsButton" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="smOptionsMenu" aria-label="Section options" title="Section options">
+                            <i class="fas fa-ellipsis-vertical" aria-hidden="true"></i>
+                        </button>
+                        <div class="mf-options-menu" id="smOptionsMenu" role="menu">
+                            <button type="button" role="menuitem" data-mf-option="add">
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                                <span>Add section</span>
+                            </button>
+                            <button type="button" role="menuitem" data-mf-option="archive">
+                                <i class="fas fa-clock-rotate-left" aria-hidden="true"></i>
+                                <span>View archive</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="mfBulkControls" class="mf-bulk-controls sm-bulk-controls" aria-hidden="true">
+                    <label class="mf-select-all">
+                        <input type="checkbox" id="smSelectAll" aria-label="Select all visible sections">
+                        <span>Select all</span>
+                    </label>
+                    <button type="button" id="smBulkArchiveBtn" class="btn mf-bulk-archive-btn" aria-label="Archive selected sections" disabled aria-disabled="true">
+                        <i class="fas fa-box-archive" aria-hidden="true"></i>
+                        <span class="mf-bulk-archive-label">Archive selected</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="dataArea">
+                <div class="sm-empty-prompt">
+                    <video class="mp4-surface-blend context-empty-video" autoplay loop muted playsinline preload="metadata" aria-hidden="true"><source src="../../assets/icons/fast-forward.mp4" type="video/mp4"></video>
+                    <h3>Select a School Year and Grade Level</h3>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ── Add / Edit Section Modal ── -->
+    <div class="modal setup-modal" id="sectionModal" aria-hidden="true">
+        <div class="modal-content setup-modal-content">
+            <div class="modal-header setup-modal-header">
+                <h2 class="modal-title setup-modal-title" id="sectionModalTitle">Add Section</h2>
+                <button class="modal-close btn btn-outline icon-btn" type="button" onclick="smCloseModal()">&times;</button>
+            </div>
+            <div class="modal-body setup-modal-body">
+                <form id="sectionForm" autocomplete="off">
+                    <input type="hidden" id="smSectionId">
+
+                    <!-- Context (read-only info) -->
+                    <div class="form-section section-modal-context">
+                        <div class="section-modal-context-items">
+                            <div>
+                                <span class="section-modal-context-label">School Year</span>
+                                <span id="smCtxSY" class="section-modal-context-value">—</span>
+                            </div>
+                            <div id="smCtxGLGroup">
+                                <span class="section-modal-context-label">Grade Level</span>
+                                <span id="smCtxGL" class="section-modal-context-value">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-modal-fields">
+                        <!-- Grade Level selector is shown when the page filter is set to All Grade Levels. -->
+                        <div class="form-group setup-field" id="smModalGradeGroup" style="display:none;">
+                            <label for="smModalGradeId">Grade Level <span class="required">*</span></label>
+                            <select id="smModalGradeId" class="form-control"></select>
+                            <div class="error-message" id="errModalGradeId"></div>
+                        </div>
+                        <div class="form-group setup-field">
+                            <label for="smSectionName">Section Name <span class="required">*</span></label>
+                            <input type="text" id="smSectionName" class="form-control" placeholder="e.g. Gemini, Gold, Section A" maxlength="100" required>
+                            <div class="error-message" id="errSectionName"></div>
+                        </div>
+                        <div class="form-group setup-field">
+                            <label for="smMaxCapacity">Max Capacity <span class="required">*</span></label>
+                            <input type="number" id="smMaxCapacity" class="form-control" value="45" min="1" max="60" required>
+                            <div class="error-message" id="errMaxCapacity"></div>
+                        </div>
+                        <div class="form-group setup-field">
+                            <label for="smAdviserId">Class Adviser</label>
+                            <select id="smAdviserId" class="form-control" data-search-enabled="true" data-search-placeholder="Search advisers...">
+                                <option value="">— No adviser assigned —</option>
+                            </select>
+                            <div class="error-message" id="errAdviserId"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer setup-modal-footer">
+                <button class="btn btn-outline" onclick="smCloseModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="smSaveSection()">
+                    <i class="fas fa-save"></i>
+                    <span id="smSaveBtnText">Save Section</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── View Section Detail Modal ── -->
+    <div class="modal setup-modal" id="sectionViewModal">
+        <div class="modal-content setup-modal-content">
+            <div class="modal-header setup-modal-header">
+                <h2 class="modal-title setup-modal-title" id="viewModalTitle">Section Details</h2>
+                <button class="modal-close btn btn-outline icon-btn" type="button" onclick="smCloseViewModal()">&times;</button>
+            </div>
+            <div class="modal-body setup-modal-body" id="viewModalBody"></div>
+            <div class="modal-footer setup-modal-footer">
+                <button class="btn btn-outline" onclick="smCloseViewModal()">Close</button>
+                <button class="btn btn-primary" id="viewModalEditBtn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../../js/masterfiles/masterfile-dialog.js?v=20260913-alerts"></script>
+    <script src="../../js/masterfiles/masterfile-common.js?v=20261008-empty-media-v1"></script>
+    <script src="../../js/masterfiles/sections.js?v=20261008-empty-media-v1"></script>
+    <script src="../../js/masterfiles/archive.js?v=20261005-users-position-restore-v1" data-modules="sections"></script>
+    <script src="../../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

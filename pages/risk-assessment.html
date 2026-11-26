@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Risk Assessment - DepEd Academic Monitoring System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/datatable.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/print-preview.css?v=20261005-print-preview-v3">
+    <link rel="stylesheet" href="../assets/css/risk-modal-premium.css?v=20261008-risk-section-clean-v7">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+
+    <!-- Axios -->
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .risk-toolbar {
+            display: grid;
+            gap: 12px;
+            min-width: 0;
+        }
+        .risk-filters {
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            background: var(--surface-0);
+            min-width: 0;
+        }
+        .risk-filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+            gap: 16px;
+            align-items: end;
+        }
+        .risk-filters .form-group {
+            margin: 0;
+            min-width: 0;
+        }
+        .risk-search-field {
+            grid-column: 1 / -1;
+        }
+        .risk-filters .search-box {
+            width: 100%;
+            max-width: none;
+        }
+        .risk-filters .form-label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .risk-filters .form-control,
+        .risk-filters .search-input,
+        .risk-filters .choices__inner {
+            min-height: 44px;
+            width: 100%;
+        }
+        .risk-filters .search-input {
+            padding-left: 1rem;
+        }
+        .risk-filters .choices {
+            min-width: 0;
+            margin-bottom: 0;
+        }
+        .risk-action-stack {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 12px;
+            align-items: stretch;
+        }
+        .risk-print-btn,
+        .risk-mechanics-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 42px;
+            justify-content: center;
+            padding: 9px 13px;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            background: var(--surface-0);
+            color: var(--gray-900);
+            font-weight: 700;
+            cursor: pointer;
+            transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+        }
+        .risk-mechanics-btn {
+            padding: 9px 13px;
+            color: var(--gray-700);
+            font-weight: 700;
+        }
+        .risk-print-btn:hover,
+        .risk-mechanics-btn:hover {
+            border-color: var(--gray-400);
+            background: var(--gray-50);
+        }
+        .risk-print-btn:focus-visible,
+        .risk-mechanics-btn:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-info) 18%, transparent);
+        }
+        .risk-context-line {
+            margin: 10px 0 12px 0;
+            font-size: 12px;
+            color: var(--gray-700);
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+        #dataTableBody tr.notif-focus-row {
+            box-shadow: 0 0 0 8px rgba(30, 64, 175, 0.24);
+            background: rgba(191, 219, 254, 0.36);
+            transition: box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1), background 200ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #dataTableBody td.notif-focus-cell {
+            position: relative;
+            background: linear-gradient(180deg, rgba(253, 224, 71, 0.6) 0%, rgba(250, 204, 21, 0.35) 100%);
+            font-weight: 800;
+            color: #0f172a;
+        }
+        #dataTableBody td.notif-focus-cell::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border: 2px dashed rgba(30, 64, 175, 0.78);
+            border-radius: 6px;
+            pointer-events: none;
+        }
+        @media (max-width: 560px) {
+            .risk-action-stack,
+            .risk-print-btn,
+            .risk-mechanics-btn {
+                width: 100%;
+            }
+            body.risk-assessment-page .risk-action-buttons {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 6px;
+                flex: 0 1 100%;
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            body.risk-assessment-page .risk-action-buttons > .risk-print-btn,
+            body.risk-assessment-page .risk-action-buttons > .risk-mechanics-btn {
+                flex: 1 1 0;
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+                min-height: 40px;
+                gap: 6px;
+                padding: 8px 9px;
+                border-radius: 8px;
+                font-size: 0.76rem;
+                line-height: 1.15;
+                white-space: nowrap;
+                box-sizing: border-box;
+            }
+            .risk-print-btn,
+            .risk-mechanics-btn {
+                justify-content: center;
+            }
+        }
+        @media print {
+            body {
+                background: #fff;
+            }
+        }
+
+        /* Ensure enhanced dropdown menus render above the data table header */
+        .risk-filters { position: relative; z-index: 2; }
+        .table-container { position: relative; z-index: 1; }
+
+        .risk-mechanics-modal .modal-body {
+            display: grid;
+            gap: 16px;
+        }
+        .risk-mechanics-note {
+            margin: 0;
+            color: var(--gray-700);
+            line-height: 1.5;
+            font-size: 13px;
+        }
+        .risk-mechanics-section {
+            display: grid;
+            gap: 8px;
+        }
+        .risk-mechanics-section h3 {
+            margin: 0;
+            color: var(--gray-900);
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .risk-mechanics-table-wrap {
+            overflow-x: auto;
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+            border-radius: 0;
+        }
+        .risk-mechanics-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+            background: transparent;
+        }
+        .risk-mechanics-table th,
+        .risk-mechanics-table td {
+            padding: 9px 10px;
+            border-bottom: 1px solid var(--gray-200);
+            text-align: left;
+            vertical-align: top;
+            line-height: 1.35;
+        }
+        .risk-mechanics-table th {
+            color: var(--gray-800);
+            background: transparent;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        .risk-mechanics-table tr:last-child td {
+            border-bottom: 0;
+        }
+        .risk-level-indicator {
+            display: inline;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .risk-level-indicator::before {
+            display: none;
+            content: none;
+        }
+        .risk-level-indicator.low {
+            color: #166534;
+        }
+        .risk-level-indicator.medium {
+            color: #d97706;
+        }
+        .risk-level-indicator.high {
+            color: #b91c1c;
+        }
+        .risk-mechanics-footnote {
+            margin: 0;
+            padding: 10px 0 0;
+            border: 0;
+            border-top: 1px solid var(--gray-200);
+            border-radius: 0;
+            color: var(--gray-700);
+            background: transparent;
+            line-height: 1.5;
+            font-size: 13px;
+        }
+        .risk-level-badge {
+            display: inline;
+            padding: 0;
+            border: 0 !important;
+            background: transparent !important;
+            font-weight: 800;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .risk-level-dot {
+            display: none;
+        }
+        .risk-level-text { display: inline; font-weight: 800; line-height: 1.2; vertical-align: middle; white-space: nowrap; }
+    </style>
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="risk-assessment-page">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+<div class="page-header">
+            <div>
+                <h1 class="page-title" id="pageTitle">Risk Assessment &amp; Intervention List</h1>
+                <p class="page-subtitle" id="pageSubtitle"></p>
+            </div>
+        </div>
+
+        <div class="card card-overflow-visible risk-assessment-card">
+            <div class="card-body">
+                <div class="risk-toolbar">
+                    <button class="risk-mobile-change-selection" id="btnRiskChangeFilters" type="button">
+                        <i class="fas fa-sliders" aria-hidden="true"></i>
+                        Change filters
+                    </button>
+                    <div class="risk-filters" id="riskFilters">
+                        <div class="risk-filter-grid">
+                            <div class="form-group risk-search-field">
+                                <label class="form-label" for="searchInput">Search learner records</label>
+                                <div class="search-box">
+                                    <input type="text" id="searchInput" placeholder="Search learner, section, level..." class="search-input">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="filterSchoolYear">School Year</label>
+                                <select id="filterSchoolYear" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="filterPeriod">Grading Period</label>
+                                <select id="filterPeriod" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="filterScope">Filter Scope</label>
+                                <select id="filterScope" class="form-control">
+                                    <option value="school_year">Whole School Year</option>
+                                    <option value="year_level">Year Level</option>
+                                    <option value="section">Section</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="display:none;" id="filterGradeLevelWrap">
+                                <label class="form-label" for="filterGradeLevel">Year Level</label>
+                                <select id="filterGradeLevel" class="form-control"></select>
+                            </div>
+                            <div class="form-group" style="display:none;" id="filterSectionWrap">
+                                <label class="form-label" for="filterSection">Section</label>
+                                <select id="filterSection" class="form-control"></select>
+                            </div>
+                            <div class="form-group" style="display:none;" id="filterMySectionWrap">
+                                <label class="form-label" for="filterMySection">My Sections</label>
+                                <select id="filterMySection" class="form-control"></select>
+                            </div>
+                            <div class="form-group" id="filterRiskLevelWrap">
+                                <label class="form-label" for="filterRiskLevel">Risk Level</label>
+                                <select id="filterRiskLevel" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="risk-mobile-proceed-wrap">
+                            <button class="btn btn-primary risk-mobile-proceed" id="btnRiskProceed" type="button">
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                                Show assessment
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="risk-action-stack">
+                        <div class="risk-action-buttons">
+                            <button class="risk-print-btn" id="btnRiskPrint" type="button">
+                                <i class="fas fa-file-alt" aria-hidden="true"></i>
+                                <span>Generate preview</span>
+                            </button>
+                            <button class="risk-mechanics-btn" id="btnRiskMechanics" type="button">
+                                <span>Risk mechanics</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="risk-context-line" id="riskContextLine"></p>
+
+                <div class="table-container">
+                    <table class="data-table" id="dataTable">
+                        <thead>
+                            <tr id="dataTableHead">
+                                <th>Loading...</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody">
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    <div class="loading">
+                                        <i class="fas fa-spinner fa-spin"></i> Loading records...
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pagination-section">
+                <div class="pagination">
+                    <button class="pagination-btn" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="pagination-info">
+                        Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                    </span>
+                    <button class="pagination-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="recordModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add Record</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="recordForm">
+                    <input type="hidden" id="recordId">
+                    <div id="dynamicFields"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveRecord()">
+                    <i class="fas fa-save"></i>
+                    <span id="saveButtonText">Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="riskMechanicsModal" aria-hidden="true">
+        <div class="modal-content modal-lg risk-mechanics-modal" role="dialog" aria-modal="true" aria-labelledby="riskMechanicsTitle">
+            <div class="modal-header">
+                <h2 class="modal-title" id="riskMechanicsTitle">
+                    How Risk Assessment Works
+                </h2>
+                <button class="modal-close" id="btnCloseRiskMechanics" type="button" aria-label="Close risk mechanics">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="risk-mechanics-note">
+                    The risk score is generated from attendance and, when Numeric grading applies, numeric grade records. It is an early warning guide for teacher support, not a final judgment of the learner.
+                </p>
+                <p class="risk-mechanics-note">
+                    <strong>Descriptive grading:</strong> Grade 1 is excluded from academic grade-risk scoring. Grades 2–3 are also excluded when the school-year Elementary Report Card Grading Mode is set to Descriptive. Attendance risk remains active; descriptive ratings are not treated as missing numeric grades.
+                </p>
+
+                <div class="risk-mechanics-section">
+                    <h3>Areas Checked</h3>
+                    <div class="risk-mechanics-table-wrap">
+                        <table class="risk-mechanics-table">
+                            <thead>
+                                <tr>
+                                    <th>Area Checked</th>
+                                    <th>What the System Looks For</th>
+                                    <th>Risk Signal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Attendance</td>
+                                    <td>Learner has many absences during the grading period.</td>
+                                    <td>Frequent or chronic absence</td>
+                                </tr>
+                                <tr>
+                                    <td>Tardiness</td>
+                                    <td>Learner has repeated late or cutting records.</td>
+                                    <td>Repeated tardiness</td>
+                                </tr>
+                                <tr>
+                                    <td>Numeric Grade Completion</td>
+                                    <td>For Numeric grading only, some or all expected subject grades are not yet encoded.</td>
+                                    <td>Missing or incomplete grades</td>
+                                </tr>
+                                <tr>
+                                    <td>Numeric Subject Performance</td>
+                                    <td>For Numeric grading only, one or more subject grades are below 75.</td>
+                                    <td>Failing subject/s</td>
+                                </tr>
+                                <tr>
+                                    <td>Numeric Period Average</td>
+                                    <td>For Numeric grading only, the learner's average for the grading period is below 75.</td>
+                                    <td>Low period performance</td>
+                                </tr>
+                                <tr>
+                                    <td>Numeric General Average</td>
+                                    <td>For Numeric grading only, the learner's computed general average is below 75.</td>
+                                    <td>Low overall performance</td>
+                                </tr>
+                                <tr>
+                                    <td>Numeric Subject Trend</td>
+                                    <td>For Numeric grading only, after the first grading period a subject grade drops by 5 or more points from the previous quarter.</td>
+                                    <td>Sudden subject grade drop</td>
+                                </tr>
+                                <tr>
+                                    <td>Numeric Continuous Decline</td>
+                                    <td>For Numeric grading only, after the first grading period the same subject or average keeps decreasing across grading periods.</td>
+                                    <td>Continuous grade decline</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="risk-mechanics-section">
+                    <h3>Risk Level Guide</h3>
+                    <div class="risk-mechanics-table-wrap">
+                        <table class="risk-mechanics-table">
+                            <thead>
+                                <tr>
+                                    <th>Score</th>
+                                    <th>Level</th>
+                                    <th>Meaning</th>
+                                    <th>Suggested Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>0-39</td>
+                                    <td><span class="risk-level-indicator low">Low</span></td>
+                                    <td>No major warning signs detected.</td>
+                                    <td>Continue routine monitoring.</td>
+                                </tr>
+                                <tr>
+                                    <td>40-59</td>
+                                    <td><span class="risk-level-indicator medium">Medium</span></td>
+                                    <td>Learner shows one or more early warning signs.</td>
+                                    <td>Provide targeted support and monitor next grading period.</td>
+                                </tr>
+                                <tr>
+                                    <td>60-100</td>
+                                    <td><span class="risk-level-indicator high">High</span></td>
+                                    <td>Learner needs urgent attention.</td>
+                                    <td>Adviser follow-up, parent contact, and documented intervention.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="risk-mechanics-section">
+                    <h3>Score Components</h3>
+                    <div class="risk-mechanics-table-wrap">
+                        <table class="risk-mechanics-table">
+                            <thead>
+                                <tr>
+                                    <th>Component</th>
+                                    <th>Max Points</th>
+                                    <th>Examples</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Attendance</td>
+                                    <td>40</td>
+                                    <td>Absences, repeated tardiness</td>
+                                </tr>
+                                <tr>
+                                    <td>Academic Performance</td>
+                                    <td>40</td>
+                                    <td>Numeric grading only: failing subject, low average, or missing grades; excluded in Descriptive mode.</td>
+                                </tr>
+                                <tr>
+                                    <td>Grade Trend</td>
+                                    <td>20</td>
+                                    <td>Sudden drops or repeated decline</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>100</td>
+                                    <td>Final risk score</td>
+                                </tr>
+                                <tr>
+                                    <td>First Grading Period</td>
+                                    <td>50 / 50 / 0</td>
+                                    <td>Attendance and academic performance only; grade trend is disabled until a previous period exists</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <p class="risk-mechanics-footnote">
+                    Risk flags are recomputed from live records. If attendance or grades are corrected, the risk level and indicators may change after the assessment is refreshed.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnDoneRiskMechanics" type="button">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal print-preview-modal" id="riskPrintModal" aria-hidden="true">
+        <div class="modal-content modal-xl" role="dialog" aria-modal="true" aria-labelledby="riskPrintModalTitle">
+            <div class="modal-header">
+                <h2 class="modal-title" id="riskPrintModalTitle">Risk assessment preview</h2>
+                <button class="modal-close" id="btnCloseRiskPrintPreview" type="button" aria-label="Close risk assessment preview">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="print-preview-scroll" tabindex="0" aria-label="Risk assessment paper preview">
+                    <iframe class="print-preview-frame" id="riskPrintFrame" data-print-preview-items=".risk-print-sheet" title="Risk assessment preview"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="btnCloseRiskPrintPreviewFooter" type="button">Close</button>
+                <button class="btn btn-primary" id="btnPrintRiskPreview" type="button">
+                    <i class="fas fa-print" aria-hidden="true"></i> Print
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <dialog class="risk-row-details-dialog" id="riskRowDetailsDialog" aria-labelledby="riskRowDetailsTitle">
+        <div class="risk-row-details-panel">
+            <header class="risk-row-details-header">
+                <div>
+                    <p class="risk-row-details-eyebrow">Risk assessment</p>
+                    <h2 id="riskRowDetailsTitle">Learner details</h2>
+                </div>
+                <button class="risk-row-details-close" id="btnCloseRiskRowDetails" type="button" aria-label="Close details">&times;</button>
+            </header>
+            <dl class="risk-row-details-content" id="riskRowDetailsContent"></dl>
+        </div>
+    </dialog>
+
+
+    <script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/masterfiles/masterfile-dialog.js?v=20260913"></script>
+    <script src="../js/masterfiles/masterfile-common.js?v=20261008-empty-media-v1"></script>
+    <script src="../assets/js/print-preview-fit.js?v=20261012-mobile-fit-v5"></script>
+    <script src="../js/masterfiles/risk-assessments.js?v=20261013-danger-filter-learner-notifications-v2"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

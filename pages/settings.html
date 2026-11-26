@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Settings - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <style>
+        .settings-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 1rem; background: rgba(15, 23, 42, 0.46); z-index: 2100; }
+        .settings-modal.show { display: flex; }
+        .settings-modal-card { width: min(420px, 100%); background: var(--surface-0); border-radius: 0.75rem; box-shadow: var(--shadow-xl); overflow: hidden; }
+        .settings-modal-head, .settings-modal-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 1rem; border-bottom: 1px solid var(--gray-200); }
+        .settings-modal-foot { border-top: 1px solid var(--gray-200); border-bottom: 0; justify-content: flex-end; }
+        .settings-modal-body { padding: 1rem; }
+        .settings-icon-btn { border: 0; background: transparent; color: var(--gray-600); cursor: pointer; font-size: 1.1rem; }
+    </style>
+    <link rel="stylesheet" href="../assets/css/settings-premium.css?v=20261014-about-system-v18">
+
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="settings-page">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">User</span>
+                        <span class="user-role">Role</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <main class="main-content" id="mainContent">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Settings</h1>
+            </div>
+        </div>
+
+        <div class="settings-workspace settings-stack-workspace">
+            <section class="settings-view settings-stack-view" aria-label="Settings options" aria-live="polite">
+                <article class="settings-option-card" id="settings-option-appearance">
+                    <button type="button" class="settings-option-toggle" id="settingsAppearanceToggle" data-settings-toggle aria-expanded="false" aria-controls="settingsAppearancePanel">
+                        <span class="settings-option-copy"><strong>Appearance</strong><small>UI size</small></span>
+                        <i class="fas fa-chevron-down settings-option-chevron" aria-hidden="true"></i>
+                    </button>
+                    <div class="settings-option-panel" id="settingsAppearancePanel" hidden>
+                        <div class="settings-option-body">
+                            <div class="settings-option-row">
+                                <div class="settings-option-row-copy"><strong>UI size</strong></div>
+                                <label class="settings-control-field settings-inline-field" for="uiScaleSelect">
+                                    <span>Size</span>
+                                    <select id="uiScaleSelect" class="form-control" data-settings-select aria-label="UI Size">
+                                        <option value="small">Small</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="large">Large</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="settings-option-card" id="settings-option-session">
+                    <button type="button" class="settings-option-toggle" id="settingsSessionToggle" data-settings-toggle aria-expanded="false" aria-controls="settingsSessionPanel">
+                        <span class="settings-option-copy"><strong>Session</strong><small id="sessionTimeoutSummary">Auto end Session</small></span>
+                        <span class="settings-option-value" id="sessionTimeoutValue">Loading...</span>
+                        <i class="fas fa-chevron-down settings-option-chevron" aria-hidden="true"></i>
+                    </button>
+                    <div class="settings-option-panel" id="settingsSessionPanel" hidden>
+                        <div class="settings-option-body">
+                            <div class="settings-option-row">
+                                <div class="settings-option-row-copy">
+                                    <strong>Auto end Session</strong>
+                                    <small id="sessionTimeoutHelp">Loading account setting...</small>
+                                </div>
+                                <label class="settings-control-field settings-inline-field" for="sessionTimeoutSelect">
+                                    <span>Time</span>
+                                    <select id="sessionTimeoutSelect" class="form-control" data-settings-select aria-label="Auto end Session" disabled>
+                                        <option value="5">5 minutes</option>
+                                        <option value="10">10 minutes</option>
+                                        <option value="15">15 minutes</option>
+                                        <option value="20">20 minutes</option>
+                                        <option value="30">30 minutes</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="settings-option-card" id="settings-option-about">
+                    <button type="button" class="settings-option-toggle" id="settingsAboutToggle" data-settings-toggle aria-expanded="false" aria-controls="settingsAboutPanel">
+                        <span class="settings-option-copy"><strong>About System</strong></span>
+                        <i class="fas fa-chevron-down settings-option-chevron" aria-hidden="true"></i>
+                    </button>
+                    <div class="settings-option-panel" id="settingsAboutPanel" hidden>
+                        <div class="settings-about-body">
+                            <p class="settings-about-intro">Student Information System for G. Pelaez Integrated School.</p>
+                            <div class="settings-about-details" aria-label="About System details">
+                                <div class="settings-about-detail">
+                                    <button type="button" class="settings-about-detail-toggle" data-settings-toggle aria-expanded="false" aria-controls="settingsAboutVersionPanel">
+                                        <span>System version</span>
+                                        <i class="fas fa-chevron-down settings-about-detail-chevron" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="settings-about-detail-panel" id="settingsAboutVersionPanel" hidden>
+                                        <strong>1.0.0</strong>
+                                    </div>
+                                </div>
+
+                                <div class="settings-about-detail">
+                                    <button type="button" class="settings-about-detail-toggle" data-settings-toggle aria-expanded="false" aria-controls="settingsAboutInitiatedPanel">
+                                        <span>Development Initiated</span>
+                                        <i class="fas fa-chevron-down settings-about-detail-chevron" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="settings-about-detail-panel" id="settingsAboutInitiatedPanel" hidden>
+                                        <strong>2026</strong>
+                                    </div>
+                                </div>
+
+                                <div class="settings-about-detail settings-about-developer-detail">
+                                    <button type="button" class="settings-about-detail-toggle" data-settings-toggle aria-expanded="false" aria-controls="settingsAboutDeveloperPanel">
+                                        <span>Developer</span>
+                                        <i class="fas fa-chevron-down settings-about-detail-chevron" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="settings-about-detail-panel settings-about-developer-panel" id="settingsAboutDeveloperPanel" hidden>
+                                        <div class="settings-about-credit-row">
+                                            <div class="settings-about-credit">
+                                                <span class="settings-about-label">System</span>
+                                                <strong class="settings-about-developer-name">
+                                                    <span>G. Pelaez Integrated School</span>
+                                                </strong>
+                                                <span>School Information Management System</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <section class="settings-category" id="settings-option-account" aria-labelledby="settingsAccountCategoryTitle">
+                    <div class="settings-category-note">
+                        <strong id="settingsAccountCategoryTitle">Account security</strong>
+                    </div>
+                    <div class="settings-option-body settings-account-option-body" id="settingsAccountPanel">
+                            <article class="settings-suboption-card settings-collapsible-card" id="accountDetailsCard">
+                                <button type="button" class="settings-option-toggle" id="accountDetailsToggle" data-settings-toggle aria-expanded="false" aria-controls="accountDetailsPanel">
+                                    <span class="settings-option-copy"><strong>Account details</strong></span>
+                                    <i class="fas fa-chevron-down settings-option-chevron" aria-hidden="true"></i>
+                                </button>
+                                <div class="settings-suboption-panel" id="accountDetailsPanel" hidden>
+                                    <dl class="settings-account-facts">
+                                        <div><dt>Account created</dt><dd id="accountCreatedValue">Loading...</dd></div>
+                                        <div><dt>Account system position</dt><dd id="accountSystemPositionValue">Loading...</dd></div>
+                                    </dl>
+                                </div>
+                            </article>
+
+                            <article class="settings-suboption-card settings-collapsible-card" id="accountPasswordCard">
+                                <button type="button" class="settings-option-toggle" id="accountPasswordToggle" data-settings-toggle aria-expanded="false" aria-controls="accountPasswordPanel">
+                                    <span class="settings-option-copy"><strong>Account Passwords</strong></span>
+                                    <i class="fas fa-chevron-down settings-option-chevron" aria-hidden="true"></i>
+                                </button>
+                                <div class="settings-suboption-panel" id="accountPasswordPanel" hidden>
+                                    <div class="settings-password-action"><button type="button" class="btn btn-primary settings-inline-action" id="changePasswordSettingsBtn">Change password</button></div>
+                                </div>
+                            </article>
+
+                            <article class="settings-suboption-card settings-sessions-card settings-collapsible-card" id="accountSessionsCard">
+                                <button type="button" class="settings-option-toggle" id="accountSessionsToggle" data-settings-toggle aria-expanded="false" aria-controls="accountSessionsPanel">
+                                    <span class="settings-option-copy"><strong>Login sessions</strong></span>
+                                    <i class="fas fa-chevron-down settings-option-chevron" aria-hidden="true"></i>
+                                </button>
+                                <div class="settings-session-panel" id="accountSessionsPanel" hidden>
+                                    <div id="accountSecuritySessions" class="settings-session-scroll" aria-live="polite"><div class="settings-session-list"><p class="settings-inline-state">Loading login sessions...</p></div></div>
+                                </div>
+                            </article>
+
+                            <article class="settings-suboption-card settings-collapsible-card settings-deactivation-card" id="deactivationRequestCard" hidden>
+                                <button type="button" class="settings-option-toggle" id="deactivationRequestToggle" data-settings-toggle aria-expanded="false" aria-controls="deactivationRequestPanel">
+                                    <span class="settings-option-copy"><strong class="settings-danger-copy">Request account deactivation</strong></span>
+                                    <span class="settings-option-value" id="deactivationAvailabilityValue">Available</span>
+                                    <i class="fas fa-chevron-down settings-option-chevron" aria-hidden="true"></i>
+                                </button>
+                                <div class="settings-option-panel settings-deactivation-panel" id="deactivationRequestPanel" hidden>
+                                    <div class="settings-deactivation-header">
+                                        <button type="button" class="btn btn-outline settings-deactivation-open-btn" id="deactivationSubmitBtn">Request account deactivation</button>
+                                    </div>
+                                    <div id="deactivationRequestStatus" class="settings-request-status" aria-live="polite"></div>
+                                </div>
+                            </article>
+                    </div>
+                </section>
+            </section>
+        </div>
+    </main>
+
+    <div class="settings-modal" id="sessionActionModal" aria-hidden="true">
+        <div class="settings-modal-card settings-session-action-modal-card" role="dialog" aria-modal="true" aria-labelledby="sessionActionTitle">
+            <div class="settings-modal-head">
+                <div>
+                    <h2 id="sessionActionTitle" style="margin:0; font-size:1rem;">Manage device</h2>
+                    <p id="sessionActionDevice" style="margin:0.35rem 0 0; color:var(--gray-600); font-size:0.82rem;"></p>
+                </div>
+                <button class="settings-icon-btn" type="button" id="sessionActionCloseBtn" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="settings-modal-body">
+                <div class="settings-session-action-options">
+                    <button type="button" class="btn btn-outline" id="sessionTerminateBtn">
+                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                        Log out this device
+                    </button>
+                    <button type="button" class="btn btn-outline settings-session-block-btn" id="sessionBlockBtn">
+                        <i class="fas fa-ban" aria-hidden="true"></i>
+                        Block device
+                    </button>
+                </div>
+                <p id="sessionActionError" class="settings-request-status is-error" role="alert" aria-live="polite"></p>
+            </div>
+            <div class="settings-modal-foot">
+                <button type="button" class="btn btn-outline" id="sessionActionCancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-modal" id="deactivationSubmitModal" aria-hidden="true">
+        <div class="settings-modal-card" role="dialog" aria-modal="true" aria-labelledby="deactivationSubmitTitle">
+            <div class="settings-modal-head">
+                <div>
+                    <h2 id="deactivationSubmitTitle" style="margin:0; font-size:1rem;">Review deactivation request</h2>
+                    <p style="margin:0.35rem 0 0; color:var(--gray-600); font-size:0.82rem;">Check the details before sending this request.</p>
+                </div>
+                <button class="settings-icon-btn" type="button" id="deactivationSubmitCloseBtn" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="settings-modal-body">
+                <div class="settings-modal-form">
+                    <label class="settings-control-field" for="deactivationReason">
+                        <span>Reason</span>
+                        <select id="deactivationReason" class="form-control" data-settings-select required>
+                            <option value="">Choose a reason</option>
+                            <option value="RETIREMENT">Retirement</option>
+                            <option value="TRANSFER">Transfer to another school</option>
+                            <option value="CAREER_CHANGE">Career change</option>
+                            <option value="HEALTH_PERSONAL">Health or personal reasons</option>
+                            <option value="EXTENDED_LEAVE">Extended leave</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </label>
+                    <label class="settings-control-field" for="deactivationOther">
+                        <span>Brief explanation <em>(optional unless you choose Other)</em></span>
+                        <textarea id="deactivationOther" class="form-control" maxlength="500" rows="4" placeholder="Tell the administrator briefly why."></textarea>
+                    </label>
+                </div>
+                <p id="deactivationSubmitError" class="settings-request-status is-error" role="alert" aria-live="polite"></p>
+            </div>
+            <div class="settings-modal-foot">
+                <button type="button" class="btn btn-outline" id="deactivationSubmitCancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="deactivationSubmitConfirmBtn">Send request</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/settings.js?v=20261014-about-system-v3"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

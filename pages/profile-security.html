@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" class="security-session-pending">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Password Security - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/profile-security-premium.css?v=20260915-password-wizard-v2">
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+
+    <style>
+        .security-layout { width: 100%; max-width: 1500px; margin: 0 auto; }
+        .security-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+        .profile-header-left { display: flex; align-items: center; gap: 0.75rem; }
+        .btn-icon { padding: 0.625rem 0.9rem; background: transparent; border: none; color: var(--deped-blue); }
+        .btn-icon:hover { background: transparent; color: var(--deped-blue-dark); }
+        .profile-info-card { display: none; position: relative; }
+        .profile-info-card .card-tools { position: absolute; top: 0.75rem; right: 0.75rem; z-index: 2; }
+        .profile-info-card .card-body { padding-top: 3.25rem; }
+        .profile-info-card .card-tools .btn-icon { padding: 0.5rem 0.7rem; }
+        .profile-info-card .card-tools .btn-icon i { font-size: 1.25rem; }
+
+        /* Prevent long values from stretching the form layout. */
+        .security-layout .form-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+        .security-layout .form-row > .form-group { min-width: 0; }
+        .security-layout .form-control { min-width: 0; }
+        .security-divider { height: 1px; background: var(--gray-200); margin: 1.25rem 0; }
+        .field-actions { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+        .field-actions .hint { color: var(--gray-500); font-size: 0.8rem; }
+        .mask-btn { background: transparent; border: 1px solid var(--gray-300); color: var(--gray-700); font-weight: 600; padding: 0.35rem 0.8rem; cursor: pointer; }
+        .mask-btn:hover { border-color: var(--deped-blue); color: var(--deped-blue); }
+        .read-only { background: var(--gray-100) !important; }
+        .form-section-title { font-size: 0.95rem; font-weight: 800; color: var(--gray-900); margin: 0 0 0.75rem; letter-spacing: 0.02em; text-transform: uppercase; }
+        .password-policy-alert { display: none; margin-bottom: 2rem; padding: 1rem 1.25rem; border: 0; background: #fffbeb; color: #78350f; box-shadow: var(--shadow-sm); border-radius: 8px; line-height: 1.5; font-size: 0.9rem; }
+        .password-panel { display: none; }
+        .password-hint { margin: 0.5rem 0 0; color: var(--gray-600); font-size: 0.85rem; line-height: 1.5; }
+        #saveBtn { display: none; }
+        .security-caution { perspective: 600px; display: flex; justify-content: center; padding: 0 0 1.5rem; margin-bottom: 1.5rem; }
+        .security-caution-bounce { animation: security-caution-bounce 2s cubic-bezier(0.28,0.84,0.42,1) infinite; }
+        .security-caution svg { display: block; overflow: visible; animation: security-caution-flip 4s cubic-bezier(0.45,0,0.2,1) infinite; }
+        .security-caution-ring { animation: security-caution-pulse 2s cubic-bezier(0.22, 1, 0.36, 1) infinite; transform-origin: 24px 24px; }
+        @keyframes security-caution-bounce {
+            0%, 40%, 70%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-20px); }
+            55% { transform: translateY(-9px); }
+        }
+        @keyframes security-caution-flip {
+            0% { transform: rotateY(0deg); }
+            8%, 50% { transform: rotateY(180deg); }
+            58%, 100% { transform: rotateY(360deg); }
+        }
+        @keyframes security-caution-pulse {
+            0% { r: 18; opacity: 0.55; }
+            30%, 100% { r: 27; opacity: 0; }
+        }
+        .security-caution-danger svg { animation: none; }
+        .security-caution-danger .security-caution-ring { animation: none; opacity: 0; }
+        .security-caution-shake { animation: security-caution-shake 1.6s cubic-bezier(0.45, 0, 0.2, 1) infinite; transform-origin: center; }
+        @keyframes security-caution-shake {
+            0%, 45%, 100% { transform: translateX(0) rotate(0); }
+            8%, 24% { transform: translateX(-7px) rotate(-8deg); }
+            16%, 32% { transform: translateX(7px) rotate(8deg); }
+            39% { transform: translateX(-3px) rotate(-3deg); }
+        }
+        .password-skip-backdrop { backdrop-filter: blur(8px); }
+        .password-skip-large { min-height: min(520px, calc(100dvh - 2rem)); padding: clamp(1.5rem, 5vw, 3.5rem); }
+        @media (prefers-reduced-motion: reduce) {
+            .security-caution-shake { animation: none; }
+            .security-caution-bounce, .security-caution svg, .security-caution-ring { animation: none; }
+            .security-caution-ring { opacity: 0; }
+        }
+        .password-form-actions { display: flex; flex-direction: column; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; }
+        .password-form-actions .btn { width: 100%; }
+        /* Keep navigation out of the first paint until the account policy is known. */
+        html:is(.security-session-pending, .password-focus) .topbar,
+        html:is(.security-session-pending, .password-focus) .sidebar,
+        html:is(.security-session-pending, .password-focus) .sidebar-overlay,
+        html:is(.security-session-pending, .password-focus) .footer {
+            display: none !important;
+        }
+        html:is(.security-session-pending, .password-focus) body {
+            padding: 0 !important;
+        }
+        html:is(.security-session-pending, .password-focus) #mainContent {
+            margin: 0 !important;
+            padding: clamp(2rem, 6vw, 4rem) !important;
+            width: 100%;
+            max-width: none !important;
+            min-height: 100dvh;
+            display: grid;
+            place-items: center;
+        }
+        html:is(.security-session-pending, .password-focus) .security-layout {
+            max-width: 560px;
+        }
+        html.password-focus .security-layout .form-row {
+            grid-template-columns: minmax(0, 1fr);
+        }
+        html.password-focus #changePasswordBtn { width: 100%; }
+        html.password-focus .page-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        html.password-focus .security-actions { width: auto; flex-shrink: 0; }
+        html.password-focus .page-title { font-size: clamp(1.5rem, 4vw, 2rem); }
+        @media (max-width: 720px) {
+            .page-header { align-items: flex-start; gap: 1rem; flex-direction: column; }
+            .profile-header-left { width: 100%; }
+            .security-actions { width: 100%; }
+            .security-actions .btn { width: 100%; }
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body data-disable-global-profile-search>
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name" id="headerUserName">User</span>
+                        <span class="user-role" id="headerUserRole">Role</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="../adviser-recovery.php?return=pages%2Fprofile-security.html" data-student-recovery hidden><i class="fas fa-user-shield"></i> Student account recovery</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <main class="main-content" id="mainContent">
+<div class="security-layout">
+            <div class="page-header">
+                <div class="profile-header-left">
+                    <span class="password-wizard-kicker security-page-kicker" id="securityPageTitle">ACCOUNT SECURITY</span>
+                </div>
+                <div class="security-actions">
+                    <a class="security-back-link" href="profile.html">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                        <span>Back to profile</span>
+                    </a>
+                    <button type="button" class="btn btn-primary" id="saveBtn" disabled><i class="fas fa-save"></i> Save</button>
+                </div>
+            </div>
+
+            <div class="password-policy-alert" id="passwordPolicyAlert" role="alert"></div>
+
+            <form id="passwordForm" class="password-wizard">
+                <div class="password-wizard-intro">
+                    <h2>Update your password</h2>
+                </div>
+
+                <ol class="password-wizard-steps" aria-label="Password change steps">
+                    <li class="password-wizard-step-indicator is-active" data-password-step-indicator="1" aria-current="step" aria-label="Step 1: Verify current password"></li>
+                    <li class="password-wizard-step-indicator" data-password-step-indicator="2" aria-label="Step 2: Create a new password"></li>
+                    <li class="password-wizard-step-indicator" data-password-step-indicator="3" aria-label="Step 3: Confirm your new password"></li>
+                </ol>
+
+                <div class="password-wizard-status" id="passwordWizardStatus" role="status" aria-live="polite" hidden></div>
+
+                <section class="password-wizard-panel is-active" data-password-step="1" aria-labelledby="passwordStepOneTitle">
+                    <div class="password-wizard-panel-heading">
+                        <div>
+                            <h2 id="passwordStepOneTitle">Verify your current password</h2>
+                            <p class="password-wizard-note" role="note">
+                                Enter the password you used to sign in.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="password-wizard-field">
+                        <label for="current_password">Current password</label>
+                        <div class="password-input-wrap">
+                            <input class="form-control" id="current_password" name="current_password" type="password" autocomplete="current-password" placeholder="Enter current password">
+                            <button type="button" class="password-visibility-toggle" data-password-toggle="current_password" aria-label="Show current password" aria-pressed="false">Show</button>
+                        </div>
+                    </div>
+                    <div class="password-wizard-actions">
+                        <button type="button" class="btn btn-outline" id="skipPasswordBtn">Skip for now</button>
+                        <button type="button" class="btn btn-primary" data-password-next="2">Continue</button>
+                    </div>
+                </section>
+
+                <section class="password-wizard-panel" data-password-step="2" aria-labelledby="passwordStepTwoTitle" hidden>
+                    <div class="password-wizard-panel-heading">
+                        <div>
+                            <h2 id="passwordStepTwoTitle">Create a new password</h2>
+                        </div>
+                    </div>
+                    <div class="password-wizard-field">
+                        <label for="new_password">New password</label>
+                        <div class="password-input-wrap">
+                            <input class="form-control" id="new_password" name="new_password" type="password" autocomplete="new-password" placeholder="Create new password">
+                            <button type="button" class="password-visibility-toggle" data-password-toggle="new_password" aria-label="Show new password" aria-pressed="false">Show</button>
+                        </div>
+                    </div>
+                    <ul class="password-requirements" aria-label="New password requirements">
+                        <li data-password-requirement="length"><i class="fas fa-circle" aria-hidden="true"></i><span>At least 8 characters</span></li>
+                        <li data-password-requirement="uppercase"><i class="fas fa-circle" aria-hidden="true"></i><span>One uppercase letter</span></li>
+                        <li data-password-requirement="number"><i class="fas fa-circle" aria-hidden="true"></i><span>One number</span></li>
+                    </ul>
+                    <div class="password-wizard-actions password-wizard-actions--split">
+                        <button type="button" class="btn btn-outline" data-password-back="1">Back</button>
+                        <button type="button" class="btn btn-primary" data-password-next="3">Continue</button>
+                    </div>
+                </section>
+
+                <section class="password-wizard-panel" data-password-step="3" aria-labelledby="passwordStepThreeTitle" hidden>
+                    <div class="password-wizard-panel-heading">
+                        <div>
+                            <h2 id="passwordStepThreeTitle">Confirm your new password</h2>
+                        </div>
+                    </div>
+                    <div class="password-wizard-field">
+                        <label for="confirm_password">Confirm new password</label>
+                        <div class="password-input-wrap">
+                            <input class="form-control" id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" placeholder="Confirm new password">
+                            <button type="button" class="password-visibility-toggle" data-password-toggle="confirm_password" aria-label="Show password confirmation" aria-pressed="false">Show</button>
+                        </div>
+                    </div>
+                    <div class="password-wizard-actions password-wizard-actions--split">
+                        <button type="button" class="btn btn-outline" data-password-back="2">Back</button>
+                        <button type="submit" class="btn btn-primary" id="changePasswordBtn"><i class="fas fa-key" aria-hidden="true"></i> Change password</button>
+                    </div>
+                </section>
+            </form>
+
+            <div class="card profile-info-card employee-profile-section">
+                <div class="card-tools">
+                    <button type="button" class="btn btn-icon" id="revealAllBtn" aria-label="Reveal All" title="Reveal All"><i class="fas fa-eye"></i></button>
+                </div>
+                <div class="card-body">
+                    <form id="securityForm">
+                        <input type="hidden" id="employee_id" name="employee_id">
+
+                        <h3 class="form-section-title">Identity</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="field-actions">
+                                    <label for="employee_number">Employee Number</label>
+                                    <button class="mask-btn" type="button" data-mask="employee_number">Show</button>
+                                </div>
+                                <input class="form-control read-only" id="employee_number" name="employee_number" type="text" readonly>
+                                <div class="field-actions"><span class="hint">Read-only (used as username).</span></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="field-actions">
+                                    <label for="date_of_birth">Date of Birth</label>
+                                    <button class="mask-btn" type="button" data-mask="date_of_birth">Show</button>
+                                </div>
+                                <input class="form-control" id="date_of_birth" name="date_of_birth" type="date" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first_name">First Name</label>
+                                <input class="form-control" id="first_name" name="first_name" type="text" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="middle_name">Middle Name</label>
+                                <input class="form-control" id="middle_name" name="middle_name" type="text" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="last_name">Last Name</label>
+                                <input class="form-control" id="last_name" name="last_name" type="text" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="name_extension">Name Extension</label>
+                                <select class="form-control" id="name_extension" name="name_extension" disabled>
+                                    <option value="">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select class="form-control" id="gender" name="gender" disabled>
+                                    <option value="">Select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="field-actions">
+                                    <label for="date_hired">Date Hired</label>
+                                    <button class="mask-btn" type="button" data-mask="date_hired">Show</button>
+                                </div>
+                                <input class="form-control" id="date_hired" name="date_hired" type="date" disabled>
+                            </div>
+                        </div>
+
+                        <div class="security-divider"></div>
+                        <h3 class="form-section-title">Contact</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="field-actions">
+                                    <label for="contact_number">Contact Number</label>
+                                    <button class="mask-btn" type="button" data-mask="contact_number">Show</button>
+                                </div>
+                                <input class="form-control" id="contact_number" name="contact_number" type="text" disabled>
+                            </div>
+                            <div class="form-group">
+                                <div class="field-actions">
+                                    <label for="email">Email</label>
+                                    <button class="mask-btn" type="button" data-mask="email">Show</button>
+                                </div>
+                                <input class="form-control" id="email" name="email" type="email" placeholder="firstname.lastname@deped.gov.ph" title="Use your DepEd email if available. Other valid email addresses are accepted." disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="field-actions">
+                                <label for="address">Address</label>
+                                <button class="mask-btn" type="button" data-mask="address">Show</button>
+                            </div>
+                            <textarea class="form-control" id="address" name="address" rows="3" disabled></textarea>
+                        </div>
+
+                        <div class="security-divider"></div>
+                        <h3 class="form-section-title">Employment</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="department">Department</label>
+                                <input class="form-control" id="department" name="department" type="text" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="position_id">Position</label>
+                                <select class="form-control" id="position_id" name="position_id" disabled>
+                                    <option value="">Select</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="security-divider"></div>
+                        <h3 class="form-section-title">Account</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="field-actions">
+                                    <label for="username">Username</label>
+                                    <button class="mask-btn" type="button" data-mask="username">Show</button>
+                                </div>
+                                <input class="form-control read-only" id="username" name="username" type="text" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="role_name">Role</label>
+                                <input class="form-control read-only" id="role_name" name="role_name" type="text" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+<script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+<script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/profile-security.js?v=20260915-password-wizard"></script>
+<script src="../assets/js/auth/security-links.js"></script>
+</body>
+</html>

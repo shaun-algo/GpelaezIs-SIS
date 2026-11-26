@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-density="compact" data-ui-scale="small">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>My Profile - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/datatable.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/masterfile-minimal.css?v=20260914-grey-canvas">
+    <link rel="stylesheet" href="../assets/css/learner-profile.css?v=20261009-employee-layout-v1">
+
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+
+    <style>
+        .learner-profile-form input:disabled,
+        .learner-profile-form select:disabled,
+        .learner-profile-form textarea:disabled,
+        .learner-profile-form input:read-only,
+        .learner-profile-form select:read-only {
+            background: var(--gray-50) !important;
+            border-color: var(--gray-300) !important;
+            color: var(--gray-900) !important;
+            opacity: 1 !important;
+            cursor: default;
+        }
+        .learner-profile-form .choices:disabled,
+        .learner-profile-form .choices.is-disabled {
+            background: var(--gray-50);
+        }
+        .learner-profile-form.readonly-form .choices,
+        .learner-profile-form.readonly-form .choices__inner,
+        .learner-profile-form.readonly-form .choices__list--dropdown,
+        .learner-profile-form.readonly-form .academic-date-trigger {
+            pointer-events: none !important;
+            cursor: default !important;
+        }
+        .learner-profile-form .birthday-picker-container input,
+        .learner-profile-form .birthday-picker-container select {
+            background: var(--gray-50) !important;
+            color: var(--gray-900) !important;
+            border-color: var(--gray-300) !important;
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="learner-profile-page learner-mobile-topbar">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Learner Portal</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Learner</span>
+                        <span class="user-role">Learner</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Account Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <section class="profile-hero learner-profile-hero" aria-labelledby="pageTitle">
+            <div class="profile-header">
+                <div class="profile-identity">
+                    <div class="profile-avatar learner-profile-avatar gender-neutral" id="learnerProfileAvatar" aria-hidden="true">LP</div>
+                    <div class="profile-info">
+                        <h1 id="pageTitle">Loading learner profile...</h1>
+                        <p id="learnerProfileRole">Learner</p>
+                        <span class="profile-presence" id="learnerProfilePresence" aria-live="polite"></span>
+                    </div>
+                </div>
+
+                <div class="profile-options" id="learnerProfileOptions" hidden>
+                    <button class="profile-options-toggle" id="learnerProfileOptionsToggle" type="button" aria-expanded="false" aria-controls="learnerProfileOptionsMenu" aria-label="Open profile options" title="Profile options">
+                        <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
+                    </button>
+                    <div class="profile-options-menu" id="learnerProfileOptionsMenu" role="menu" aria-label="Profile options" aria-hidden="true" hidden>
+                        <a href="#profileCard" data-learner-view="details" role="menuitem">
+                            <i class="fas fa-id-card" aria-hidden="true"></i>
+                            <span>Profile info</span>
+                        </a>
+                        <a href="#profileCard" data-learner-edit role="menuitem">
+                            <i class="fas fa-pen" aria-hidden="true"></i>
+                            <span>Edit profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="profileStatus" class="text-center" style="padding: 2rem; color: var(--gray-600);">
+            <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+            <p>Loading your record...</p>
+        </div>
+
+        <section class="learner-profile-panel" id="profileCard" style="display: none;" aria-label="Profile information">
+            <div class="learner-profile-layout">
+                <aside class="profile-info-rail learner-profile-rail" aria-label="Learner profile sections">
+                    <h2 id="learnerDetailsTitle">Details</h2>
+                    <nav class="profile-info-section-nav learner-profile-nav" aria-label="Learner profile sections" role="tablist">
+                        <button class="profile-info-section-tab learner-segment-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="sf1RecordForm" data-learner-segment="personal">
+                            Personal
+                        </button>
+                        <button class="profile-info-section-tab learner-segment-tab" type="button" role="tab" aria-selected="false" aria-controls="sf1RecordForm" data-learner-segment="address">
+                            Address
+                        </button>
+                        <button class="profile-info-section-tab learner-segment-tab" type="button" role="tab" aria-selected="false" aria-controls="sf1RecordForm" data-learner-segment="guardian">
+                            Family
+                        </button>
+                    </nav>
+                </aside>
+
+                <div class="profile-info-form-shell learner-profile-form-shell">
+                    <form id="sf1RecordForm" class="learner-profile-form" autocomplete="off"></form>
+                    <div class="learner-profile-edit-actions" id="learnerProfileEditActions" hidden>
+                        <button type="button" class="btn btn-outline btn-sm" id="learnerProfileCancelEdit">Cancel</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="learnerProfileSave">
+                            <i class="fas fa-check" aria-hidden="true"></i>
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+<script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/masterfiles/learner-details.js?v=20261014-fixed-grade-section-search-v1"></script>
+<script src="../js/learner-profile.js?v=20261014-fixed-grade-section-search-v1"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

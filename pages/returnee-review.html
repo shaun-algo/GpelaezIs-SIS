@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" data-density="compact">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Balik-Aral Enrollments - DepEd Academic Monitoring System</title>
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/returnee-review.css?v=20260923-returnee-source">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+</head>
+<body class="returnee-review-page">
+    <div class="logo-loader" id="logoLoader" aria-hidden="true"><div class="logo-loader-content"><img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image"></div></div>
+    <nav class="topbar">
+        <div class="topbar-left"><button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation"><i class="fas fa-bars"></i></button><div class="logo"><img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img"><div class="logo-text"><h1>G.Pelaez Integrated School</h1><p>Balik-Aral Enrollments</p></div></div></div>
+        <div class="topbar-right"><button class="notification-btn" id="notificationBtn" type="button"><i class="fas fa-bell"></i><span class="notification-badge">3</span></button><div class="user-menu"><button class="user-btn" id="userMenuBtn" type="button"><div class="user-avatar"><i class="fas fa-user"></i></div><div class="user-info"><span class="user-name">User</span><span class="user-role">Registrar</span></div><span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></button><div class="user-dropdown" id="userDropdown"><a href="profile.html"><i class="fas fa-user"></i> Profile</a><a href="settings.html"><i class="fas fa-cog"></i> Settings</a><hr><a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></div></div></div>
+    </nav>
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+    <main class="main-content" id="mainContent">
+        <div class="page-header"><div><h1 class="page-title">Balik-Aral Enrollments</h1><p class="page-subtitle">Source-record returnee statuses already enrolled for the school year.</p></div></div>
+        <section class="rr-card rr-toolbar" aria-label="Returnee filters"><div class="rr-toolbar-fields"><label>Enrollment status<select id="rrStatus"><option value="Enrolled">Enrolled</option><option value="all">All statuses</option><option value="Dropped">Dropped</option><option value="Transferred">Transferred</option><option value="Completed">Completed</option></select></label><label>Search<input id="rrSearch" type="search" placeholder="Name or LRN"></label></div><button class="btn btn-secondary" id="rrRefresh" type="button"><i class="fas fa-rotate"></i> Refresh</button></section>
+        <section class="rr-card"><div class="rr-card-head"><div><h2>Imported returnee records</h2><p id="rrCount">Loading…</p></div><span class="rr-policy-note"><i class="fas fa-lock"></i> Source status is authoritative</span></div><div class="rr-table-wrap"><table class="rr-table"><thead><tr><th>Learner</th><th>School year / grade</th><th>Section</th><th>Enrollment type</th><th>Status</th><th></th></tr></thead><tbody id="rrRows"><tr><td colspan="6" class="rr-empty">Loading records…</td></tr></tbody></table></div></section>
+    </main>
+    <div class="rr-modal" id="rrModal" hidden><section class="rr-dialog" role="dialog" aria-modal="true" aria-labelledby="rrModalTitle"><div class="rr-dialog-head"><div><h2 id="rrModalTitle">Returnee enrollment</h2><p id="rrModalMeta"></p></div><button class="rr-close" id="rrClose" type="button" aria-label="Close">&times;</button></div><div class="rr-form"><div class="rr-case-summary" id="rrSummary"></div><div class="rr-prior"><div class="rr-section-title">Enrollment history</div><div id="rrHistory" class="rr-prior-list"></div></div><div class="rr-form-actions"><button class="btn btn-primary" id="rrDone" type="button">Done</button></div></div></section></div>
+    <script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/returnee-review.js?v=20260923-returnee-source"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

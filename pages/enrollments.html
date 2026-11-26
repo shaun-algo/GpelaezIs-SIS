@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" data-density="compact">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Import Learners - DepEd Academic Monitoring System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/lis-import-wizard.css?v=20261006-spreadsheet-import-guidance-v1">
+    <link rel="stylesheet" href="../assets/css/learner-import-guide.css?v=20261105-sf1-template-download-v1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+
+    <!-- Axios -->
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body data-form-theme="clean">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <!-- Role Detection and Navigation Adjustment -->
+    <script>
+    // Wait for dashboard.js to set the global role variables
+    function waitForRoleDetection() {
+        if (typeof window.CURRENT_ROLE_NAME !== 'undefined' && window.CURRENT_ROLE_NAME) {
+            const roleName = String(window.CURRENT_ROLE_NAME).toLowerCase();
+
+            // If user is teacher, update the page to show teacher-appropriate navigation
+            if (roleName.includes('teacher')) {
+                // Update logo text
+                const logoText = document.querySelector('.logo-text p');
+                if (logoText) logoText.textContent = 'Teacher Portal';
+
+                // Hide admin-specific navigation items
+                const adminItems = document.querySelectorAll('[data-masterfile-link="roles"], [data-masterfile-link="employees"], [data-masterfile-link="positions"]');
+                adminItems.forEach(item => item.style.display = 'none');
+
+                // Update dashboard link
+                const dashboardLink = document.querySelector('.nav-list > .nav-item > .nav-link');
+                if (dashboardLink) dashboardLink.href = '../dashboard/teacher_dashboard.html';
+            }
+        } else {
+            // Role not loaded yet, wait and try again
+            setTimeout(waitForRoleDetection, 100);
+        }
+    }
+
+    // Start role detection after DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', waitForRoleDetection);
+    } else {
+        waitForRoleDetection();
+    }
+    </script>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="page-header learner-import-header">
+            <div>
+                <h1 class="page-title" id="pageTitle">Import Learners</h1>
+                <p class="page-subtitle" id="pageSubtitle"></p>
+            </div>
+            <div class="learner-import-header-actions">
+                <a class="btn btn-outline learner-import-template-link" href="../assets/templates/SF1_TEMPLATE.xlsx" download="SF1_TEMPLATE.xlsx">
+                    <i class="fas fa-file-excel" aria-hidden="true"></i> Download SF1 Sample
+                </a>
+                <button type="button" class="btn btn-outline" id="learnerImportGuideButton" aria-haspopup="dialog" aria-controls="learnerImportGuide">
+                    <i class="fas fa-circle-question learner-import-guide-icon" aria-hidden="true"></i> Import Guide
+                </button>
+            </div>
+        </div>
+
+        <section id="enroll-panel-import" class="enroll-panel">
+            <div id="liswiz" class="card card-overflow-visible">
+                <div class="liswiz-top-tabs">
+                    <button type="button" class="liswiz-tab active" data-mode="upload">Upload File</button>
+                    <button type="button" class="liswiz-tab" data-mode="spreadsheet">Spreadsheet Entry</button>
+                </div>
+
+                <div class="liswiz-step-indicator" id="liswiz-step-indicator">
+                    <div class="step active" id="liswiz-si-1">1. Upload File</div>
+                    <div class="step" id="liswiz-si-2">2. Review & Edit</div>
+                    <div class="step" id="liswiz-si-3" style="display:none">3. Mapping</div>
+                    <div class="step" id="liswiz-si-4">3. Import</div>
+                </div>
+
+                <div id="liswiz-step-1">
+                    <div id="liswiz-mode-upload">
+                        <div id="liswiz-upload-zone" class="liswiz-upload-zone" tabindex="0" role="button" aria-label="Upload LIS file">
+                            <div><i class="fas fa-file-import"></i> Drag and drop LIS CSV/XLSX here, or click to select</div>
+                        </div>
+                        <input id="liswiz-file" type="file" accept=".csv,.xlsx" style="display:none">
+                        <div id="liswiz-file-meta" style="display:none;"></div>
+                        <div id="liswiz-step1-note" style="display:none;"></div>
+
+                        <div class="ss-action-bar">
+                            <span></span>
+                            <button id="liswiz-next-1" class="btn btn-primary" type="button" disabled><i class="fas fa-arrow-right"></i> Next: Review & Edit</button>
+                        </div>
+                    </div>
+
+                    <div id="liswiz-mode-spreadsheet" style="display:none">
+
+                        <!-- Spreadsheet wizard step indicator -->
+                        <div class="liswiz-step-indicator" id="ss-step-indicator">
+                            <div class="step active" id="ss-si-1">1. Settings</div>
+                            <div class="step" id="ss-si-2">2. Enter Data</div>
+                            <div class="step" id="ss-si-3">3. Import</div>
+                        </div>
+
+                        <!-- SS Step 1: Settings -->
+                        <div id="ss-wiz-step-1">
+                            <div class="ss-panel">
+                                <p class="ss-panel-guidance" role="note">
+                                    <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+                                    <span>Select where learners will be enrolled. All fields are required.</span>
+                                </p>
+                                <div class="ss-panel-fields ss-panel-fields--3col">
+                                    <div class="ss-field">
+                                        <label for="liswiz-ss-sy">School Year</label>
+                                        <select id="liswiz-ss-sy" class="form-control">
+                                            <option value="">-- Select School Year --</option>
+                                        </select>
+                                    </div>
+                                    <div class="ss-field">
+                                        <label for="liswiz-ss-grade">Grade Level</label>
+                                        <select id="liswiz-ss-grade" class="form-control">
+                                            <option value="">-- Select Grade Level --</option>
+                                        </select>
+                                    </div>
+                                    <div class="ss-field">
+                                        <label for="liswiz-ss-section">Section</label>
+                                        <select id="liswiz-ss-section" class="form-control">
+                                            <option value="">-- Select Section --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="ss-step1-status" class="liswiz-ss-status status-info" style="display:none;"></div>
+
+                            <div class="ss-action-bar">
+                                <span></span>
+                                <button id="ss-next-1" class="btn btn-primary" type="button" disabled><i class="fas fa-arrow-right"></i> Next: Enter Learner Data</button>
+                            </div>
+                        </div>
+
+                        <!-- SS Step 2: Learner Data -->
+                        <div id="ss-wiz-step-2" style="display:none;">
+                            <div class="ss-panel ss-panel-table">
+                                <div class="ss-panel-toolbar">
+                                    <div class="ss-panel-label"><i class="fas fa-table-cells"></i> Learner Data</div>
+                                    <div class="ss-toolbar-actions">
+                                        <button id="liswiz-ss-delete-rows" class="ss-tool-btn ss-tool-btn--danger" type="button" disabled><i class="fas fa-trash-can"></i> <span>Delete</span></button>
+                                        <span class="ss-toolbar-sep"></span>
+                                        <button id="liswiz-ss-add-rows" class="ss-tool-btn" type="button"><i class="fas fa-plus"></i> <span>Add Rows</span></button>
+                                    </div>
+                                </div>
+                                <div id="liswiz-spreadsheet-wrap" class="liswiz-spreadsheet-wrap">
+                                    <table id="liswiz-spreadsheet" class="liswiz-spreadsheet">
+                                        <thead>
+                                            <tr id="liswiz-ss-header-row"></tr>
+                                        </thead>
+                                        <tbody id="liswiz-ss-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="liswiz-ss-status" class="liswiz-ss-status" style="display:none;"></div>
+
+                            <div class="ss-action-bar">
+                                <div class="ss-action-bar-left">
+                                    <button id="ss-back-2" class="btn btn-secondary" type="button"><i class="fas fa-arrow-left"></i> Back</button>
+                                    <span class="ss-row-count" id="liswiz-ss-row-count">0 learners entered</span>
+                                </div>
+                                <button id="liswiz-ss-import" class="btn btn-primary" type="button" disabled><i class="fas fa-file-import"></i> Validate & Import</button>
+                            </div>
+                        </div>
+
+                        <!-- SS Step 3: Import Progress -->
+                        <div id="ss-wiz-step-3" style="display:none;">
+                            <div id="ss-import-progress-area"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="liswiz-step-2" style="display:none;">
+
+                    <!-- Hidden assignment fields populated from detected file headers -->
+                    <div class="ss-panel" style="display:none;">
+                        <div class="ss-panel-fields ss-panel-fields--3col">
+                            <div class="ss-field">
+                                <label for="liswiz-sy">School Year</label>
+                                <select id="liswiz-sy" class="form-control"></select>
+                            </div>
+                            <div class="ss-field">
+                                <label for="liswiz-grade">Grade Level</label>
+                                <select id="liswiz-grade" class="form-control"></select>
+                            </div>
+                            <div class="ss-field">
+                                <label for="liswiz-sections">Section</label>
+                                <select id="liswiz-sections" class="form-control"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="liswiz-pwcustom-wrap" style="display:none; margin-top:8px;">
+                        <label for="liswiz-pwcustom">Custom Password</label>
+                        <input id="liswiz-pwcustom" class="form-control" type="text" placeholder="Enter default password">
+                    </div>
+
+                    <div id="liswiz-step2-note" class="liswiz-ss-status" style="display:none;"></div>
+
+                    <!-- Learner Data table panel (editable) -->
+                    <div class="ss-panel ss-panel-table" id="liswiz-review-panel" style="display:none;">
+                        <div class="ss-panel-toolbar">
+                            <div class="ss-panel-label"><i class="fas fa-table-cells"></i> Learner Data</div>
+                            <div class="ss-toolbar-actions">
+                                <div id="liswiz-review-chips" class="ss-review-chips"></div>
+                            </div>
+                        </div>
+                        <div id="liswiz-review" class="liswiz-spreadsheet-wrap"></div>
+                    </div>
+
+                    <!-- Action bar -->
+                    <div class="ss-action-bar" id="liswiz-step2-actions" style="display:none;">
+                        <button id="liswiz-back-2" class="btn btn-secondary btn-sm" type="button"><i class="fas fa-arrow-left"></i> Back</button>
+                        <button id="liswiz-next-2" class="btn btn-primary" type="button" disabled><i class="fas fa-check"></i> Confirm & Import</button>
+                    </div>
+
+                    <div id="liswiz-hidden-options" style="display:none">
+                        <select id="liswiz-etype" class="form-control"></select>
+                        <select id="liswiz-dup" class="form-control">
+                            <option value="skip">Skip existing learners</option>
+                            <option value="update">Update existing learners</option>
+                        </select>
+                        <select id="liswiz-pwmode" class="form-control" style="display:none">
+                            <option value="lrn">Use LRN</option>
+                            <option value="dob">Use Birth Date</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="liswiz-step-3" style="display:none;">
+                    <div id="liswiz-mapping"></div>
+                    <div id="liswiz-step3-note" style="display:none; margin-top:8px; color:#b91c1c;"></div>
+                    <div style="display:flex; justify-content:space-between; margin-top:12px;">
+                        <button id="liswiz-back-3" class="btn btn-secondary" type="button">Back</button>
+                        <button id="liswiz-next-3" class="btn btn-primary" type="button" disabled>Start Import</button>
+                    </div>
+                </div>
+
+                <div id="liswiz-step-4" style="display:none;">
+                    <div class="liswiz-step4-progress">
+                        <div id="liswiz-prog-label" class="liswiz-prog-label">
+                            <i class="fas fa-spinner fa-spin"></i> Importing learners...
+                        </div>
+                        <div class="liswiz-progress"><div id="liswiz-prog"></div></div>
+                    </div>
+                    <div id="liswiz-log" class="liswiz-log"></div>
+
+                    <div id="liswiz-summary-card" class="liswiz-summary-card" style="display:none;">
+                        <div id="liswiz-summary-header" class="liswiz-summary-header"></div>
+                        <div class="liswiz-summary">
+                            <div class="item"><div class="label">Total</div><div id="liswiz-sum-total" class="val">0</div></div>
+                            <div class="item"><div class="label">Imported</div><div id="liswiz-sum-ok" class="val" style="color:#16a34a">0</div></div>
+                            <div class="item"><div class="label">Skipped</div><div id="liswiz-sum-skip" class="val" style="color:#d97706">0</div></div>
+                            <div class="item"><div class="label">Failed</div><div id="liswiz-sum-err" class="val" style="color:#dc2626">0</div></div>
+                        </div>
+                        <div class="ss-action-bar">
+                            <button id="liswiz-reset" class="btn btn-primary" type="button"><i class="fas fa-plus"></i> Import Another File</button>
+                        </div>
+                    </div>
+
+                    <div id="liswiz-results-table" style="display:none;"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <dialog class="learner-import-guide" id="learnerImportGuide" aria-labelledby="learnerImportGuideTitle" aria-describedby="learnerImportGuideIntro">
+        <div class="learner-import-guide-header">
+            <h2 id="learnerImportGuideTitle"><i class="fas fa-circle-question learner-import-guide-icon" aria-hidden="true"></i> How to Import Learners</h2>
+            <button type="button" class="learner-import-guide-close" data-close-import-guide aria-label="Close import guide" autofocus><i class="fas fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="learner-import-guide-body">
+            <p id="learnerImportGuideIntro">Add learner records and enroll them in the selected school year and section. Choose the method that matches your starting point.</p>
+            <section class="learner-import-guide-prep" aria-labelledby="importGuidePrepare">
+                <h3 id="importGuidePrepare">Before you begin</h3>
+                <p>Use your <strong>SF1 form in Excel (.xlsx) format</strong> to import learners. Check the target <strong>School Year, Grade Level, and Section</strong> before importing. If any of these records are missing, contact your administrative staff for assistance.</p>
+            </section>
+            <div class="learner-import-guide-methods">
+                <section aria-labelledby="importGuideUpload">
+                    <h3 id="importGuideUpload"><i class="fas fa-file-import" aria-hidden="true"></i> Upload File</h3>
+                    <p>Use this when you already have a LIS/SF1 learner file.</p>
+                    <ol>
+                        <li>Choose <strong>Upload File</strong>, then drop or select a <strong>.csv</strong> or <strong>.xlsx</strong> file.</li>
+                        <li>Check the detected file details, then select <strong>Next: Review &amp; Edit</strong>.</li>
+                        <li>Confirm the school year, grade level, and section. Review the learner rows and correct any highlighted values or reported issues.</li>
+                        <li>Select <strong>Confirm &amp; Import</strong> when ready to save the learners. Wait for the import to finish.</li>
+                        <li>Check the <strong>Imported, Skipped, and Failed</strong> totals to review the outcome.</li>
+                    </ol>
+                </section>
+                <section aria-labelledby="importGuideSpreadsheet">
+                    <h3 id="importGuideSpreadsheet"><i class="fas fa-table-cells" aria-hidden="true"></i> Spreadsheet Entry</h3>
+                    <p>Use this to type or paste learner data into the page.</p>
+                    <ol>
+                        <li>Choose <strong>Spreadsheet Entry</strong> and select the school year, grade level, and section.</li>
+                        <li>Select <strong>Next: Enter Learner Data</strong>.</li>
+                        <li>Enter one learner per row. Match pasted values to the column headings. Use <strong>Add Rows</strong> for more space.</li>
+                        <li>Review the entries, then select <strong>Validate &amp; Import</strong>. This checks the data and starts saving if validation passes.</li>
+                        <li>Fix any highlighted cells or reported issues and try again. After completion, review the import summary before adding more learners.</li>
+                    </ol>
+                </section>
+            </div>
+            <section class="learner-import-guide-promotion" aria-labelledby="importGuidePromotion">
+                <h3 id="importGuidePromotion">How promotion checks work during import</h3>
+                <p>For an existing learner entering a new school year, the import checks their latest earlier enrollment before accepting the target grade.</p>
+                <ul>
+                    <li><strong>With a promotion record:</strong> the selected grade must match its recommendation. Import is blocked for <strong>Retained</strong>, <strong>Conditionally Promoted</strong>, or <strong>Completed</strong> with no next grade.</li>
+                    <li><strong>Without a promotion record:</strong> Grades 2-10 use subject offerings, complete passing numeric final grades, and a general average of at least 75. Grade 1 descriptive mode instead requires every PACE A-E rating for Terms 1-3; numeric final grades and a general average are not required. The selected grade must match the expected next grade when one is configured.</li>
+                    <li><strong>No earlier enrollment:</strong> an existing learner receives a warning and can receive a new school-year enrollment if the other checks pass.</li>
+                    <li><strong>Reimporting an existing learner:</strong> when the <strong>School Year and Grade Level are the same</strong> but the section is different, completing the import updates the existing enrollment and moves the learner <strong>from the previous section to the selected section</strong>. The review message shows the move (for example, <strong>Section A → Section B</strong>). If the section is also the same, the import refreshes personal details.</li>
+                    <li><strong>If blocked:</strong> read the row’s message. Ask your registrar or administrator to verify the promotion status, complete academic records, or correct the target grade before retrying.</li>
+                </ul>
+            </section>
+            <section class="learner-import-guide-promotion" aria-labelledby="importGuideReturnee">
+                <h3 id="importGuideReturnee">External Returnee / Balik-Aral rows</h3>
+                <p>The imported LIS/DepEd source record is authoritative when Remarks is present. A row marked <strong>Balik-Aral</strong> or <strong>Returnee</strong> is enrolled for the new school year with <strong>Entry Classification: Returnee</strong>. The previous enrollment is kept unchanged.</p>
+                <ul>
+                    <li>The target enrollment status is <strong>Enrolled</strong> and its enrollment type is <strong>Balik-Aral</strong>.</li>
+                    <li>If Remarks is blank, the importer checks the latest prior grade record. Same-grade re-entry with missing or failing final grades is treated as Returnee; otherwise promotion checks apply.</li>
+                    <li>The import does not infer returnee status from a school-year gap and does not create a pending approval step.</li>
+                    <li>Review the stored <strong>Entry Classification</strong> and <strong>Enrollment Status</strong> in the standard <strong>Enrollments</strong> list; no separate review or approval page is required.</li>
+                </ul>
+            </section>
+            <section class="learner-import-guide-promotion" aria-labelledby="importGuideTransferIn">
+                <h3 id="importGuideTransferIn">Transfer-In rows</h3>
+                <p>Use <strong>Transferred In</strong>, <strong>Transfer-In</strong>, <strong>T/I</strong>, or <strong>TI</strong> in the source <strong>Remarks</strong> column. The learner will be enrolled here as <strong>Transfer-In</strong> without using local promotion history.</p>
+                <ul>
+                    <li>The learner’s LRN remains the single learner record.</li>
+                    <li>The new enrollment is stored as <strong>Enrolled / Transfer-In</strong>.</li>
+                    <li>Previous-school details can be entered manually in <strong>Learner Registration → Previous School Information</strong> when the school needs the history displayed locally.</li>
+                    <li>Previous grades can be entered manually in <strong>SF10 → Previous-school records</strong>; they remain separate from this school’s report-card grades and are not an import requirement.</li>
+                </ul>
+            </section>
+            <section class="learner-import-guide-promotion" aria-labelledby="importGuideSourceStatuses">
+                <h3 id="importGuideSourceStatuses">Source status handling</h3>
+                <p>The imported LIS/SF1 status is authoritative. The app stores the status and applies its local roster/report behavior; it does not repeat external document or previous-school grade checks.</p>
+                <ul>
+                    <li><strong>T/O</strong> or <strong>Transferred Out</strong> marks the enrollment as Transferred Out and preserves its history.</li>
+                    <li><strong>DRP</strong>, <strong>Dropped</strong>, or <strong>Dropped Out</strong> marks the enrollment as Dropped for consolidated reporting.</li>
+                    <li><strong>LE</strong> or <strong>Late Enrollment</strong> keeps the learner Enrolled with Entry Classification: Late Enrollment.</li>
+                    <li><strong>LWD</strong> is stored as a separate BoSY learner identifier and does not change enrollment or grade-entry eligibility.</li>
+                </ul>
+            </section>
+            <section class="learner-import-guide-help" aria-labelledby="importGuideHelp">
+                <h3 id="importGuideHelp">Need help with a message?</h3>
+                <ul>
+                    <li><strong>Missing columns or invalid values:</strong> check the named column or row. Keep the file’s column headings, correct the data, and upload again if needed.</li>
+                    <li><strong>Duplicate or existing learner:</strong> check the LRN and the reported result before importing again. Do not change an LRN just to bypass a duplicate message.</li>
+                    <li><strong>Section capacity or promotion issue:</strong> verify the selected grade and section with your registrar or administrator.</li>
+                    <li><strong>Skipped or failed rows:</strong> these are not counted as successfully imported. Read their messages and check existing records before retrying.</li>
+                </ul>
+            </section>
+        </div>
+        <div class="learner-import-guide-footer"><button type="button" class="btn btn-primary" data-close-import-guide>Got it</button></div>
+    </dialog>
+
+
+<script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/registration/learner-import-guide.js?v=20260910"></script>
+    <script src="../js/registration/lis-import-wizard.js?v=20261014-import-status-v1"></script>
+    <script src="../js/registration/lis-spreadsheet-entry.js?v=20261006-remove-spreadsheet-template-v1"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

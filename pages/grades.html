@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Grades - DepEd Academic Monitoring System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/datatable.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+
+    <!-- Axios -->
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        .grade-pass { color: var(--color-success); font-weight: 700; }
+        .grade-fail { color: var(--color-danger); font-weight: 700; }
+        .grade-row-pass { background: color-mix(in srgb, var(--color-success) 8%, transparent); }
+        .grade-row-fail { background: color-mix(in srgb, var(--color-danger) 8%, transparent); }
+        .grade-row-partial { background: color-mix(in srgb, var(--color-warning) 4%, transparent); }
+
+        .lg-pill { display:inline-flex; align-items:center; gap:8px; padding: 6px 12px; border-radius: 999px; font-weight: 800; font-size: 12px; }
+        .lg-pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-500); }
+        .lg-pill-present { color: var(--color-success); border: 1px solid color-mix(in srgb, var(--color-success) 30%, transparent); background: color-mix(in srgb, var(--color-success) 10%, transparent); }
+        .lg-pill-present .lg-pill-dot { background: var(--color-success); }
+        .lg-pill-absent { color: var(--color-danger); border: 1px solid color-mix(in srgb, var(--color-danger) 30%, transparent); background: color-mix(in srgb, var(--color-danger) 10%, transparent); }
+        .lg-pill-absent .lg-pill-dot { background: var(--color-danger); }
+        .lg-pill-info { color: var(--color-info); border: 1px solid color-mix(in srgb, var(--color-info) 30%, transparent); background: color-mix(in srgb, var(--color-info) 10%, transparent); }
+        .lg-pill-info .lg-pill-dot { background: var(--color-info); }
+        .lg-pill-warn { color: var(--color-warning); border: 1px solid color-mix(in srgb, var(--color-warning) 30%, transparent); background: color-mix(in srgb, var(--color-warning) 10%, transparent); }
+        .lg-pill-warn .lg-pill-dot { background: var(--color-warning); }
+
+        #lgSchoolYear { position: relative; z-index: 1000; }
+        #learnerGradesView .form-group { position: relative; z-index: 1000; }
+        #learnerGradesView .card { overflow: visible; }
+
+        .mapeh-row { cursor: pointer; }
+        .mapeh-row:hover { background: color-mix(in srgb, var(--primary-color) 8%, transparent); }
+        .mapeh-component-row { display: none !important; background: color-mix(in srgb, var(--gray-500) 4%, transparent); }
+        .mapeh-component-row td:first-child { border-left: 3px solid var(--primary-color); }
+    </style>
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body>
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>DepEd Academic Monitoring</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+<div class="page-header">
+            <div>
+                <h1 class="page-title" id="pageTitle">Grades</h1>
+                <p class="page-subtitle" id="pageSubtitle"></p>
+            </div>
+        </div>
+
+        <div id="learnerGradesView" style="display: none;">
+            <div class="card" style="margin-bottom: 1rem;">
+                <div class="card-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+                    <h2 class="card-title">My Grades</h2>
+                    <div class="form-group" style="margin:0;">
+                        <label class="form-label" for="lgSchoolYear" style="margin-right:0.5rem;">School Year</label>
+                        <select id="lgSchoolYear" class="form-control" style="min-width: 180px;"></select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="lgSummary" style="display:flex; gap:1.5rem; flex-wrap:wrap; margin-bottom:1rem;"></div>
+                    <div class="table-container" id="lgTableContainer">
+                        <table class="data-table" id="lgGradesTable">
+                            <thead id="lgTableHead"></thead>
+                            <tbody id="lgTableBody">
+                                <tr><td colspan="10" class="text-center">Select a school year to view your grades.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="lgEmpty" class="text-center" style="display:none; padding: 2rem; color: var(--gray-600);">
+                        <video class="mp4-surface-blend empty-state-video" autoplay loop muted playsinline preload="metadata" aria-hidden="true"><source src="../assets/icons/learners.mp4" type="video/mp4"></video>
+                        <p>No grades found for the selected school year.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="gradesManagementCard">
+            <div class="table-header-section">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search..." class="search-input">
+                </div>
+                <button class="btn btn-primary" id="addButton" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i>
+                    <span id="addButtonLabel">Add Record</span>
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table" id="dataTable">
+                    <thead>
+                        <tr id="dataTableHead">
+                            <th>Loading...</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody">
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading records...
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination-section">
+                <div class="pagination-info">
+                    Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span id="totalRecords">0</span> entries
+                </div>
+                <div class="pagination">
+                    <button class="pagination-btn" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="pagination-info">
+                        Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                    </span>
+                    <button class="pagination-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="recordModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add Record</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="recordForm">
+                    <input type="hidden" id="recordId">
+                    <div id="dynamicFields"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveRecord()">
+                    <i class="fas fa-save"></i>
+                    <span id="saveButtonText">Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+<script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/masterfiles/masterfile-dialog.js?v=20260913"></script>
+    <script src="../js/masterfiles/masterfile-common.js?v=20261008-empty-media-v1"></script>
+    <script src="../js/masterfiles/grades.js?v=20260824-mapeh-classic-first"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>SF10 Permanent Record - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        .sf10-shell { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 14px; align-items: start; }
+        .sf10-panel { position: relative; border: 1px solid var(--gray-200); background: var(--surface-0); border-radius: 8px; overflow: hidden; }
+        .sf10-panel:first-child { overflow: visible; z-index: 30; }
+        .sf10-panel:nth-child(2) { z-index: 1; }
+        .sf10-panel-head { padding: 12px 14px; border-bottom: 1px solid var(--gray-200); font-weight: 800; color: var(--gray-900); }
+        .sf10-panel-body { position: relative; padding: 12px; }
+        .sf10-filters { display: grid; gap: 10px; z-index: 60; background: var(--surface-0); }
+        .sf10-filter-field { display: grid; gap: 5px; }
+        .sf10-filter-field > span { color: var(--gray-600); font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+        .sf10-filters select,
+        .sf10-filters option { position: relative; z-index: 70; background: var(--surface-0); color: var(--gray-900); }
+        .sf10-student-list { position: relative; z-index: 1; max-height: 62vh; overflow: auto; }
+        .sf10-student-item { width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--gray-200); background: transparent; padding: 10px 12px; cursor: pointer; }
+        .sf10-student-item:hover, .sf10-student-item.active { background: #eef6ff; }
+        .sf10-student-item strong { display: block; font-size: 13px; color: var(--gray-900); }
+        .sf10-student-item span { display: block; font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+        .sf10-preview-toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .sf10-preview-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+        .sf10-preview-frame { width: 100%; min-height: 72vh; border: 1px solid var(--gray-200); background: #8b95a1; border-radius: 8px; }
+        .sf10-history-modal { position: fixed; inset: 0; z-index: 1100; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }
+        .sf10-history-modal[hidden] { display: none; }
+        .sf10-history-dialog { display: flex; width: min(1080px, 100%); max-height: min(92vh, 900px); flex-direction: column; overflow: hidden; border: 1px solid var(--gray-200); border-radius: 12px; background: var(--surface-0); color: var(--gray-900); box-shadow: 0 22px 70px rgba(15, 23, 42, .24); }
+        .sf10-history-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 18px 22px; border-bottom: 1px solid color-mix(in srgb, var(--deped-blue) 18%, var(--gray-200)); background: color-mix(in srgb, var(--deped-blue) 4%, var(--surface-0)); }
+        .sf10-history-head > div { min-width: 0; }
+        .sf10-history-head h2 { margin: 0; background: none; border: 0; padding: 0; color: var(--gray-950, var(--gray-900)); text-align: left; font-size: clamp(18px, 2.1vw, 23px); font-weight: 850; letter-spacing: -.025em; line-height: 1.18; }
+        .sf10-history-head p { margin: 5px 0 0; color: var(--gray-600); font-size: 12px; }
+        .sf10-history-close { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border: 1px solid var(--gray-300); border-radius: 8px; background: var(--surface-0); color: var(--gray-700); font-size: 22px; cursor: pointer; }
+        .sf10-history-close:hover { border-color: var(--deped-blue); background: color-mix(in srgb, var(--deped-blue) 8%, var(--surface-0)); color: var(--deped-blue); }
+        .sf10-history-body { display: block; min-height: 0; overflow: auto; padding: 18px 22px 22px; background: var(--gray-50, #f8fafc); }
+        .sf10-history-list-panel, .sf10-history-form-panel { min-width: 0; }
+        .sf10-history-form-panel { max-width: 980px; margin: 0 auto; padding: 20px; border: 1px solid var(--gray-200); border-radius: 12px; background: var(--surface-0); box-shadow: 0 8px 24px rgba(15, 23, 42, .05); }
+        .sf10-history-head-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+        .sf10-history-load-modal { position: fixed; inset: 0; z-index: 1120; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .64); }
+        .sf10-history-load-modal[hidden] { display: none; }
+        .sf10-history-load-dialog { width: min(560px, 100%); max-height: min(76vh, 680px); overflow: auto; border: 1px solid var(--gray-200); border-radius: 12px; background: var(--surface-0); color: var(--gray-900); box-shadow: 0 22px 70px rgba(15, 23, 42, .28); }
+        .sf10-history-load-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 18px 20px; border-bottom: 1px solid var(--gray-200); }
+        .sf10-history-load-head h3 { margin: 0; font-size: 17px; line-height: 1.2; }
+        .sf10-history-load-head p { margin: 5px 0 0; color: var(--gray-600); font-size: 12px; line-height: 1.4; }
+        .sf10-history-load-body { padding: 14px 20px 20px; }
+        .sf10-history-list { display: grid; gap: 8px; }
+        .sf10-history-item { display: grid; gap: 6px; width: 100%; padding: 10px 11px; border: 1px solid var(--gray-200); border-radius: 8px; background: var(--surface-1, var(--surface-0)); color: var(--gray-900); text-align: left; }
+        .sf10-history-item:hover, .sf10-history-item.is-active { border-color: var(--deped-blue); background: color-mix(in srgb, var(--deped-blue) 8%, var(--surface-0)); }
+        .sf10-history-item strong { font-size: 13px; }
+        .sf10-history-item span { color: var(--gray-600); font-size: 11px; }
+        .sf10-history-item-main { display: grid; gap: 3px; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; text-align: left; cursor: pointer; }
+        .sf10-history-item-main:focus-visible, .sf10-history-remove-record:focus-visible { outline: 2px solid var(--deped-blue); outline-offset: 3px; }
+        .sf10-history-remove-record { width: max-content; padding: 0; border: 0; background: transparent; color: var(--gray-600); font-size: 11px; cursor: pointer; }
+        .sf10-history-remove-record:hover { color: #b42318; text-decoration: underline; }
+        .sf10-history-empty { padding: 15px 4px; color: var(--gray-600); font-size: 12px; line-height: 1.45; }
+        .sf10-history-form { display: grid; gap: 13px; }
+        .sf10-history-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+        .sf10-history-grid .span-2 { grid-column: span 2; }
+        .sf10-history-field { display: grid; gap: 5px; min-width: 0; }
+        .sf10-history-field label { color: var(--gray-700); font-size: 11px; font-weight: 800; }
+        .sf10-history-field input, .sf10-history-field select { width: 100%; min-height: 36px; padding: 7px 9px; border: 1px solid var(--gray-300); border-radius: 6px; background: var(--surface-0); color: var(--gray-900); }
+        .sf10-history-field select[data-native="true"], .sf10-history-grade-row select[data-native="true"] { appearance: auto; cursor: pointer; }
+        .sf10-history-check { display: flex; align-items: center; gap: 7px; color: var(--gray-700); font-size: 12px; font-weight: 700; }
+        .sf10-history-check input { width: 16px; height: 16px; }
+        .sf10-history-section-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--gray-200); color: var(--gray-800); font-size: 12px; font-weight: 900; }
+        .sf10-history-grade-rows { display: grid; gap: 8px; }
+        .sf10-history-grade-row { display: grid; grid-template-columns: minmax(130px, 1.65fr) repeat(4, minmax(50px, .55fr)) minmax(90px, .9fr) minmax(90px, .9fr) 30px; gap: 5px; align-items: center; }
+        .sf10-history-grade-field { min-width: 0; }
+        .sf10-history-grade-field label { display: none; }
+        .sf10-history-grade-row input, .sf10-history-grade-row select { width: 100%; min-width: 0; min-height: 34px; padding: 6px 7px; border: 1px solid var(--gray-300); border-radius: 5px; background: var(--surface-0); color: var(--gray-900); font-size: 12px; }
+        .sf10-history-grade-row input::placeholder { color: var(--gray-500); }
+        .sf10-history-remove-grade { width: 30px; height: 30px; border: 0; border-radius: 5px; background: transparent; color: var(--gray-600); cursor: pointer; }
+        .sf10-history-remove-grade:hover { background: var(--gray-100); color: #b42318; }
+        .sf10-history-form-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 5px; }
+        .sf10-history-note { margin: 0; padding: 9px 10px; border: 1px solid color-mix(in srgb, #b54708 30%, var(--gray-200)); border-radius: 7px; background: color-mix(in srgb, #f79009 10%, var(--surface-0)); color: var(--gray-700); font-size: 11px; line-height: 1.45; }
+        @media (max-width: 760px) {
+            .sf10-history-body { grid-template-columns: 1fr; }
+            .sf10-history-list-panel { border-right: 0; border-bottom: 1px solid var(--gray-200); padding: 0 0 14px; }
+            .sf10-history-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sf10-history-grid .span-2 { grid-column: span 2; }
+            .sf10-history-grade-head { display: none; }
+            .sf10-history-grade-rows { display: grid; gap: 10px; padding-bottom: 3px; }
+            .sf10-history-grade-row { min-width: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; padding: 11px; border: 1px solid var(--gray-200); border-radius: 9px; background: var(--surface-1, var(--surface-0)); }
+            .sf10-history-grade-field { display: grid; gap: 4px; }
+            .sf10-history-grade-field label { display: block; color: var(--gray-600); font-size: 10px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; }
+            .sf10-history-grade-field--subject, .sf10-history-grade-field--remarks { grid-column: span 2; }
+            .sf10-history-grade-field--subject { padding-right: 34px; }
+            .sf10-history-grade-row input { min-height: 38px; padding: 8px 9px; border-radius: 6px; }
+            .sf10-history-remove-grade { position: absolute; top: 8px; right: 8px; }
+            .sf10-history-grade-row { position: relative; }
+        }
+        @media (max-width: 980px) { .sf10-shell { grid-template-columns: 1fr; } }
+
+        .sf10-history-wizard-intro { margin-bottom: 18px; }
+        .sf10-history-wizard-kicker { display: block; margin-bottom: 7px; color: var(--deped-blue, #0055a4); font-size: 10px; font-weight: 850; letter-spacing: .14em; line-height: 1.2; text-transform: uppercase; }
+        .sf10-history-wizard-intro h3 { margin: 0; color: var(--gray-900); font-size: clamp(18px, 2vw, 22px); letter-spacing: -.025em; line-height: 1.15; }
+        .sf10-history-wizard-intro p { margin: 6px 0 0; color: var(--gray-600); font-size: 12px; line-height: 1.45; }
+        .sf10-history-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin: 0 0 17px; padding: 0; list-style: none; }
+        .sf10-history-step-indicator { display: flex; min-width: 0; align-items: center; gap: 8px; padding: 9px 10px; border: 1px solid var(--gray-200); border-radius: 8px; background: var(--surface-1, var(--surface-0)); color: var(--gray-600); transition: border-color 180ms var(--sf10-ease, cubic-bezier(.22, 1, .36, 1)), background-color 180ms var(--sf10-ease, cubic-bezier(.22, 1, .36, 1)), color 180ms var(--sf10-ease, cubic-bezier(.22, 1, .36, 1)); }
+        .sf10-history-step-indicator span { display: grid; width: 23px; height: 23px; flex: 0 0 23px; place-items: center; border-radius: 6px; background: var(--gray-100); color: var(--gray-600); font-size: 10px; font-weight: 850; }
+        .sf10-history-step-indicator strong { min-width: 0; overflow: hidden; font-size: 11px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+        .sf10-history-step-indicator.is-active { border-color: color-mix(in srgb, var(--deped-blue, #0055a4) 48%, var(--gray-200)); background: color-mix(in srgb, var(--deped-blue, #0055a4) 7%, var(--surface-0)); color: var(--gray-900); }
+        .sf10-history-step-indicator.is-active span { background: var(--deped-blue, #0055a4); color: #fff; }
+        .sf10-history-step-indicator.is-complete { border-color: color-mix(in srgb, #39714f 38%, var(--gray-200)); color: #39714f; }
+        .sf10-history-step-indicator.is-complete span { background: #e9f5ed; color: #39714f; }
+        .sf10-history-step-panel[hidden] { display: none !important; }
+        .sf10-history-status { margin: 0 0 14px; padding: 9px 11px; border: 1px solid var(--gray-200); border-radius: 8px; background: var(--surface-1, var(--surface-0)); color: var(--gray-700); font-size: 12px; line-height: 1.4; }
+        .sf10-history-status[hidden] { display: none; }
+        .sf10-history-status--error { border-color: #efc7c9; background: #fff5f5; color: #9b2c2c; }
+        .sf10-history-step-heading { display: grid; gap: 4px; margin-bottom: 14px; }
+        .sf10-history-step-heading > span { color: var(--gray-600); font-size: 11px; line-height: 1.35; }
+        .sf10-history-step-heading h4 { margin: 0; color: var(--gray-900); font-size: 15px; letter-spacing: -.01em; line-height: 1.25; }
+        .sf10-history-step-heading--row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+        .sf10-history-step-heading--row .btn { flex: 0 0 auto; min-height: 38px; }
+        .sf10-history-form-actions { align-items: center; justify-content: space-between; margin-top: 19px; padding-top: 14px; border-top: 1px solid var(--gray-200); }
+        .sf10-history-form-actions .btn { min-height: 42px; border-radius: 8px; font-weight: 750; transition: transform 180ms var(--sf10-ease, cubic-bezier(.22, 1, .36, 1)), background-color 180ms var(--sf10-ease, cubic-bezier(.22, 1, .36, 1)), border-color 180ms var(--sf10-ease, cubic-bezier(.22, 1, .36, 1)); }
+        .sf10-history-form-actions .btn:active { transform: scale(.98); }
+        .sf10-history-form-actions--split { justify-content: space-between; }
+        .sf10-history-form-actions--end { justify-content: flex-end; }
+        .sf10-history-action-group { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+        .sf10-history-step-note { color: var(--gray-600); font-size: 11px; }
+        .sf10-history-grade-count { margin: 8px 0 0; color: var(--gray-600); font-size: 11px; }
+        .sf10-history-rating-tools { display: grid; grid-template-columns: minmax(180px, .6fr) minmax(180px, .4fr); gap: 10px; margin-bottom: 14px; }
+        .sf10-history-rating-summary { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: 14px; }
+        .sf10-history-average-editor { display: grid; gap: 4px; width: min(230px, 100%); }
+        .sf10-history-average-assist { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; color: var(--gray-600); font-size: 11px; line-height: 1.4; }
+        .sf10-history-use-calculated { padding: 0; border: 0; background: transparent; color: var(--deped-blue); font-size: 11px; font-weight: 800; cursor: pointer; }
+        .sf10-history-use-calculated:hover { text-decoration: underline; }
+        .sf10-history-rating-summary p { max-width: 420px; margin: 0; color: var(--gray-600); font-size: 11px; line-height: 1.4; text-align: right; }
+        .sf10-history-grade-row input[readonly] { background: var(--gray-50, #f8fafc); color: var(--gray-700); cursor: default; }
+        .sf10-history-grade-head { display: grid; grid-template-columns: minmax(130px, 1.65fr) repeat(4, minmax(50px, .55fr)) minmax(90px, .9fr) minmax(90px, .9fr) 30px; gap: 5px; min-width: 650px; margin-bottom: 5px; padding: 0 7px; color: var(--gray-600); font-size: 10px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; }
+        .sf10-history-grade-head span:not(:first-child) { text-align: center; }
+        .sf10-history-grade-rows { padding-bottom: 3px; }
+        .sf10-history-grade-row { min-width: 0; }
+        @media (min-width: 761px) {
+            .sf10-history-grade-head.is-three-term,
+            .sf10-history-grade-rows.is-three-term .sf10-history-grade-row { grid-template-columns: minmax(130px, 1.65fr) repeat(3, minmax(50px, .55fr)) minmax(90px, .9fr) minmax(90px, .9fr) 30px; }
+        }
+        .sf10-history-note { border-radius: 8px; }
+        @media (max-width: 760px) {
+            .sf10-history-steps { gap: 5px; }
+            .sf10-history-body { padding: 14px 12px 16px; }
+            .sf10-history-form-panel { padding: 15px; }
+            .sf10-history-head-actions { gap: 5px; }
+            .sf10-history-head-actions .btn { padding-inline: 8px; }
+            .sf10-history-load-modal { align-items: end; padding: 0; }
+            .sf10-history-load-dialog { width: 100%; max-height: min(84dvh, 680px); border-radius: 18px 18px 0 0; }
+            .sf10-history-rating-tools { grid-template-columns: 1fr; }
+            .sf10-history-rating-summary { align-items: stretch; flex-direction: column; }
+            .sf10-history-average-editor { width: 100%; }
+            .sf10-history-rating-summary p { max-width: none; text-align: left; }
+            .sf10-history-grade-head { display: none; }
+            .sf10-history-step-indicator { justify-content: center; padding: 8px 6px; }
+            .sf10-history-step-indicator strong { display: none; }
+            .sf10-history-step-heading--row { align-items: stretch; flex-direction: column; }
+            .sf10-history-step-heading--row .btn { width: 100%; }
+            .sf10-history-form-actions { align-items: stretch; flex-wrap: wrap; }
+            .sf10-history-form-actions .btn { flex: 1 1 130px; }
+            .sf10-history-action-group { width: 100%; }
+            .sf10-history-action-group .btn { flex: 1 1 0; }
+            .sf10-history-step-note { width: 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .sf10-history-step-indicator,
+            .sf10-history-form-actions .btn { transition: none; }
+            .sf10-history-form-actions .btn:active { transform: none; }
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/css/sf10-premium.css?v=20260923-sf10-dropdown-layer">
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="sf10-page">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>SF10 Permanent Record</p>
+                </div>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-info">
+                        <span class="user-name">User</span>
+                        <span class="user-role">Role</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <main class="main-content" id="mainContent">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">School Form 10</h1>
+            </div>
+        </div>
+
+        <div class="sf10-shell">
+            <section class="sf10-panel">
+                <div class="sf10-panel-head">Learners</div>
+                <div class="sf10-panel-body sf10-filters">
+                    <label class="sf10-filter-field">
+                        <span>School Year</span>
+                        <select class="form-control" id="sf10SchoolYearSelect" aria-label="School Year"></select>
+                    </label>
+                    <label class="sf10-filter-field">
+                        <span>Year Level</span>
+                        <select class="form-control" id="sf10YearLevelSelect" aria-label="Year Level"></select>
+                    </label>
+                    <label class="sf10-filter-field">
+                        <span>Section</span>
+                        <select class="form-control" id="sf10SectionSelect" aria-label="Section"></select>
+                    </label>
+                    <input class="form-control" id="sf10Search" type="text" placeholder="Search name or LRN..." aria-label="Search learners">
+                </div>
+                <div class="sf10-student-list" id="sf10LearnerList"></div>
+            </section>
+
+            <section class="sf10-panel">
+                <div class="sf10-panel-body">
+                    <div class="sf10-preview-toolbar">
+                        <div>
+                            <div id="sf10SelectedLabel" style="font-weight:800; color:var(--gray-700);">Select a learner to preview SF10.</div>
+                        </div>
+                        <div class="sf10-preview-actions">
+                            <button class="btn btn-secondary" id="sf10HistoryBtn" type="button" disabled><i class="fas fa-school" aria-hidden="true"></i> Previous-school history</button>
+                            <button class="btn btn-secondary" id="sf10SavePreviewBtn" type="button" disabled><i class="fas fa-save"></i> Save Preview Edits</button>
+                            <button class="btn btn-primary" id="sf10PrintBtn" type="button" disabled><i class="fas fa-print"></i> Print SF10</button>
+                        </div>
+                    </div>
+                    <iframe id="sf10Frame" class="sf10-preview-frame" title="School Form 10 document"></iframe>
+                </div>
+            </section>
+        </div>
+
+        <div class="sf10-history-modal" id="sf10HistoryModal" hidden>
+            <section class="sf10-history-dialog" role="dialog" aria-modal="true" aria-labelledby="sf10HistoryTitle">
+                <div class="sf10-history-head">
+                    <div>
+                        <h2 id="sf10HistoryTitle">Previous-school academic history</h2>
+                    </div>
+                    <div class="sf10-history-head-actions">
+                        <button class="btn btn-secondary" id="sf10HistoryLoadBtn" type="button" aria-haspopup="dialog" aria-controls="sf10HistoryLoadModal"><i class="fas fa-folder-open" aria-hidden="true"></i> Load record</button>
+                        <button class="sf10-history-close" id="sf10HistoryCloseBtn" type="button" aria-label="Close previous-school history">&times;</button>
+                    </div>
+                </div>
+                <div class="sf10-history-body">
+                    <div class="sf10-history-form-panel">
+                        <form class="sf10-history-form" id="sf10HistoryForm" autocomplete="off">
+                            <input type="hidden" id="sf10HistoryId" value="">
+                            <input type="hidden" id="sf10HistoryLearnerId" value="">
+
+                            <div class="sf10-history-status" id="sf10HistoryStatus" role="status" aria-live="polite" hidden></div>
+
+                            <section class="sf10-history-step-panel is-active" data-history-step="1" aria-labelledby="sf10HistoryStepOneTitle">
+                                <div class="sf10-history-step-heading">
+                                    <h4 id="sf10HistoryStepOneTitle">School and grade</h4>
+                                </div>
+                                <div class="sf10-history-grid">
+                                    <div class="sf10-history-field span-2"><label for="sf10HistorySchoolName">Previous school name *</label><input id="sf10HistorySchoolName" type="text" maxlength="200" required></div>
+                                    <div class="sf10-history-field"><label for="sf10HistorySchoolId">DepEd School ID</label><input id="sf10HistorySchoolId" type="text" maxlength="20" inputmode="numeric"></div>
+                                    <div class="sf10-history-field"><label for="sf10HistorySchoolYear">School year *</label><input id="sf10HistorySchoolYear" type="text" maxlength="20" placeholder="e.g. 2023-2024" required></div>
+                                    <div class="sf10-history-field"><label for="sf10HistoryGrade">Grade level *</label><input id="sf10HistoryGrade" type="text" list="sf10HistoryGradeOptions" maxlength="50" placeholder="e.g. Grade 3" required></div>
+                                    <div class="sf10-history-field"><label for="sf10HistorySourceType">Record source</label><select id="sf10HistorySourceType" data-native="true"><option>Previous School SF10</option><option>Form 137</option><option>Official school record</option><option>Manual entry</option></select></div>
+                                </div>
+                                <div class="sf10-history-form-actions sf10-history-form-actions--end">
+                                    <button class="btn btn-primary" type="button" data-history-next="2">Continue <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                                </div>
+                            </section>
+
+                            <section class="sf10-history-step-panel" data-history-step="2" aria-labelledby="sf10HistoryStepTwoTitle" hidden>
+                                <div class="sf10-history-step-heading">
+                                    <h4 id="sf10HistoryStepTwoTitle">School context</h4>
+                                </div>
+                                <div class="sf10-history-grid">
+                                    <div class="sf10-history-field span-2"><label for="sf10HistorySourceReference">Source reference / document note</label><input id="sf10HistorySourceReference" type="text" maxlength="255" placeholder="Optional receiving-school reference"></div>
+                                    <div class="sf10-history-field"><label for="sf10HistoryDistrict">District</label><input id="sf10HistoryDistrict" type="text" maxlength="150"></div>
+                                    <div class="sf10-history-field"><label for="sf10HistoryDivision">Division</label><input id="sf10HistoryDivision" type="text" maxlength="150"></div>
+                                    <div class="sf10-history-field"><label for="sf10HistoryRegion">Region</label><input id="sf10HistoryRegion" type="text" maxlength="100"></div>
+                                    <div class="sf10-history-field"><label for="sf10HistorySection">Section</label><input id="sf10HistorySection" type="text" maxlength="100"></div>
+                                    <div class="sf10-history-field span-2"><label for="sf10HistoryAdviser">Adviser / teacher</label><input id="sf10HistoryAdviser" type="text" maxlength="200"></div>
+                                </div>
+                                <div class="sf10-history-form-actions sf10-history-form-actions--split">
+                                    <button class="btn btn-secondary" type="button" data-history-back="1"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</button>
+                                    <button class="btn btn-primary" type="button" data-history-next="3">Continue to ratings <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                                </div>
+                            </section>
+
+                            <section class="sf10-history-step-panel" data-history-step="3" aria-labelledby="sf10HistoryStepThreeTitle" hidden>
+                                <div class="sf10-history-step-heading sf10-history-step-heading--row">
+                                    <div>
+                                        <h4 id="sf10HistoryStepThreeTitle">Learning areas and ratings</h4>
+                                    </div>
+                                    <div class="sf10-history-action-group">
+                                        <button class="btn btn-secondary" id="sf10HistoryAddGradeBtn" type="button"><i class="fas fa-plus" aria-hidden="true"></i> Add learning area</button>
+                                    </div>
+                                </div>
+                                <div class="sf10-history-rating-tools">
+                                    <div class="sf10-history-field"><label for="sf10HistoryGradingSystem">Grading system</label><select id="sf10HistoryGradingSystem" data-native="true"><option value="Quarterly">Quarterly</option><option value="Three-Term">Three-Term</option></select></div>
+                                </div>
+                                <div class="sf10-history-grade-head" aria-hidden="true"><span>Learning area</span><span data-history-grade-head="q1">Q1</span><span data-history-grade-head="q2">Q2</span><span data-history-grade-head="q3">Q3</span><span data-history-grade-head="q4">Q4</span><span>Final</span><span>Remarks</span><span></span>                                </div>
+                                <div class="sf10-history-grade-rows" id="sf10HistoryGradeRows"></div>
+                                <div class="sf10-history-rating-summary">
+                                    <div class="sf10-history-average-editor">
+                                        <div class="sf10-history-field"><label for="sf10HistoryGeneralAverage">General average</label><input id="sf10HistoryGeneralAverage" type="number" min="0" max="100" step="0.01"></div>
+                                        <div class="sf10-history-average-assist"><button class="sf10-history-use-calculated" id="sf10HistoryUseCalculatedAverage" type="button" hidden>Use calculated</button></div>
+                                    </div>
+                                </div>
+                                <div class="sf10-history-form-actions sf10-history-form-actions--split">
+                                    <button class="btn btn-secondary" type="button" data-history-back="2"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</button>
+                                    <div class="sf10-history-action-group">
+                                        <button class="btn btn-secondary" id="sf10HistoryCancelBtn" type="button">Clear form</button>
+                                        <button class="btn btn-primary" id="sf10HistorySaveBtn" type="submit"><i class="fas fa-save" aria-hidden="true"></i> Save record</button>
+                                    </div>
+                                </div>
+                            </section>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="sf10-history-load-modal" id="sf10HistoryLoadModal" hidden>
+            <section class="sf10-history-load-dialog" role="dialog" aria-modal="true" aria-labelledby="sf10HistoryLoadTitle">
+                <div class="sf10-history-load-head">
+                    <div>
+                        <h3 id="sf10HistoryLoadTitle">Load previous-school record</h3>
+                        <p>Choose a saved record to continue editing it.</p>
+                    </div>
+                    <button class="sf10-history-close" id="sf10HistoryLoadCloseBtn" type="button" aria-label="Close load record">&times;</button>
+                </div>
+                <div class="sf10-history-load-body">
+                    <div class="sf10-history-list" id="sf10HistoryLoadList"></div>
+                </div>
+            </section>
+        </div>
+        <datalist id="sf10HistoryGradeOptions">
+            <option value="Grade 1"></option><option value="Grade 2"></option><option value="Grade 3"></option><option value="Grade 4"></option><option value="Grade 5"></option><option value="Grade 6"></option><option value="Grade 7"></option><option value="Grade 8"></option><option value="Grade 9"></option><option value="Grade 10"></option>
+        </datalist>
+
+</main>
+
+    <script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/sf10.js?v=20261009-clean-history-controls-v1"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

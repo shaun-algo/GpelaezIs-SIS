@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Curriculum Configuration - DepEd Academic Monitoring System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/curriculum-editor.css?v=20260824-dark-modal">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+
+    <!-- Axios -->
+    <script src="../../assets/vendor/axios/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../../assets/css/unsaved-changes-dialog.css?v=20260930-unsaved-dialog-v2">
+    <link rel="stylesheet" href="../../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/curriculum-components-overrides.css?v=20261013-single-click-drag-order-v1">
+</head>
+<body class="curriculum-components-page">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="../profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="../settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="content-header">
+            <div class="header-left">
+                <h1>Curriculum Setup</h1>
+            </div>
+            <div class="header-right">
+                <div class="cc-step-menu cc-header-menu">
+                    <button type="button" class="cc-step-menu-toggle" data-cc-step-menu-toggle aria-label="Curriculum setup options" title="Curriculum setup options" aria-haspopup="menu" aria-expanded="false" aria-controls="cc-header-menu-panel">
+                        <i class="fas fa-ellipsis-vertical" aria-hidden="true"></i>
+                    </button>
+                    <div class="cc-step-menu-panel" id="cc-header-menu-panel" role="menu" hidden>
+                        <button type="button" role="menuitem" data-cc-curriculum-action="add-curriculum"><i class="fas fa-plus" aria-hidden="true"></i><span>Add curriculum</span></button>
+                        <button type="button" role="menuitem" data-cc-open-archive><i class="fas fa-box-archive" aria-hidden="true"></i><span>View archive</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-body">
+            <!-- Empty state -->
+            <div id="cc-empty-state" class="cc-empty-state" style="display:none;" aria-live="polite" aria-atomic="true">
+                <div class="cc-empty-icon"><video class="mp4-surface-blend empty-state-video" autoplay loop muted playsinline preload="metadata" aria-hidden="true"><source src="../../assets/icons/search.mp4" type="video/mp4"></video></div>
+                <h3>Select or Create a Curriculum</h3>
+                <p>Choose a curriculum from the Curriculum card to begin.</p>
+                <div class="cc-empty-actions">
+                    <button type="button" class="btn btn-primary btn-sm" data-cc-curriculum-action="add-curriculum">
+                        <i class="fas fa-plus"></i> Create curriculum
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm" data-cc-open-archive>
+                        <i class="fas fa-box-archive"></i> View archive
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor -->
+            <div id="cc-editor" class="cc-editor">
+                <nav class="cc-sidebar cc-wizard-steps" aria-label="Curriculum setup steps">
+                    <div class="cc-tab cc-curriculum-control" role="group" aria-labelledby="cc-curriculum-step-title">
+                        <div class="cc-curriculum-control-fields">
+                            <strong id="cc-curriculum-step-title">Curriculum</strong>
+                            <select id="curriculumSelect" class="form-control cc-wizard-step-select" data-curriculum-selector data-search-enabled="true" data-search-placeholder="Search curricula..." placeholder="Choose a curriculum" aria-label="Choose a curriculum"></select>
+                        </div>
+                    </div>
+                    <button type="button" class="cc-tab" data-tab="overview">
+                        <span class="cc-step-copy"><strong>Overview</strong></span>
+                    </button>
+                    <button type="button" class="cc-tab" data-tab="subjects">
+                        <span class="cc-step-copy"><strong>Subjects</strong></span>
+                    </button>
+                </nav>
+
+                <div class="cc-panels">
+                    <!-- Overview -->
+                    <section class="cc-panel active" id="cc-panel-overview">
+                        <div class="cc-panel-header">
+                            <div><h2>Overview</h2></div>
+                        </div>
+                        <div class="cc-panel-body">
+                            <div class="cc-info-card" id="cc-curriculum-info" role="button" tabindex="-1" aria-label="Show curriculum actions"></div>
+                        </div>
+                    </section>
+
+                    <!-- Subjects Panel -->
+                    <section class="cc-panel" id="cc-panel-subjects">
+                        <div class="cc-panel-header">
+                            <div>
+                                <h2>Subjects</h2>
+                            </div>
+                        </div>
+                        <div class="cc-panel-body">
+                            <!-- Efficient Table Display -->
+                            <div class="cc-table-wrap" id="cc-subjects-table-container">
+                                <table class="cc-data-table cc-subjects-table" id="cc-subjects-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Year Level</th>
+                                            <th class="cc-subjects-heading-cell">
+                                                <span>Subjects</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cc-subjects-table-body">
+                                        <!-- Rendered dynamically via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+
+            <span id="statusText" class="cc-status-text" role="status" aria-live="polite"></span>
+        </div>
+    </main>
+
+    <!-- Modal for creating and editing a curriculum -->
+    <div class="cc-curriculum-modal" id="cc-curriculum-modal" aria-hidden="true" style="display:none;">
+        <div class="cc-curriculum-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="cc-curriculum-form-title">
+            <div class="cc-curriculum-modal-header">
+                <div>
+                    <span class="cc-modal-kicker">Curriculum</span>
+                    <h2 id="cc-curriculum-form-title">Create Curriculum</h2>
+                </div>
+                <button type="button" class="modal-close" id="cc-curriculum-modal-close" aria-label="Close curriculum dialog" title="Close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+            </div>
+            <form id="cc-curriculum-form" class="cc-curriculum-form">
+                <input type="hidden" id="cc-curriculum-id">
+                <div class="cc-form-grid">
+                    <div class="cc-form-group">
+                        <label for="cc-curriculum-code">Code</label>
+                        <input type="text" id="cc-curriculum-code" class="form-control" placeholder="e.g. K12-2024">
+                    </div>
+                    <div class="cc-form-group">
+                        <label for="cc-curriculum-name">Name</label>
+                        <input type="text" id="cc-curriculum-name" class="form-control" placeholder="e.g. K-12 Basic Education Curriculum">
+                    </div>
+                    <div class="cc-form-group">
+                        <label for="cc-curriculum-effective-from">Effective From</label>
+                        <input type="number" id="cc-curriculum-effective-from" class="form-control" placeholder="YYYY">
+                    </div>
+                    <div class="cc-form-group">
+                        <label for="cc-curriculum-effective-until">Effective Until</label>
+                        <input type="number" id="cc-curriculum-effective-until" class="form-control" placeholder="YYYY (optional)">
+                    </div>
+                    <div class="cc-form-group">
+                        <label for="cc-curriculum-status">Status</label>
+                        <select id="cc-curriculum-status" class="form-control">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="cc-form-group cc-form-group-wide">
+                    <label for="cc-curriculum-description">Description</label>
+                    <input type="text" id="cc-curriculum-description" class="form-control" placeholder="Short description (optional)">
+                </div>
+                <div class="cc-curriculum-modal-footer">
+                    <button type="button" class="btn btn-outline btn-sm" id="cc-cancel-curriculum-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="cc-save-curriculum-btn"><i class="fas fa-save"></i> Save curriculum</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for viewing/editing all subjects assigned to one year level -->
+    <div class="modal fade cc-year-subject-modal" id="cc-year-subject-modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="cc-year-subject-modal-title" aria-describedby="cc-year-subject-modal-detail" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered cc-year-subject-modal-dialog">
+            <div class="modal-content cc-year-subject-modal-content">
+                <div class="modal-header cc-year-subject-modal-header">
+                    <div>
+                        <span class="cc-modal-kicker">Subjects</span>
+                        <h2 id="cc-year-subject-modal-title">Year Level</h2>
+                        <p id="cc-year-subject-modal-detail">0 subjects assigned</p>
+                    </div>
+                    <button type="button" class="modal-close" id="cc-year-subject-modal-close" aria-label="Close subjects dialog" title="Close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body cc-year-subject-modal-body">
+                    <div class="cc-year-subject-list" id="cc-year-subject-modal-list"></div>
+                </div>
+                <div class="modal-footer cc-year-subject-modal-footer" id="cc-year-subject-modal-footer" hidden>
+                    <button type="button" class="btn btn-outline btn-sm cc-remove-selected-subjects" id="cc-year-subject-modal-remove-selected" disabled><i class="fas fa-minus-circle" aria-hidden="true"></i> Remove selected <span id="cc-edit-selected-count">0 selected</span></button>
+                    <button type="button" class="btn btn-outline btn-sm" id="cc-year-subject-modal-cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="cc-year-subject-modal-save"><i class="fas fa-save" aria-hidden="true"></i> Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Subject to Curriculum Grade Level -->
+    <div class="modal fade cc-subject-modal" id="ccAddSubjectModal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="ccAddSubjectModalLabel" aria-describedby="cc-modal-curriculum-detail" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered cc-modal-dialog--subjects">
+            <div class="modal-content cc-subject-modal-content">
+                <div class="modal-header cc-subject-modal-header">
+                    <div>
+                        <h5 class="modal-title" id="ccAddSubjectModalLabel">Add Subjects to Year Level</h5>
+                        <p class="cc-subject-modal-grade-detail" id="cc-modal-curriculum-detail">Select a year level from the Subjects row first.</p>
+                    </div>
+                    <div class="cc-subject-modal-header-actions">
+                        <button type="button" class="btn btn-outline btn-sm cc-new-master-trigger" id="cc-toggle-create-subject-btn" title="Add a new subject">
+                            <i class="fas fa-plus-circle" aria-hidden="true"></i> Add Subject
+                        </button>
+                        <button type="button" class="modal-close" id="ccAddSubjectModalCloseX" aria-label="Close add subjects dialog" title="Close">&times;</button>
+                    </div>
+                </div>
+                <div class="modal-body cc-subject-modal-body">
+                    <div class="cc-add-subject-flow-step" id="cc-add-subject-picker-step">
+                        <div class="cc-subject-picker">
+                            <div class="cc-subject-picker-tools">
+                                <input type="text" id="cc-modal-subject-search" class="form-control" placeholder="Search available subjects...">
+                            </div>
+                            <div id="cc-modal-subject-list" class="cc-subject-checklist"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer cc-subject-modal-footer">
+                    <button type="button" class="btn btn-outline btn-sm" id="ccAddSubjectModalCancel">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="ccAddSubjectModalSave"><i class="fas fa-plus"></i> Add selected</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nested modal for creating a subject without leaving the add flow -->
+    <div class="modal fade cc-new-subject-modal" id="cc-new-subject-master-modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="cc-new-subject-master-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered cc-new-subject-modal-dialog">
+            <div class="modal-content cc-new-subject-modal-content">
+                <div class="modal-header cc-new-subject-modal-header">
+                    <div>
+                        <span class="cc-modal-kicker">Subject</span>
+                        <h2 id="cc-new-subject-master-title">Add Subject</h2>
+                    </div>
+                    <button type="button" class="modal-close" id="cc-new-subject-master-close" aria-label="Close add subject dialog" title="Close"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body cc-new-subject-modal-body">
+                    <div class="cc-new-subject-field">
+                        <label for="cc-new-subject-name">Subject Name</label>
+                        <input type="text" id="cc-new-subject-name" class="form-control" placeholder="e.g. Arabic Language" maxlength="100" autocomplete="off" required aria-required="true">
+                    </div>
+                    <div class="cc-new-subject-field">
+                        <label for="cc-new-subject-category">Subject Category</label>
+                        <select id="cc-new-subject-category" class="form-control" required aria-required="true">
+                            <option value="">Select subject category</option>
+                        </select>
+                        <small class="cc-new-subject-field-help">This category controls the divider where the subject appears in Curriculum Setup.</small>
+                    </div>
+                    <div class="cc-new-subject-field">
+                        <label for="cc-new-subject-description">Description</label>
+                        <input type="text" id="cc-new-subject-description" class="form-control" maxlength="255" autocomplete="off" placeholder="Optional description">
+                    </div>
+                </div>
+                <div class="modal-footer cc-new-subject-modal-footer">
+                    <button type="button" class="btn btn-outline btn-sm" id="cc-new-subject-master-cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="cc-save-new-subject-master-btn"><i class="fas fa-check" aria-hidden="true"></i> Save and select</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- JavaScript -->
+<script src="../../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../../assets/js/components/unsaved-changes-dialog.js?v=20260930-unsaved-dialog-v2"></script>
+    <script src="../../js/masterfiles/masterfile-dialog.js?v=20260913-alerts"></script>
+<script src="../../js/masterfiles/curriculum-components.js?v=20261013-closed-risk-period-routing-v2"></script>
+    <script src="../../js/masterfiles/archive.js?v=20261013-closed-risk-period-routing-v2" data-modules="curricula,curriculum_subjects,curriculum_grade_levels,curriculum_passing_marks,curriculum_school_year_map"></script>
+    <script src="../../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

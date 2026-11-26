@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Account deactivation requests - DepEd Academic Monitoring System</title>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/account-deactivation-requests.css?v=20261009-request-archive-v5">
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+</head>
+<body class="account-requests-page">
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image">
+        </div>
+    </div>
+
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn" type="button" aria-expanded="false">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-info"><span class="user-name">User</span><span class="user-role">Role</span></div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="audit-logs.html" data-admin-only="true"><i class="fas fa-clipboard-list"></i> Audit Logs</a>
+                    <a href="account-deactivation-requests.html" data-admin-only="true" aria-current="page"><i class="fas fa-user-slash"></i> Account deactivation requests</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <main class="main-content" id="mainContent">
+        <header class="account-requests-header">
+            <div class="account-requests-heading">
+                <h1>Account deactivation requests</h1>
+            </div>
+            <div class="account-requests-header-actions">
+                <div class="account-requests-menu-wrap">
+                    <button type="button" class="account-requests-more" id="accountRequestsMoreBtn" aria-expanded="false" aria-controls="accountRequestsMoreMenu" aria-label="More request views">
+                        <i class="fas fa-ellipsis-h" aria-hidden="true"></i>
+                    </button>
+                    <div class="account-requests-more-menu" id="accountRequestsMoreMenu" hidden>
+                        <button type="button" data-archive-view="approved">Deactivated / archive</button>
+                        <button type="button" data-archive-view="closed">Closed / rejected requests</button>
+                    </div>
+                </div>
+                <a class="account-requests-back" href="settings.html#account-security"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to settings</a>
+            </div>
+        </header>
+
+        <div class="account-requests-shell">
+            <section class="account-requests-panel account-requests-panel--pending" aria-labelledby="accountRequestsPendingTitle">
+                <header class="account-requests-panel-header">
+                    <div>
+                        <h2 id="accountRequestsPendingTitle">Waiting for review</h2>
+                    </div>
+                </header>
+                <div class="account-requests-list" id="accountRequestsPendingList" aria-live="polite">
+                    <p class="account-requests-empty">Loading requests...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="account-requests-modal" id="accountRequestArchiveModal" aria-hidden="true">
+        <section class="account-requests-dialog" role="dialog" aria-modal="true" aria-labelledby="accountRequestArchiveTitle">
+            <header class="account-requests-dialog__header">
+                <div>
+                    <h2 id="accountRequestArchiveTitle">Deactivated / archive</h2>
+                </div>
+                <button type="button" class="account-requests-dialog__close" id="accountRequestArchiveCloseBtn" aria-label="Close request archive"><i class="fas fa-times"></i></button>
+            </header>
+            <div class="account-requests-dialog__body account-request-archive-body">
+                <label class="account-request-archive-search" for="accountRequestArchiveSearch">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="sr-only">Search archived requests</span>
+                    <input id="accountRequestArchiveSearch" type="search" placeholder="Search archived requests" autocomplete="off">
+                </label>
+                <div class="account-requests-list account-request-archive-list" id="accountRequestArchiveList" aria-live="polite"></div>
+                <div class="account-request-archive-load-more-wrap">
+                    <button type="button" class="btn btn-outline account-request-load-more" id="accountRequestArchiveLoadMoreBtn" hidden>Load more</button>
+                </div>
+            </div>
+            <footer class="account-requests-dialog__footer">
+                <button type="button" class="btn btn-outline" id="accountRequestArchiveCloseBtnFooter">Close</button>
+            </footer>
+        </section>
+    </div>
+
+    <div class="account-requests-modal" id="accountRequestDetailModal" aria-hidden="true">
+        <section class="account-requests-dialog" role="dialog" aria-modal="true" aria-labelledby="accountRequestDetailTitle">
+            <header class="account-requests-dialog__header">
+                <div>
+                    <h2 id="accountRequestDetailTitle">Request details</h2>
+                </div>
+                <button type="button" class="account-requests-dialog__close" id="accountRequestCloseBtn" aria-label="Close request details"><i class="fas fa-times"></i></button>
+            </header>
+            <div class="account-requests-dialog__body">
+                <div id="accountRequestDetailBody"></div>
+            </div>
+            <footer class="account-requests-dialog__footer">
+                <button type="button" class="btn btn-outline" id="accountRequestCloseBtnFooter">Close</button>
+                <button type="button" class="btn btn-outline account-request-reactivate" id="accountRequestReactivateBtn" hidden>Reactivate account</button>
+                <button type="button" class="btn btn-outline" id="accountRequestRejectBtn">Reject request</button>
+                <button type="button" class="btn btn-primary" id="accountRequestApproveBtn">Approve request</button>
+            </footer>
+        </section>
+    </div>
+
+    <div class="account-requests-modal account-request-reauth-modal" id="accountRequestReauthModal" aria-hidden="true">
+        <section class="account-requests-dialog account-request-reauth-dialog" role="dialog" aria-modal="true" aria-labelledby="accountRequestReauthTitle">
+            <header class="account-requests-dialog__header">
+                <div>
+                    <h2 id="accountRequestReauthTitle">Confirm approval</h2>
+                </div>
+                <button type="button" class="account-requests-dialog__close" id="accountRequestReauthCloseBtn" aria-label="Close confirmation"><i class="fas fa-times"></i></button>
+            </header>
+            <div class="account-requests-dialog__body">
+                <p class="account-request-reauth-copy">Re-enter your administrator password to continue.</p>
+                <label class="account-request-reauth-field" for="accountRequestReauthPassword">Administrator password
+                    <input id="accountRequestReauthPassword" type="password" autocomplete="current-password">
+                </label>
+                <p class="account-request-review-error" id="accountRequestReauthError" role="alert" aria-live="polite"></p>
+            </div>
+            <footer class="account-requests-dialog__footer">
+                <button type="button" class="btn btn-outline" id="accountRequestReauthCancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="accountRequestReauthConfirmBtn">Approve request</button>
+            </footer>
+        </section>
+    </div>
+
+    <script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/account-deactivation-requests.js?v=20261009-reactivation-feedback-v1"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

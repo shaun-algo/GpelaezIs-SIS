@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Roles - DepEd Academic Monitoring System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/datatable.css">
+    <link rel="stylesheet" href="../../assets/css/modal.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+
+    <!-- Axios -->
+    <script src="../../assets/vendor/axios/axios.min.js"></script>
+    <!-- SweetAlert2 for nicer toasts (optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body>
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="../profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="../settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Breadcrumb -->
+<!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title" id="pageTitle">Roles</h1>
+                <p class="page-subtitle" id="pageSubtitle"></p>
+            </div>
+        </div>
+
+        <!-- Data Table Card -->
+        <div class="card">
+            <!-- Table Header -->
+            <div class="table-header-section">
+                <div class="roles-filter-stack">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search..." class="search-input">
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="addButton" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i>
+                    <span id="addButtonLabel">Add Record</span>
+                </button>
+            </div>
+
+            <aside class="role-authorization-note" role="note" aria-label="Important authorization notice">
+                <i class="fas fa-circle-info" aria-hidden="true"></i>
+                <span><strong>Important:</strong> Each role controls user access and permissions. Strictly keep their spelling unchanged.
+                    <br>
+                Current roles cannot be archived.</span>
+            </aside>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table class="data-table" id="dataTable">
+                    <thead>
+                        <tr id="dataTableHead">
+                            <th>Loading...</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody">
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading records...
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-section">
+                <div class="pagination-info">
+                    Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span id="totalRecords">0</span> entries
+                </div>
+                <div class="pagination">
+                    <button class="pagination-btn" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="pagination-info">
+                        Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                    </span>
+                    <button class="pagination-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal" id="recordModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add Record</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="recordForm">
+                    <input type="hidden" id="recordId">
+                    <div id="dynamicFields"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveRecord()">
+                    <i class="fas fa-save"></i>
+                    <span id="saveButtonText">Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+
+<!-- JavaScript -->
+<script src="../../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../../js/masterfiles/masterfile-dialog.js?v=20260913-alerts"></script>
+    <script src="../../js/masterfiles/masterfile-common.js?v=20261008-empty-media-v1"></script>
+    <script src="../../js/masterfiles/roles.js?v=20261007-unique-name-validation-v1"></script>
+    <script src="../../js/masterfiles/archive.js?v=20261005-users-position-restore-v1" data-modules="roles"></script>
+    <script src="../../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

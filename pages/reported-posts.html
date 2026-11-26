@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Reported posts - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="admin-module-page">
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image">
+        </div>
+    </div>
+
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open sidebar">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Portal</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn" type="button" aria-label="Open notifications" aria-haspopup="true">
+                <i class="fas fa-bell" aria-hidden="true"></i>
+                <span class="notification-badge" id="notificationCount" hidden></span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn" type="button" aria-label="Open profile menu" aria-haspopup="true" aria-expanded="false">
+                    <div class="user-avatar" aria-hidden="true"></div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true">
+                        <svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user" aria-hidden="true"></i> Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog" aria-hidden="true"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <nav class="sidebar-nav" aria-label="Primary navigation">
+            <ul class="nav-list"></ul>
+        </nav>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+        <section id="reportedPostsSection" class="content-section active" aria-labelledby="reportedPostsTitle">
+            <div class="page-header announcement-reports-page-header">
+                <div>
+                    <h1 class="page-title" id="reportedPostsTitle">Reported posts</h1>
+                    <button type="button" class="announcement-reports-back" data-reports-back hidden>
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                        <span>Back to reported posts</span>
+                    </button>
+                </div>
+                <div class="announcement-reports-view-menu" id="reportedPostsViewMenu">
+                    <button type="button"
+                            class="announcement-menu-toggle announcement-reports-view-toggle"
+                            data-reports-view-toggle
+                            aria-expanded="false"
+                            aria-controls="reportedPostsViewActions"
+                            aria-label="Reported posts options"
+                            title="Reported posts options">
+                        <i class="fas fa-ellipsis-vertical" aria-hidden="true"></i>
+                    </button>
+                    <div class="announcement-action-menu announcement-reports-view-actions"
+                         id="reportedPostsViewActions"
+                         data-reports-view-menu
+                         role="menu"
+                         hidden>
+                        <button type="button" role="menuitem" data-report-view-switch="removed">
+                            <i class="fas fa-box-archive announcement-action-icon" aria-hidden="true"></i>
+                            <span class="announcement-reports-view-option">
+                                <strong>Removed posts</strong>
+                                <small>No longer visible to users</small>
+                            </span>
+                        </button>
+                        <button type="button" role="menuitem" data-report-view-switch="resolved">
+                            <i class="fas fa-circle-check announcement-action-icon" aria-hidden="true"></i>
+                            <span class="announcement-reports-view-option">
+                                <strong>Resolved reports</strong>
+                                <small>Marked as no issue found</small>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <section class="announcement-reports-list" id="announcementReportsList" aria-label="Reported posts">
+                <div class="announcement-reports-empty announcement-reports-empty--loading" role="status">
+                    <span class="announcement-reports-empty__icon" aria-hidden="true"><i class="fas fa-spinner fa-spin"></i></span>
+                    <h3>Loading feedback</h3>
+                    <p>Checking for reports from the school community.</p>
+                </div>
+            </section>
+
+            <dialog class="announcement-report-reasons-dialog" id="announcementReportReasonsDialog" aria-labelledby="announcementReportReasonsTitle">
+                <div class="announcement-report-reasons-dialog__panel">
+                    <header class="announcement-report-reasons-dialog__header">
+                        <div>
+                            <p class="announcement-report-label">Community feedback</p>
+                            <h2 id="announcementReportReasonsTitle">Report Reason/s</h2>
+                        </div>
+                        <button type="button" class="announcement-report-reasons-dialog__close" data-close-report-reasons aria-label="Close report reasons">
+                            <i class="fas fa-times" aria-hidden="true"></i>
+                        </button>
+                    </header>
+                    <div class="announcement-report-reasons-dialog__body" id="announcementReportReasonsBody"></div>
+                </div>
+            </dialog>
+
+            <dialog class="announcement-report-reasons-dialog announcement-report-post-dialog" id="announcementReportPostDialog" aria-labelledby="announcementReportPostTitle">
+                <div class="announcement-report-reasons-dialog__panel">
+                    <header class="announcement-report-reasons-dialog__header">
+                        <div>
+                            <h2 id="announcementReportPostTitle">View post</h2>
+                        </div>
+                        <button type="button" class="announcement-report-reasons-dialog__close" data-close-report-post aria-label="Close post preview">
+                            <i class="fas fa-times" aria-hidden="true"></i>
+                        </button>
+                    </header>
+                    <div class="announcement-report-reasons-dialog__body announcement-report-post-dialog__body" id="announcementReportPostBody"></div>
+                </div>
+            </dialog>
+        </section>
+    </main>
+
+<script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../assets/js/components/announcement-background.js?v=20260924-plain-default"></script>
+<script src="../js/reported-posts.js?v=20261009-presence-active-v1"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

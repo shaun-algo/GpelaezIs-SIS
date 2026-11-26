@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" data-density="compact" data-ui-scale="small">
+<head>
+    <link rel="stylesheet" href="../../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Registered Learners - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/datatable.css">
+    <link rel="stylesheet" href="../../assets/css/modal.css">
+    <link rel="stylesheet" href="../../assets/css/masterfile-minimal.css?v=20260914-grey-canvas">
+
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+
+    <style>
+        /* Improved form field styling */
+        .form-control {
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* Enhanced field styling */
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+
+        input::placeholder {
+            color: var(--gray-500);
+            font-style: italic;
+        }
+
+        /* Enhanced Search Styling - Clean & Simple */
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Reasonable max width for readability */
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid var(--gray-300);
+            border-radius: 4px;
+            font-size: 14px;
+            background: var(--surface-0);
+            color: var(--gray-900);
+        }
+
+        .search-input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--surface-0);
+            border: 1px solid var(--gray-300);
+            border-top: none;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .suggestion-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background: var(--gray-100);
+        }
+
+        .suggestion-item.selected {
+            background: var(--deped-blue-light);
+        }
+
+        .suggestion-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            background: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .suggestion-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .suggestion-name {
+            font-weight: 500;
+            color: var(--gray-900);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+        }
+
+        .suggestion-meta {
+            font-size: 12px;
+            color: var(--gray-600);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .suggestion-lrn {
+            font-family: monospace;
+            font-weight: 400;
+        }
+
+        .suggestion-grade {
+            font-weight: 500;
+        }
+
+        .no-suggestions {
+            padding: 12px;
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 13px;
+        }
+
+        .suggestions-loading {
+            padding: 12px;
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 13px;
+        }
+
+        .suggestions-loading i {
+            margin-right: 6px;
+        }
+
+        /* Search highlight - subtle */
+        .highlight {
+            background: var(--status-warning-bg);
+            color: var(--status-warning-text);
+            font-weight: 600;
+        }
+
+        /* Fixed width container for consistent layout */
+        .learner-content-wrapper {
+            max-width: 960px; /* 20% smaller than 1200px */
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .learner-filter-card,
+        .learner-details-card {
+            width: 100%;
+            max-width: 960px; /* 20% smaller than 1200px */
+            margin: 0 auto 20px auto;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px; /* 20% smaller than 800px */
+            margin: 0; /* Remove auto centering - align to left */
+        }
+
+        /* Ensure suggestions don't exceed container */
+        .search-suggestions {
+            max-width: 640px; /* 20% smaller than 800px */
+            left: 0; /* Align to left edge of search container */
+            transform: none; /* Remove centering transform */
+            width: 100%;
+            margin: 4px 0 0 0; /* Remove auto margins */
+        }
+
+        .search-box {
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+    </style>
+<link rel="stylesheet" href="../../assets/css/learner-record.css?v=20260930-unsaved-learner-guard-v2">
+    <script src="../../assets/vendor/axios/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../../assets/css/unsaved-changes-dialog.css?v=20260930-unsaved-dialog-v2">
+    <link rel="stylesheet" href="../../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/components/academic-calendar-date-picker.css?v=20260930-academic-calendar">
+</head>
+<body data-form-theme="clean" class="masterfile-minimal learner-record-page">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="../profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="../settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="../../adviser-recovery.php?return=pages%2Fmasterfiles%2Flearners.html" data-student-recovery hidden><i class="fas fa-user-shield"></i> Student account recovery</a>
+                    <hr>
+                    <a href="../../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <main class="main-content" id="mainContent">
+        <div class="learner-content-wrapper">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title" id="pageTitle"></h1>
+                    <p class="page-subtitle" id="pageSubtitle"></p>
+                </div>
+            </div>
+
+            <div class="learner-record-workspace">
+                <aside class="learner-record-sidebar" aria-label="Learner record navigation">
+                    <div class="learner-filter-heading">
+                        <h2>Find a learner</h2>
+                    </div>
+
+                    <div class="search-container learner-search-container">
+                        <label class="learner-search-label" for="studentFilterInput">Search records</label>
+                        <div class="search-box">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <input type="text" id="studentFilterInput" placeholder="Name or 12-digit LRN" class="search-input" autocomplete="off">
+                        </div>
+                        <div id="searchSuggestions" class="search-suggestions" style="display: none;"></div>
+                    </div>
+
+                    <div class="learner-segment-heading">
+                        <h3>Details</h3>
+                    </div>
+                    <nav class="learner-segment-nav" aria-label="Learner record sections" role="tablist">
+                        <button class="learner-segment-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="studentDetailsFields" data-learner-segment="personal">
+                            Personal details
+                        </button>
+                        <button class="learner-segment-tab" type="button" role="tab" aria-selected="false" aria-controls="studentDetailsFields" data-learner-segment="address">
+                            Address
+                        </button>
+                        <button class="learner-segment-tab" type="button" role="tab" aria-selected="false" aria-controls="studentDetailsFields" data-learner-segment="guardian">
+                            Family / Guardian
+                        </button>
+                    </nav>
+                </aside>
+
+                <section class="card card-overflow-visible learner-details-card" aria-label="Selected learner details">
+                    <form id="studentDetailsForm">
+                        <div class="student-fixed-header" id="studentFixedHeader">
+                            <div class="student-fixed-meta">
+                                <div class="student-fixed-item student-fixed-item--primary">
+                                    <div class="student-fixed-label">LRN</div>
+                                    <div class="student-fixed-value" id="fixedLrn">-</div>
+                                </div>
+                                <div class="student-fixed-item student-fixed-item--context">
+                                    <div class="student-fixed-label">Academic placement</div>
+                                    <div class="student-fixed-value" id="fixedPlacement">-</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="studentDetailsFields">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Loading form...
+                            </div>
+                        </div>
+
+                        <footer class="learner-record-footer">
+                            <button class="btn btn-primary" type="button" id="saveChangesBtn">
+                                <i class="fas fa-save" aria-hidden="true"></i>
+                                Save Learner Details
+                            </button>
+                        </footer>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+
+
+<script src="../../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+<script src="../../assets/js/components/unsaved-changes-dialog.js?v=20260930-unsaved-dialog-v2"></script>
+    <script src="../../assets/js/components/academic-calendar-date-picker.js?v=20260930-academic-calendar"></script>
+<script src="../../js/masterfiles/learner-details.js?v=20261014-fixed-grade-section-search-v1"></script>
+    <script src="../../js/masterfiles/masterfile-dialog.js?v=20260913-alerts"></script>
+    <script src="../../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

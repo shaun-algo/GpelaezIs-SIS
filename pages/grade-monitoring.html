@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Grade Input Monitoring - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/datatable.css">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        .gm-toolbar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            align-items: end;
+        }
+        .gm-filter-card {
+            position: relative;
+            overflow: visible !important;
+        }
+        .gm-filter-card .card-body,
+        .gm-filter-card .form-group {
+            position: relative;
+            overflow: visible;
+        }
+        .gm-filter-card select.form-control,
+        .gm-filter-card input.form-control {
+            position: relative;
+        }
+        .gm-layout {
+            position: relative;
+        }
+        .gm-layout .card,
+        .gm-layout .table-container {
+            position: relative;
+        }
+        .gm-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 16px;
+        }
+        .gm-audit-list {
+            display: grid;
+            gap: 8px;
+        }
+        .gm-audit-item {
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 10px 12px;
+            background: var(--surface-0);
+        }
+        .gm-audit-item strong {
+            display: block;
+            color: var(--gray-900);
+        }
+        .gm-muted {
+            color: var(--gray-600);
+            font-size: 12px;
+        }
+        .gm-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        .gm-action-header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            min-width: 220px;
+        }
+        .gm-audit-header-btn,
+        .gm-audit-header-btn:visited {
+            min-width: 112px;
+            border: 1px solid #0f766e !important;
+            border-radius: 6px;
+            background: #0f766e !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 6px rgba(15, 118, 110, 0.22);
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .gm-audit-header-btn:hover,
+        .gm-audit-header-btn:focus {
+            border-color: #115e59 !important;
+            background: #115e59 !important;
+            color: #ffffff !important;
+            box-shadow: 0 3px 8px rgba(15, 118, 110, 0.3);
+            transform: translateY(-1px);
+        }
+        .gm-audit-header-btn i {
+            margin-right: 5px;
+        }
+        .gm-period-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .gm-period-tab {
+            border: 1px solid var(--gray-300);
+            background: var(--surface-0);
+            color: var(--gray-700);
+        }
+        .gm-period-tab.active {
+            border-color: var(--color-primary, #2563eb);
+            background: var(--color-primary, #2563eb);
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.24);
+        }
+        .gm-period-tab.active .gm-muted {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .gm-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(15, 23, 42, 0.48);
+        }
+        .gm-modal.open {
+            display: flex;
+        }
+        .gm-modal-card {
+            width: min(980px, 96vw);
+            max-height: 86vh;
+            overflow: hidden;
+            border-radius: 8px;
+            background: var(--surface-0);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+        }
+        .gm-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .gm-modal-title {
+            margin: 0;
+            font-size: 18px;
+            color: var(--gray-900);
+        }
+        .gm-modal-body {
+            padding: 16px 18px;
+            overflow: auto;
+        }
+        .gm-detail-grid {
+            display: grid;
+            gap: 10px;
+        }
+        .gm-detail-row {
+            padding: 10px 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            background: var(--gray-50);
+        }
+        .gm-view[hidden] {
+            display: none !important;
+        }
+        .gm-wizard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/css/grade-monitoring.css?v=20260929-middle-initials-v1">
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="grade-monitoring-page">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Dashboard</p>
+                </div>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <main class="main-content gm-page-shell" id="mainContent">
+        <div class="page-header gm-page-header">
+            <div>
+                <h1 class="page-title">Grade Input Monitoring</h1>
+            </div>
+        </div>
+
+        <section class="gm-view" id="gmMonitorView">
+            <section class="card gm-filter-card" style="margin-bottom:16px;">
+                <div class="card-body">
+                    <div class="gm-toolbar gm-filter-toolbar">
+                        <div class="form-group">
+                            <label for="gmSchoolYear">School Year</label>
+                            <select class="form-control" id="gmSchoolYear"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gmGradeLevel">Year Level</label>
+                            <select class="form-control" id="gmGradeLevel"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gmSection">Section</label>
+                            <select class="form-control" id="gmSection"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gmStatus">Status</label>
+                            <select class="form-control" id="gmStatus">
+                                <option value="">All</option>
+                                <option value="incomplete">Incomplete only</option>
+                                <option value="not-started">Not started</option>
+                                <option value="complete">Complete</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gmSearch">Search</label>
+                        <input class="form-control" id="gmSearch" type="search" placeholder="Teacher or section">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="gm-layout">
+                <section class="card gm-monitor-card">
+                    <div class="card-body gm-period-strip">
+                        <span class="gm-period-label">Grading period</span>
+                        <div class="gm-period-picker">
+                            <button class="gm-period-toggle" type="button" id="gmPeriodToggle" aria-haspopup="listbox" aria-expanded="false" aria-controls="gmPeriodButtons">
+                                <span id="gmPeriodCurrent">Loading...</span>
+                                <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                            </button>
+                            <div class="gm-period-options" id="gmPeriodButtons" role="listbox" hidden></div>
+                        </div>
+                        <div class="gm-audit-toggle">
+                            <button class="btn btn-sm gm-audit-header-btn" type="button" id="gmAuditBtn" aria-haspopup="true" aria-expanded="false" aria-controls="gmAuditMenu">
+                                <i class="fas fa-clipboard-list"></i> View audit trail <i class="fas fa-chevron-down gm-audit-toggle-icon" aria-hidden="true"></i>
+                            </button>
+                            <div class="gm-audit-menu" id="gmAuditMenu" role="menu" hidden></div>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table gm-monitor-table">
+                            <thead>
+                                <tr>
+                                    <th>Teacher</th>
+                                    <th>Grade Input Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gmTableBody">
+                                <tr><td colspan="2" class="text-center">Loading monitoring data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section class="gm-view gm-audit-view" id="gmAuditView" hidden>
+            <div class="gm-wizard-header">
+                <button class="btn btn-outline" type="button" id="gmBackToMonitorBtn"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
+
+            <section class="card" id="gmAuditListPanel">
+                <div class="card-header">
+                    <h2 class="card-title" id="gmAuditTitle">Grade Audit Report</h2>
+                    <button class="btn btn-outline" type="button" id="gmReloadAuditBtn"><i class="fas fa-sync-alt"></i> Refresh Audit</button>
+                </div>
+                <div class="card-body">
+                    <div class="gm-toolbar gm-audit-toolbar">
+                        <div class="form-group">
+                            <label for="gmAuditDateFrom">Date From</label>
+                            <input class="form-control" id="gmAuditDateFrom" type="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="gmAuditDateTo">Date To</label>
+                            <input class="form-control" id="gmAuditDateTo" type="date">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="button" id="gmAuditApplyDatesBtn">
+                                <i class="fas fa-filter"></i> Apply Dates
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table gm-audit-table">
+                        <thead>
+                            <tr>
+                                <th>Recorded By</th>
+                                <th>Report Entry</th>
+                                <th>Learner</th>
+                                <th>Class Context</th>
+                                <th>Date / Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gmAuditBody"></tbody>
+                    </table>
+                </div>
+                <div class="card-body">
+                    <div class="gm-actions">
+                        <button class="btn btn-outline" type="button" id="gmAuditSeeMoreBtn" hidden>
+                            <i class="fas fa-chevron-down"></i> See More
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <div class="gm-modal" id="gmMissingModal" aria-hidden="true">
+        <div class="gm-modal-card">
+            <div class="gm-modal-header">
+                <div>
+                    <h2 class="gm-modal-title" id="gmMissingTitle">Learners Missing Grades</h2>
+                    <div class="gm-muted gm-missing-context" id="gmMissingContext" aria-hidden="true"></div>
+                </div>
+                <button class="btn btn-outline" type="button" data-gm-close="gmMissingModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="gm-modal-body">
+                <table class="data-table gm-missing-table">
+                    <thead>
+                        <tr>
+                            <th>Learner Name</th>
+                            <th>Missing Subjects</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gmMissingBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../js/grade-monitoring.js?v=20261008-empty-media-v1"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

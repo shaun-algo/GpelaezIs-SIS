@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Risk Assessment Analytics - DepEd Academic Monitoring System</title>
+
+    <link rel="stylesheet" href="../../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../../assets/css/analytics-clean.css?v=20261009-population-polish-v3">
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="../../assets/vendor/axios/axios.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="analytics-modern risk-analytics-page">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Administrative Portal</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notificationCount">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="../profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="../settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <main class="main-content" id="mainContent">
+        <div class="page-header risk-analytics-header">
+            <div>
+                <h1 class="page-title">Risk Assessment Analytics</h1>
+            </div>
+        </div>
+
+        <section class="card card-overflow-visible analytics-filter-card" aria-label="Risk assessment filters">
+            <div class="analytics-filter-grid risk-filter-grid">
+                <div class="form-group">
+                    <label for="filterSchoolYear">School Year</label>
+                    <select id="filterSchoolYear" class="form-control"></select>
+                </div>
+            </div>
+            <p class="risk-period-note" id="riskPeriodNote" role="status">Showing all grading periods for the selected school year.</p>
+        </section>
+
+        <section class="risk-analytics-grid">
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h3 class="card-title">Risk Level Distribution</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="riskLevelChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h3 class="card-title">Main Reasons Learners Were Flagged</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="riskReasonChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card chart-card risk-year-level-card">
+                <div class="card-header">
+                    <h3 class="card-title">Risk Levels by Year Level</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="riskByGradeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card chart-card risk-section-card">
+                <div class="card-header">
+                    <h3 class="card-title">Risk Levels by Section</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="riskBySectionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+<script src="../../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../../js/analytics/risk-analytics.js?v=20261009-year-period-summary-v1"></script>
+    <script src="../../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

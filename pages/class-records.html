@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../assets/css/components/logo-loader.css?v=20261002-logo-transparent-v1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Class Records - DepEd Academic Monitoring System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/dashboard.css?v=20261014-responsive-long-names-v1">
+    <link rel="stylesheet" href="../assets/css/academic-modules-premium.css?v=20260924-save-width-v1">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+    <link rel="stylesheet" href="../assets/css/print-preview.css?v=20261005-print-preview-v3">
+    <link rel="stylesheet" id="choices-css" href="../assets/vendor/choices/choices.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+
+    <!-- Axios -->
+    <script src="../assets/vendor/axios/axios.min.js"></script>
+    <script id="choices-js" src="../assets/vendor/choices/choices.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="../assets/css/unsaved-changes-dialog.css?v=20260930-unsaved-dialog-v2">
+
+    <style>
+        body.class-records-page #mainContent > .card {
+            border-radius: 16px;
+        }
+        body.class-records-page #mainContent > .card > .card-header {
+            border-radius: 16px 16px 0 0;
+        }
+        body.class-records-page #mainContent > .card > .card-body {
+            border-radius: 0 0 16px 16px;
+        }
+        body.class-records-page .cr-context,
+        body.class-records-page .cr-grade-sheet-wrap,
+        body.class-records-page .cr-observed-table-wrap,
+        body.class-records-page .cr-honors-table-wrap {
+            border-radius: 12px !important;
+        }
+        body.class-records-page .cr-honors-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--academic-line);
+        }
+        .cr-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+        .cr-tabs .btn.active { border-color: var(--deped-blue); background: var(--deped-blue); color: #fff; }
+        .cr-g1-pace-tools { display:flex; gap:12px; align-items:end; flex-wrap:wrap; margin-bottom:12px; }
+        .cr-g1-pace-tools .form-group { margin:0; min-width:min(100%, 320px); }
+        .cr-g1-pace-hint { color:var(--gray-600); font-size:.9rem; }
+        .cr-g1-pace-hint--important {
+            display:flex;
+            align-items:center;
+            gap:9px;
+            flex:1 1 100%;
+            padding:10px 13px;
+            border:1px solid #facc15;
+            border-radius:9px;
+            background:#fef3c7;
+            color:#854d0e;
+            font-weight:600;
+            line-height:1.45;
+        }
+        .cr-g1-pace-hint--important::before {
+            content:"!";
+            display:inline-grid;
+            place-items:center;
+            flex:0 0 21px;
+            width:21px;
+            height:21px;
+            border-radius:50%;
+            background:#facc15;
+            color:#713f12;
+            font-weight:800;
+        }
+        .cr-g1-pace-preview { width:100%; height:min(78vh, 1040px); min-height:620px; border:1px solid var(--gray-200); border-radius:10px; background:#e5e7eb; }
+        .cr-g1-pace-empty { display:grid; place-items:center; min-height:280px; padding:24px; border:1px dashed var(--gray-300); border-radius:10px; color:var(--gray-600); text-align:center; }
+        .cr-gender-filter .btn.active { border-color: var(--deped-blue); background: var(--deped-blue); color: #fff; }
+        .cr-filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
+        .cr-filters .form-group { margin: 0; min-width: 180px; }
+        .cr-context {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+            align-items: stretch;
+            gap: 12px;
+        }
+        .cr-context > div {
+            width: 100%;
+            min-width: 0 !important;
+        }
+        .cr-context > div > .form-control,
+        .cr-period-field > .form-control {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cr-grade-controls {
+            display: grid !important;
+            grid-template-columns: minmax(220px, 280px) auto 1fr auto;
+            align-items: end !important;
+            gap: 10px;
+        }
+        .cr-grade-controls > .form-group,
+        .cr-grade-controls > .btn {
+            min-width: 0;
+            margin: 0;
+        }
+        .cr-grade-controls > .btn {
+            width: fit-content;
+            min-width: 0;
+            justify-self: start;
+            justify-content: center;
+            white-space: nowrap;
+        }
+        .cr-grade-controls #btnTogglePeriodStatus {
+            width: fit-content;
+            min-width: 88px;
+            height: 38px;
+            padding: 0 11px;
+            grid-column: auto;
+        }
+        .cr-period-admin-control {
+            display: none;
+            grid-column: 2;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            min-width: 0;
+            align-self: end;
+        }
+        .cr-period-admin-label {
+            display: inline-flex;
+            align-items: center;
+            min-height: 22px;
+            width: max-content;
+            max-width: 100%;
+            padding: 4px 7px;
+            border: 1px solid rgba(245, 158, 11, .42);
+            border-radius: 5px;
+            background: var(--status-warning-bg);
+            color: var(--status-warning-text);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .35px;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+        .cr-period-admin-control .btn {
+            justify-content: center;
+        }
+        .cr-period-admin-status {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .15px;
+            line-height: 1;
+        }
+        .cr-grade-actions-menu {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+        }
+        .cr-grade-primary-actions {
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            gap: 10px;
+            min-width: 0;
+            grid-column: 4;
+        }
+        .cr-grade-primary-actions > .btn {
+            width: fit-content;
+            min-width: 0;
+            justify-content: center;
+            white-space: nowrap;
+        }
+        .cr-grade-actions-menu .cr-more-toggle {
+            width: 38px;
+            min-width: 38px;
+            height: 38px;
+            padding: 0;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .cr-grade-actions-menu .cr-more-toggle[aria-expanded="true"] {
+            background: var(--deped-blue);
+            border-color: var(--deped-blue);
+            color: #fff;
+        }
+        .cr-grade-actions-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            min-width: 190px;
+            padding: 6px;
+            background: var(--surface-0, #fff);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, .14);
+            z-index: 10080;
+        }
+        .cr-grade-actions-dropdown.open { display: grid; gap: 4px; }
+        .cr-grade-actions-dropdown .btn {
+            width: 100%;
+            justify-content: flex-start;
+            gap: 8px;
+            min-height: 38px;
+            padding: 8px 10px;
+            white-space: nowrap;
+        }
+        .cr-grade-controls #btnSave {
+            min-width: 132px;
+        }
+        .cr-honors-controls {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+            align-items: end !important;
+            gap: 12px;
+            position: relative;
+            z-index: 20;
+        }
+        body.class-records-page #mainContent > .card.card-overflow-visible {
+            overflow: visible !important;
+        }
+        .cr-honors-controls .form-group {
+            width: 100%;
+            min-width: 0 !important;
+            margin: 0;
+            position: relative;
+            z-index: 21;
+            overflow: visible;
+        }
+        .cr-honors-controls .form-group:has(.choices.is-open) {
+            z-index: 10070;
+        }
+        .cr-honors-controls .choices {
+            width: 100%;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+        .cr-honors-controls .choices.is-open {
+            position: relative;
+            z-index: 10071 !important;
+        }
+        .cr-honors-controls .choices.is-open .choices__list--dropdown,
+        .cr-honors-controls .choices.is-open .choices__list[aria-expanded] {
+            z-index: 10072 !important;
+        }
+        .cr-honors-controls .choices__inner {
+            width: 100%;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .cr-honors-controls .choices__list--single,
+        .cr-honors-controls .choices__list--single .choices__item {
+            min-width: 0;
+            max-width: 100%;
+        }
+        .cr-honors-controls .choices__list--single .choices__item {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .cr-honors-controls .choices__list--dropdown,
+        .cr-honors-controls .choices__list[aria-expanded] {
+            left: 0 !important;
+            right: auto !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            max-height: min(22rem, calc(100vh - 7rem)) !important;
+            overflow: hidden !important;
+            z-index: 10061 !important;
+        }
+        .cr-honors-controls .choices__list--dropdown .choices__list,
+        .cr-honors-controls .choices__list[aria-expanded] .choices__list {
+            max-height: min(17rem, calc(100vh - 12rem)) !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+        }
+        .cr-honors-controls .choices__list--dropdown .choices__item,
+        .cr-honors-controls .choices__list[aria-expanded] .choices__item {
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            line-height: 1.35;
+        }
+        #wrapHonSchoolYear .choices.is-open {
+            z-index: 10071 !important;
+        }
+        #wrapHonSchoolYear .choices__list--dropdown,
+        #wrapHonSchoolYear .choices__list[aria-expanded] {
+            width: min(320px, calc(100vw - 24px)) !important;
+            min-width: min(260px, calc(100vw - 24px)) !important;
+            max-width: min(320px, calc(100vw - 24px)) !important;
+            overflow: visible !important;
+        }
+        #wrapHonSchoolYear .choices__list--dropdown .choices__list,
+        #wrapHonSchoolYear .choices__list[aria-expanded] .choices__list {
+            max-height: min(18rem, calc(100vh - 8rem)) !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+        }
+        #wrapHonSchoolYear .choices__list--dropdown .choices__item,
+        #wrapHonSchoolYear .choices__list[aria-expanded] .choices__item {
+            white-space: normal !important;
+            overflow-wrap: anywhere;
+            line-height: 1.4;
+        }
+        .cr-honors-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+            min-width: 0;
+            margin-left: 0 !important;
+            grid-column: 1 / -1;
+        }
+        .cr-period-field {
+            width: 100%;
+            min-width: 0 !important;
+        }
+        .cr-context .choices,
+        .cr-grade-controls .choices {
+            width: 100%;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+        .cr-context .choices.is-open,
+        .cr-grade-controls .choices.is-open {
+            z-index: 10060 !important;
+        }
+        .cr-context .choices__inner,
+        .cr-grade-controls .choices__inner {
+            width: 100%;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .cr-context .choices__list--dropdown,
+        .cr-context .choices__list[aria-expanded],
+        .cr-grade-controls .choices__list--dropdown,
+        .cr-grade-controls .choices__list[aria-expanded] {
+            left: 0 !important;
+            right: auto !important;
+            width: max-content !important;
+            min-width: 100% !important;
+            max-width: min(36rem, calc(100vw - 1.5rem)) !important;
+            max-height: min(22rem, calc(100vh - 7rem)) !important;
+            overflow: hidden !important;
+            z-index: 10061 !important;
+        }
+        .cr-context .choices__list--dropdown .choices__list,
+        .cr-context .choices__list[aria-expanded] .choices__list,
+        .cr-grade-controls .choices__list--dropdown .choices__list,
+        .cr-grade-controls .choices__list[aria-expanded] .choices__list {
+            max-height: min(17rem, calc(100vh - 12rem)) !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+        }
+        .cr-context .choices__list--dropdown .choices__item,
+        .cr-context .choices__list[aria-expanded] .choices__item,
+        .cr-grade-controls .choices__list--dropdown .choices__item,
+        .cr-grade-controls .choices__list[aria-expanded] .choices__item {
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            line-height: 1.35;
+        }
+        #crContextSubjectWrap .choices__inner,
+        #crContextSubjectWrap .choices__list--single,
+        #crContextSubjectWrap .choices__list--single .choices__item {
+            min-width: 0;
+            max-width: 100%;
+        }
+        #crContextSubjectWrap .choices__list--single .choices__item {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        #crContextSubjectWrap .choices__list--dropdown,
+        #crContextSubjectWrap .choices__list[aria-expanded] {
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+        }
+        @media (max-width: 760px) {
+            .cr-grade-controls {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr) 44px;
+                align-items: end !important;
+            }
+            .cr-grade-controls .cr-period-field {
+                grid-column: 1;
+                grid-row: 1;
+                width: 100%;
+            }
+            .cr-grade-controls .cr-period-admin-control {
+                grid-column: 1 / -1;
+                grid-row: 2;
+            }
+            .cr-grade-controls > .btn { min-width: 0 !important; grid-column: auto; }
+            .cr-grade-primary-actions { display: contents; }
+            .cr-grade-actions-menu {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: end;
+            }
+            .cr-grade-actions-menu .cr-more-toggle { width: 44px; min-width: 44px; height: 44px; }
+            body.class-records-page .cr-grade-controls #btnSave {
+                grid-column: 1 / -1;
+                display: flex;
+                width: 100% !important;
+                max-width: none !important;
+                min-width: 0 !important;
+                justify-self: stretch;
+                box-sizing: border-box;
+            }
+            .cr-honors-controls { grid-template-columns: 1fr; }
+            .cr-honors-actions { justify-content: flex-start; }
+        }
+        @media (max-width: 520px) {
+            .cr-grade-controls { grid-template-columns: minmax(0, 1fr) 44px; }
+        }
+        .cr-metrics { display: grid; grid-template-columns: repeat(4, minmax(180px, 1fr)); gap: 12px; }
+        @media (max-width: 980px) { .cr-metrics { grid-template-columns: repeat(2, minmax(180px, 1fr)); } }
+        @media (max-width: 560px) { .cr-metrics { grid-template-columns: 1fr; } }
+
+        .cr-metric { border: 1px solid var(--gray-200); background: var(--surface-0); border-radius: 12px; padding: 12px 14px; }
+        .cr-metric .k { font-size: 12px; color: var(--gray-600); margin-bottom: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+        .cr-metric .v { font-size: 22px; font-weight: 800; color: var(--gray-900); }
+        .cr-metric .s { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+
+        .cr-grade-sheet-wrap {
+            --cr-learner-width: clamp(220px, 30vw, 320px);
+            position: relative;
+            overflow: auto;
+            max-width: 100%;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            background: var(--surface-0);
+        }
+        .cr-grade-scroll-cue-layer {
+            position: sticky;
+            top: 50%;
+            left: 0;
+            z-index: 20;
+            width: 100%;
+            height: 0;
+            pointer-events: none;
+        }
+        .cr-grade-scroll-cue {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 21;
+            display: block;
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            object-fit: contain;
+            opacity: .72;
+            mix-blend-mode: multiply;
+            filter: saturate(.76) contrast(.88);
+            pointer-events: none;
+            transform: translateY(-50%);
+            animation: cr-grade-scroll-cue-glide 1.6s ease-in-out infinite;
+        }
+        .cr-grade-scroll-cue[hidden] {
+            display: none;
+        }
+        @keyframes cr-grade-scroll-cue-glide {
+            0%, 100% { transform: translateY(-50%) translateX(0); opacity: .62; }
+            45% { transform: translateY(-50%) translateX(8px); opacity: .94; }
+            60% { transform: translateY(-50%) translateX(3px); opacity: .78; }
+            76% { transform: translateY(-50%) translateX(8px); opacity: .94; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .cr-grade-scroll-cue { animation: none; }
+        }
+        #tblGrades {
+            width: max-content;
+            min-width: 100%;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        #tblGrades th, #tblGrades td { white-space: nowrap; box-sizing: border-box; }
+        #tblGrades thead th { position: sticky; top: 0; z-index: 3; background: var(--surface-0); }
+        #tblGrades th:nth-child(1), #tblGrades td:nth-child(1) {
+            width: var(--cr-learner-width);
+            min-width: var(--cr-learner-width);
+            max-width: var(--cr-learner-width);
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: var(--surface-0);
+            box-shadow: 1px 0 0 var(--gray-200);
+        }
+        #tblGrades td:nth-child(1) > div { max-width: 100%; }
+        #tblGrades td:nth-child(1) span {
+            overflow: visible;
+            text-overflow: clip;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+        #tblGrades thead th:nth-child(1) { z-index: 4; }
+        #tblGrades tr.cr-gender-group-row > td.cr-gender-group-cell {
+            position: sticky !important;
+            left: 0 !important;
+            width: var(--cr-learner-width) !important;
+            min-width: var(--cr-learner-width) !important;
+            max-width: var(--cr-learner-width) !important;
+            z-index: 3 !important;
+            padding: 3px 12px;
+            background: var(--gray-100);
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: 1px 0 0 var(--gray-200);
+            color: var(--gray-700);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .04em;
+            text-align: left !important;
+            text-transform: uppercase;
+            white-space: normal;
+            line-height: 1.1;
+        }
+        #tblGrades tr.cr-gender-group-row > td.cr-gender-group-fill {
+            padding: 3px 12px;
+            background: var(--gray-100);
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .cr-learner-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            line-height: 1.3;
+        }
+        .cr-learner-name,
+        .cr-learner-meta {
+            display: block;
+            overflow: visible;
+            text-overflow: clip;
+        }
+        .cr-learner-name {
+            font-weight: 800;
+            line-height: 1.3;
+        }
+        .cr-learner-meta {
+            color: var(--gray-600);
+            font-size: 12px;
+            line-height: 1.25;
+        }
+        #tblGrades th.cr-subject-header {
+            width: 132px;
+            min-width: 132px;
+            max-width: 132px;
+            padding: 8px 10px;
+            text-align: center;
+            vertical-align: middle;
+            border-left: 1px solid var(--gray-200);
+            border-right: 1px solid var(--gray-200);
+            background: #f8fafc;
+        }
+        #tblGrades th.cr-subject-header .cr-subject-label {
+            display: block;
+            white-space: normal;
+            line-height: 1.2;
+            font-weight: 800;
+            color: var(--gray-700);
+        }
+        #tblGrades td.cr-subject-grade-cell {
+            width: 132px;
+            min-width: 132px;
+            max-width: 132px;
+            text-align: center;
+            padding: 6px 8px;
+            border-left: 1px solid var(--gray-200);
+            border-right: 1px solid var(--gray-200);
+        }
+        #tblGrades td.cr-subject-grade-cell > .cr-grade-input,
+        #tblGrades td:nth-child(2) > .cr-grade-input {
+            display: inline-block;
+            width: 84px !important;
+            min-width: 84px !important;
+            max-width: 84px !important;
+            height: 32px;
+            box-sizing: border-box;
+        }
+        #tblGrades td.cr-grade-empty-cell,
+        #tblObservedValues td.cr-grade-empty-cell {
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            position: static !important;
+            white-space: normal;
+            text-align: center;
+            box-shadow: none !important;
+        }
+        .cr-grade-empty-state {
+            box-sizing: border-box;
+            display: grid;
+            justify-items: center;
+            gap: 8px;
+            min-height: 260px;
+            padding: 28px 18px;
+            color: var(--gray-600);
+        }
+        .cr-grade-empty-overlay {
+            position: sticky;
+            top: 50%;
+            left: 0;
+            z-index: 12;
+            width: 100%;
+            height: 0;
+            pointer-events: none;
+        }
+        .cr-grade-empty-overlay[hidden] { display: none; }
+        .cr-grade-empty-overlay .cr-grade-empty-state {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            align-content: center;
+            transform: translateY(-50%);
+        }
+        .cr-observed-table-wrap {
+            --cr-learner-width: clamp(220px, 30vw, 320px);
+            position: relative;
+            min-height: 420px;
+            max-width: 100%;
+            overflow: auto;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            background: var(--surface-0);
+        }
+        .cr-observed-scroll-cue-layer {
+            position: sticky;
+            top: 50%;
+            left: 0;
+            z-index: 20;
+            width: 100%;
+            height: 0;
+            pointer-events: none;
+        }
+        .cr-observed-scroll-cue {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 21;
+            display: block;
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            object-fit: contain;
+            opacity: .72;
+            mix-blend-mode: multiply;
+            filter: saturate(.76) contrast(.88);
+            pointer-events: none;
+            transform: translateY(-50%);
+            animation: cr-grade-scroll-cue-glide 1.6s ease-in-out infinite;
+        }
+        .cr-observed-scroll-cue[hidden] { display: none; }
+        #tblObservedValues {
+            width: max-content;
+            min-width: 100%;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        #tblObservedValues th,
+        #tblObservedValues td {
+            box-sizing: border-box;
+            white-space: nowrap;
+        }
+        #tblObservedValues thead th {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            background: var(--surface-0);
+        }
+        #tblObservedValues th:first-child,
+        #tblObservedValues td:first-child {
+            width: var(--cr-learner-width);
+            min-width: var(--cr-learner-width);
+            max-width: var(--cr-learner-width);
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: var(--surface-0);
+            box-shadow: 1px 0 0 var(--gray-200);
+        }
+        #tblObservedValues thead th:first-child { z-index: 4; }
+        #tblObservedValues th.cr-observed-statement {
+            width: 180px;
+            min-width: 180px;
+            max-width: 180px;
+            padding: 8px 10px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: normal;
+            line-height: 1.2;
+            border-left: 1px solid var(--gray-200);
+            border-right: 1px solid var(--gray-200);
+        }
+        #tblObservedValues td.cr-observed-value-cell {
+            width: 180px;
+            min-width: 180px;
+            max-width: 180px;
+            padding: 6px 8px;
+            text-align: center;
+            border-left: 1px solid var(--gray-200);
+            border-right: 1px solid var(--gray-200);
+        }
+        #tblObservedValues td.cr-observed-value-cell > .cr-observed-select {
+            display: inline-block;
+            width: 76px;
+            min-width: 76px;
+            max-width: 76px;
+            height: 34px;
+            box-sizing: border-box;
+        }
+        #tblObservedValues tr.cr-gender-group-row > td.cr-gender-group-cell {
+            position: sticky !important;
+            left: 0 !important;
+            width: var(--cr-learner-width) !important;
+            min-width: var(--cr-learner-width) !important;
+            max-width: var(--cr-learner-width) !important;
+            z-index: 3 !important;
+            padding: 3px 12px;
+            background: var(--gray-100);
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: 1px 0 0 var(--gray-200);
+            color: var(--gray-700);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .04em;
+            line-height: 1.1;
+            text-align: left !important;
+            text-transform: uppercase;
+            white-space: normal;
+        }
+        #tblObservedValues tr.cr-gender-group-row > td.cr-gender-group-fill {
+            padding: 3px 12px;
+            background: var(--gray-100);
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+        }
+       .cr-observed-empty-overlay {
+            position: sticky;
+           top: 50%;
+           left: 0;
+           z-index: 12;
+           width: 100%;
+           height: 0;
+           pointer-events: none;
+       }
+        .cr-grade-empty-reserve { min-height: 260px; }
+        .cr-grade-empty-icon {
+            display: block;
+            width: clamp(8rem, 16vw, 11rem);
+            height: clamp(8rem, 16vw, 11rem);
+            object-fit: contain;
+            margin-bottom: 4px;
+        }
+       .cr-grade-empty-video {
+           object-fit: contain;
+           filter: none;
+           mix-blend-mode: darken;
+       }
+        /* The learners MP4 has a solid frame background; soften it only in the
+           Observed Values empty state so it melts into the table surface. */
+        .cr-observed-empty-overlay .cr-grade-empty-video {
+            opacity: .82;
+            filter: saturate(.64) contrast(.82) brightness(1.07) blur(.2px);
+            mix-blend-mode: multiply;
+            -webkit-mask-image: radial-gradient(ellipse at center, #000 48%, rgba(0, 0, 0, .9) 70%, transparent 100%);
+            mask-image: radial-gradient(ellipse at center, #000 48%, rgba(0, 0, 0, .9) 70%, transparent 100%);
+        }
+       .cr-grade-server-video {
+            opacity: .9;
+            filter: saturate(.78) contrast(.9) brightness(1.03);
+            mix-blend-mode: multiply;
+        }
+        .cr-grade-empty-state h3 {
+            margin: 0;
+            color: var(--gray-800);
+            font-size: 1rem;
+        }
+        .cr-grade-empty-state p {
+            max-width: 42rem;
+            margin: 0;
+            color: var(--gray-600);
+            line-height: 1.5;
+            white-space: normal;
+        }
+        .cr-honors-empty-cell {
+            padding: 0 !important;
+            text-align: center;
+            white-space: normal;
+        }
+        #tblHonors {
+            position: relative;
+            z-index: 1;
+        }
+        .cr-honors-empty-state {
+            display: grid;
+            justify-items: center;
+            gap: 8px;
+            min-height: 240px;
+            padding: 28px 18px;
+            color: var(--gray-600);
+            text-align: center;
+        }
+        .cr-honors-empty-icon {
+            display: block;
+            width: clamp(8rem, 16vw, 11rem);
+            height: clamp(8rem, 16vw, 11rem);
+            object-fit: contain;
+            margin-bottom: 4px;
+            filter: none;
+            mix-blend-mode: darken;
+        }
+        .cr-honors-empty-state h3 {
+            margin: 0;
+            color: var(--gray-800);
+            font-size: 1rem;
+        }
+        .cr-honors-empty-state p {
+            max-width: 42rem;
+            margin: 0;
+            color: var(--gray-600);
+            line-height: 1.5;
+            white-space: normal;
+        }
+        .cr-honors-empty-note {
+            padding: 9px 13px;
+            border: 1px solid rgba(37, 99, 235, .22);
+            border-radius: 9px;
+            background: rgba(37, 99, 235, .08);
+            color: #1d4ed8 !important;
+            font-weight: 700;
+        }
+        @media (max-width: 560px) {
+            .cr-grade-empty-state {
+                width: min(100%, calc(100vw - 1.5rem));
+            }
+        }
+        .cr-grade-input { width: 84px; height: 32px; text-align: center; border-radius: 0; }
+        .cr-grade-input:focus, .cr-grade-input.cr-grade-active { outline: 2px solid var(--deped-blue); outline-offset: -2px; box-shadow: none; }
+        #btnSave.cr-unsaved, #btnSaveObserved.cr-unsaved { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18); }
+        .cr-grade-input.cr-field-unsaved,
+        .cr-observed-select.cr-field-unsaved {
+            border-color: #d39a32 !important;
+            background: #fff8e7 !important;
+            box-shadow: 0 0 0 3px rgba(211, 154, 50, 0.14) !important;
+        }
+        .cr-observed-select { min-width: 76px; height: 34px; padding: 4px 6px; font-weight: 800; text-align: center; text-align-last: center; }
+        .cr-observed-select option { text-align: center; }
+        .cr-observed-statement { min-width: 180px; max-width: 260px; font-size: 12px; line-height: 1.25; color: var(--gray-700); }
+        .cr-observed-core { font-size: 11px; font-weight: 800; color: var(--deped-blue); text-transform: uppercase; letter-spacing: .3px; }
+        .cr-observed-tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; margin-bottom: 12px; }
+        .cr-import-preview-popup {
+            width: min(1400px, calc(100vw - 16px)) !important;
+            max-width: calc(100vw - 16px) !important;
+            padding: 24px !important;
+        }
+        .cr-import-preview {
+            width: 100%;
+            max-height: min(72vh, 780px);
+            overflow: auto;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            background: var(--surface-0);
+            text-align: left;
+        }
+        .cr-import-preview-table {
+            width: 100%;
+            min-width: 640px;
+            border-collapse: separate;
+            border-spacing: 0;
+            table-layout: fixed;
+        }
+        .cr-import-preview-table th,
+        .cr-import-preview-table td {
+            padding: 7px 7px;
+            border-bottom: 1px solid var(--gray-200);
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+        .cr-import-preview-table th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: var(--surface-0);
+            color: var(--gray-700);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+        .cr-import-preview-all-subjects thead tr:first-child th:first-child { width: 220px !important; }
+        .cr-import-preview-all-subjects thead tr:first-child th:not(:first-child) { width: 104px !important; }
+        .cr-import-preview-all-subjects th:not(:first-child),
+        .cr-import-preview-all-subjects td:not(:first-child) { text-align: center; }
+        .cr-import-preview-all-subjects-wrap { overflow-x: hidden; }
+        .cr-import-preview-all-subjects {
+            width: 100% !important;
+            min-width: 100% !important;
+        }
+        .cr-import-preview-all-subjects thead tr:first-child th:first-child,
+        .cr-import-preview-all-subjects tbody td:first-child { width: 27% !important; }
+        .cr-import-preview-all-subjects thead tr:first-child th:not(:first-child),
+        .cr-import-preview-all-subjects tbody td:not(:first-child) {
+            width: auto !important;
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+        .cr-import-preview-single-subject th:first-child,
+        .cr-import-preview-single-subject td:first-child { width: 70% !important; }
+        .cr-import-preview-single-subject th:nth-child(2),
+        .cr-import-preview-single-subject td:nth-child(2) { width: 30% !important; }
+        .cr-import-preview-table tbody tr:last-child td { border-bottom: 0; }
+        .cr-import-preview-table th:nth-child(1),
+        .cr-import-preview-table td:nth-child(1) { width: 42%; }
+        .cr-import-preview-table th:nth-child(2),
+        .cr-import-preview-table td:nth-child(2) { width: 16%; }
+        .cr-import-preview-table th:nth-child(3),
+        .cr-import-preview-table td:nth-child(3),
+        .cr-import-preview-table th:nth-child(4),
+        .cr-import-preview-table td:nth-child(4) { width: 21%; }
+        .cr-import-preview-table td:nth-child(3),
+        .cr-import-preview-table td:nth-child(4) {
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+        .cr-import-preview-learner {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+        .cr-import-preview-learner-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 800;
+        }
+        .cr-import-preview-learner-lrn {
+            color: var(--gray-600);
+            font-size: 11px;
+        }
+        .cr-import-preview-subject {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 42px;
+            padding: 4px 7px;
+            border: 1px solid var(--gray-200);
+            border-radius: 5px;
+            color: var(--deped-blue);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .06em;
+        }
+        .cr-import-preview-invalid {
+            color: #b91c1c;
+            font-weight: 700;
+            white-space: normal !important;
+        }
+        @media (max-width: 640px) {
+            .cr-import-preview-popup { padding: 16px !important; }
+            .cr-import-preview { max-height: 58vh; }
+            .cr-import-preview-table { min-width: 560px; }
+            .cr-import-preview-table th,
+            .cr-import-preview-table td { padding: 6px 6px; }
+            .cr-import-preview-all-subjects thead tr:first-child th:first-child { width: 190px !important; }
+            .cr-import-preview-all-subjects thead tr:first-child th:not(:first-child) { width: 92px !important; }
+            .cr-import-preview-all-subjects thead tr:first-child th:first-child,
+            .cr-import-preview-all-subjects tbody td:first-child { width: 30% !important; }
+            .cr-import-preview-all-subjects thead tr:first-child th:not(:first-child),
+            .cr-import-preview-all-subjects tbody td:not(:first-child) { width: auto !important; }
+        }
+        .cr-observed-tools .form-group { margin: 0; min-width: 150px; }
+        .cr-grade-input.cr-grade-invalid {
+            border: 2px solid #e74c3c !important;
+            background: #fdecea !important;
+            animation: cr-shake 0.3s ease;
+        }
+        @keyframes cr-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        /* Print: only show the print area */
+        @media print {
+            @page { size: A4 portrait; margin: 10mm; }
+            body * { visibility: hidden !important; }
+            #cr-print-area, #cr-print-area * { visibility: visible !important; }
+            #cr-print-area { position: absolute; left: 0; top: 0; width: 100%; }
+            #cr-print-area, #cr-print-area * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+
+        /* Class Records: breathable phone layout for grade and observed-value entry. */
+        @media (max-width: 640px) {
+            body.class-records-page #mainContent > .card > .card-body { padding: 14px; }
+
+            body.class-records-page .cr-grade-sheet-wrap,
+            body.class-records-page .cr-observed-table-wrap {
+                --cr-learner-width: clamp(148px, 40vw, 190px);
+                border-radius: 10px;
+                scrollbar-gutter: stable;
+                scroll-padding-inline: 10px;
+            }
+
+            body.class-records-page #tblGrades,
+            body.class-records-page #tblObservedValues { font-size: 12px; }
+
+            body.class-records-page #tblGrades th,
+            body.class-records-page #tblGrades td,
+            body.class-records-page #tblObservedValues th,
+            body.class-records-page #tblObservedValues td {
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            body.class-records-page #tblGrades th:nth-child(1),
+            body.class-records-page #tblGrades td:nth-child(1),
+            body.class-records-page #tblObservedValues th:first-child,
+            body.class-records-page #tblObservedValues td:first-child {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            body.class-records-page .cr-learner-cell { gap: 3px; line-height: 1.2; }
+            body.class-records-page .cr-learner-name { font-size: 13px; line-height: 1.25; }
+            body.class-records-page .cr-learner-meta { font-size: 10px; line-height: 1.2; }
+
+            body.class-records-page #tblGrades th:nth-child(2),
+            body.class-records-page #tblGrades td:nth-child(2) {
+                width: 112px;
+                min-width: 112px;
+                max-width: 112px;
+                text-align: center;
+            }
+
+            body.class-records-page #tblGrades th:nth-child(3),
+            body.class-records-page #tblGrades td:nth-child(3) {
+                width: 92px;
+                min-width: 92px;
+                max-width: 92px;
+                text-align: center;
+            }
+
+            body.class-records-page #tblGrades td:nth-child(2) > .cr-grade-input,
+            body.class-records-page #tblGrades td.cr-subject-grade-cell > .cr-grade-input {
+                width: 88px !important;
+                min-width: 88px !important;
+                max-width: 88px !important;
+                height: 42px;
+                min-height: 42px;
+                padding: 8px 6px;
+                font-size: 16px;
+                line-height: 1.2;
+                border-radius: 7px;
+                touch-action: manipulation;
+            }
+
+            body.class-records-page #tblGrades th.cr-subject-header,
+            body.class-records-page #tblGrades td.cr-subject-grade-cell {
+                width: 108px;
+                min-width: 108px;
+                max-width: 108px;
+                padding-left: 6px;
+                padding-right: 6px;
+            }
+
+            body.class-records-page #tblGrades th.cr-subject-header .cr-subject-label {
+                font-size: 11px;
+                line-height: 1.15;
+            }
+
+            body.class-records-page #tblObservedValues th.cr-observed-statement,
+            body.class-records-page #tblObservedValues td.cr-observed-value-cell {
+                width: 156px;
+                min-width: 156px;
+                max-width: 156px;
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+            body.class-records-page #tblObservedValues td.cr-observed-value-cell > .cr-observed-select {
+                width: 84px;
+                min-width: 84px;
+                max-width: 84px;
+                height: 42px;
+                min-height: 42px;
+                padding: 6px 8px;
+                font-size: 15px;
+                touch-action: manipulation;
+            }
+
+            body.class-records-page #tblObservedValues th.cr-observed-statement {
+                font-size: 11px;
+                line-height: 1.2;
+            }
+
+            body.class-records-page .cr-observed-statement { font-size: 11px; line-height: 1.25; }
+            body.class-records-page .cr-observed-core { font-size: 10px; line-height: 1.15; }
+
+            body.class-records-page .cr-grade-controls > .btn,
+            body.class-records-page .cr-observed-tools > .btn {
+                width: 100%;
+                min-height: 44px;
+            }
+
+            body.class-records-page .cr-observed-tools .form-group { min-width: 0; }
+
+            body.class-records-page .cr-period-field,
+            body.class-records-page #tabObserved .cr-observed-tools > .form-group:first-child {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+
+            body.class-records-page .cr-period-field .form-label,
+            body.class-records-page #tabObserved .cr-observed-tools > .form-group:first-child .form-label {
+                margin-bottom: 0;
+            }
+
+            body.class-records-page #selPeriod,
+            body.class-records-page #selObservedPeriod {
+                width: 100%;
+                min-height: 44px;
+                padding: 10px 36px 10px 12px;
+                font-size: 15px;
+                line-height: 1.25;
+                white-space: normal;
+            }
+
+            body.class-records-page .cr-period-field .choices,
+            body.class-records-page #tabObserved .cr-observed-tools > .form-group:first-child .choices {
+                width: 100%;
+                min-width: 0;
+                margin: 0;
+            }
+
+            body.class-records-page .cr-period-field .choices__inner,
+            body.class-records-page #tabObserved .cr-observed-tools > .form-group:first-child .choices__inner {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                padding: 8px 38px 8px 12px;
+            }
+
+            body.class-records-page .cr-period-field .choices__list--single,
+            body.class-records-page #tabObserved .cr-observed-tools > .form-group:first-child .choices__list--single {
+                min-width: 0;
+                padding: 0;
+            }
+
+            body.class-records-page .cr-period-field .choices__list--single .choices__item,
+            body.class-records-page #tabObserved .cr-observed-tools > .form-group:first-child .choices__list--single .choices__item {
+                white-space: normal;
+                overflow-wrap: anywhere;
+                font-size: 15px;
+                font-weight: 600;
+                line-height: 1.25;
+            }
+
+            body.class-records-page #cr-roster-search,
+            body.class-records-page #cr-observed-search {
+                width: 100%;
+                max-width: none !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/css/mobile-polish.css?v=20261014-responsive-long-names-v1">
+</head>
+<body class="class-records-page">
+    <!-- Logo Loading Screen -->
+    <div class="logo-loader" id="logoLoader" aria-hidden="true">
+        <div class="logo-loader-content">
+            <img src="../assets/img/logo/logo.png" alt="G. Pelaez Integrated School Logo" class="logo-loader-image" />
+        </div>
+    </div>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/img/logo/logo.png" alt="School Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>G.Pelaez Integrated School</h1>
+                    <p>Class Records</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-menu">
+                <button class="user-btn" id="userMenuBtn">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">User</span>
+                        <span class="user-role">Role</span>
+                    </div>
+                    <span class="profile-menu-indicator" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="../logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar"><nav class="sidebar-nav"><ul class="nav-list"></ul></nav></aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="card card-overflow-visible">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+                <div>
+                    <h2 class="card-title" id="cr-header-title">Grade Encoding</h2>
+                    <p class="card-subtitle" id="cr-header-sub"></p>
+                </div>
+                <div class="cr-tabs">
+                    <button class="btn btn-outline active" id="tabBtnGrades" type="button"><i class="fas fa-pen"></i> Grade Encoding </button>
+                    <button class="btn btn-outline" id="tabBtnPace" type="button" style="display:none;"><i class="fas fa-table-cells-large"></i> Grade 1 PACE</button>
+                    <button class="btn btn-outline" id="tabBtnObserved" type="button" style="display:none;"><i class="fas fa-list-check"></i> Observed Values</button>
+                    <button class="btn btn-outline" id="tabBtnHonors" type="button"><i class="fas fa-award"></i> Honors &amp; Exports</button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <!-- Context bar visible across tabs -->
+                <div class="cr-context" id="crContextBar" style="display:none; margin-bottom:16px; padding:12px 14px; background:#f8fafc; border:1px solid var(--gray-200); border-radius:10px;">
+                    <div id="crContextSyWrap" style="display:flex; flex-direction:column; gap:2px; min-width:170px;">
+                        <span style="font-size:11px; color:var(--gray-600); text-transform:uppercase; letter-spacing:.4px; font-weight:700;">School Year</span>
+                        <select class="form-control" id="selClassRecordSchoolYear" data-search-enabled="true" data-search-placeholder="Search school years..." style="min-width:170px;"></select>
+                    </div>
+                    <div id="crContextGradeLevelWrap" style="display:flex; flex-direction:column; gap:2px; min-width:190px;">
+                        <span style="font-size:11px; color:var(--gray-600); text-transform:uppercase; letter-spacing:.4px; font-weight:700;">Year Level</span>
+                        <select class="form-control" id="selGradeLevel" data-search-enabled="true" data-search-placeholder="Search year levels..." style="min-width:190px;" aria-label="Year level"></select>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:2px; min-width:200px;">
+                        <span style="font-size:11px; color:var(--gray-600); text-transform:uppercase; letter-spacing:.4px; font-weight:700;">Section</span>
+                        <select class="form-control" id="selSection" data-search-enabled="true" data-search-placeholder="Search sections..." style="min-width:200px; width:auto; max-width:280px;"></select>
+                    </div>
+                    <div id="crContextSubjectWrap" style="display:flex; flex-direction:column; gap:2px; min-width:160px;">
+                        <span style="font-size:11px; color:var(--gray-600); text-transform:uppercase; letter-spacing:.4px; font-weight:700;">Subject</span>
+                        <select class="form-control" id="selSubject" data-search-enabled="true" data-search-placeholder="Search subjects..." style="min-width:200px;"></select>
+                    </div>
+                </div>
+
+                <!-- Grade Encoding Tab -->
+                <section id="tabGrades">
+                    <div class="cr-filters cr-grade-controls" style="margin-bottom: 12px;">
+                        <div class="form-group cr-period-field">
+                            <label class="form-label" for="selPeriod">Period</label>
+                            <select class="form-control" id="selPeriod" data-search-enabled="true" data-search-placeholder="Search periods...">
+                                <option value="">Select period</option>
+                            </select>
+                        </div>
+                        <div class="cr-period-admin-control" id="crPeriodAdminControl">
+                            <span class="cr-period-admin-label">Admin control</span>
+                            <button class="btn btn-outline" id="btnTogglePeriodStatus" type="button" aria-label="Administrative control" title="Administrative control">
+                                <i class="fas fa-lock"></i>
+                                <span class="cr-period-admin-status" id="periodStatusBtnText">Lock Period</span>
+                            </button>
+                        </div>
+                        <input id="gradeImportFile" type="file" accept=".xlsx,.numbers,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.apple.numbers,text/csv" style="display:none;">
+                        <div class="cr-grade-primary-actions">
+                            <div class="cr-grade-actions-menu" id="crGradeActionsMenu">
+                                <button class="btn btn-outline cr-more-toggle" id="btnGradeActions" type="button" aria-haspopup="true" aria-expanded="false" aria-label="More grade options" title="More grade options">
+                                    <i class="fas fa-ellipsis-vertical" aria-hidden="true"></i>
+                                </button>
+                                <div class="cr-grade-actions-dropdown" id="crGradeActionsDropdown" role="menu" aria-hidden="true">
+                                    <button class="btn btn-outline" id="btnDownloadGradeTemplate" type="button" role="menuitem"><i class="fas fa-file-arrow-down" aria-hidden="true"></i> Template</button>
+                                    <button class="btn btn-outline" id="btnImportGrades" type="button" role="menuitem"><i class="fas fa-file-import" aria-hidden="true"></i> Import Grades</button>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" id="btnSave" type="button"><i class="fas fa-save"></i> Save Grades</button>
+                        </div>
+                    </div>
+
+                    <div class="cr-metrics" id="metricsGrades" style="margin-bottom: 12px;"></div>
+                    <div id="mapehNotice" style="margin-bottom: 12px;"></div>
+
+                    <div style="margin-bottom:8px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                        <input id="cr-roster-search" class="form-control" type="text" placeholder="Search learners by name or LRN..." style="max-width:300px;">
+                        <div class="cr-gender-filter" id="crRosterGenderFilter" style="display:flex; gap:6px; flex-wrap:wrap;">
+                            <button class="btn btn-outline active" type="button" data-cr-roster-gender="all">All</button>
+                            <button class="btn btn-outline" type="button" data-cr-roster-gender="male">Male</button>
+                            <button class="btn btn-outline" type="button" data-cr-roster-gender="female">Female</button>
+                        </div>
+                    </div>
+
+                    <div class="cr-grade-sheet-wrap" id="crGradeSheetWrap">
+                        <div class="cr-grade-scroll-cue-layer" aria-hidden="true">
+                            <video class="cr-grade-scroll-cue" id="crGradeScrollCue" autoplay loop muted playsinline preload="auto" aria-hidden="true" hidden>
+                                <source src="../assets/icons/arrow.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="cr-grade-empty-overlay" id="crGradeEmptyOverlay" hidden></div>
+                        <table class="tx-table" id="tblGrades">
+                            <thead>
+                                <tr>
+                                    <th>Learner</th>
+                                    <th style="width: 160px;">Enter Grade</th>
+                                    <th style="width: 110px;">Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyGrades"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Grade 1 descriptive PACE entry uses the same SF9 form pages as the report-card preview. -->
+                <section id="tabPace" style="display:none;">
+                    <div class="cr-g1-pace-tools">
+                        <div class="form-group">
+                            <label class="form-label" for="selPacePeriod">Term</label>
+                            <select class="form-control" id="selPacePeriod" data-search-enabled="true" data-search-placeholder="Search terms...">
+                                <option value="">Select term</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="selPaceLearner">Learner</label>
+                            <select class="form-control" id="selPaceLearner" data-search-enabled="true" data-search-placeholder="Search learners...">
+                                <option value="">Select learner</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="btnSavePaceRatings" type="button" disabled>
+                            <i class="fas fa-save"></i> Save PACE Ratings
+                        </button>
+                        <span id="paceEntryHint" class="cr-g1-pace-hint" role="status" aria-live="polite">Select a Grade 1 learner and term to enter A–E ratings.</span>
+                    </div>
+                    <div class="cr-g1-pace-empty" id="paceEntryEmpty">
+                        <div class="cr-grade-empty-state cr-g1-pace-empty-state">
+                            <video class="mp4-surface-blend cr-grade-empty-icon cr-grade-empty-video" autoplay loop muted playsinline preload="auto" aria-hidden="true">
+                                <source src="../assets/icons/learners.mp4" type="video/mp4">
+                            </video>
+                            <p>Choose a Grade 1 section to load its PACE learners.</p>
+                        </div>
+                    </div>
+                    <iframe class="cr-g1-pace-preview" id="g1PaceFrame" title="Grade 1 PACE form entry" style="display:none;"></iframe>
+                </section>
+
+                <!-- Observed Values Tab -->
+                <section id="tabObserved" style="display:none;">
+                    <div class="cr-observed-tools">
+                        <div class="form-group">
+                            <label class="form-label" for="selObservedPeriod">Period</label>
+                            <select class="form-control" id="selObservedPeriod">
+                                <option value="">Select period</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="selObservedIndicator">Field</label>
+                            <select class="form-control" id="selObservedIndicator">
+                                <option value="all">All fields</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="selObservedBulkRating">Rating</label>
+                            <select class="form-control" id="selObservedBulkRating">
+                                <option value="">Blank</option>
+                                <option value="AO">AO</option>
+                                <option value="SO">SO</option>
+                                <option value="RO">RO</option>
+                                <option value="NO">NO</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-outline" id="btnApplyObservedBulk" type="button"><i class="fas fa-fill-drip"></i> Apply to Visible</button>
+                        <button class="btn btn-outline" id="btnCopyObservedPrevious" type="button"><i class="fas fa-copy"></i> Copy Previous</button>
+                        <button class="btn btn-primary" id="btnSaveObserved" type="button" style="margin-left:auto;"><i class="fas fa-save"></i> Save Values</button>
+                    </div>
+
+                    <div id="observedNotice" style="margin-bottom:12px;"></div>
+                    <div style="margin-bottom:8px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                        <input id="cr-observed-search" class="form-control" type="text" placeholder="Search learners by name or LRN..." style="max-width:300px;">
+                        <div class="cr-gender-filter" id="crObservedGenderFilter" style="display:flex; gap:6px; flex-wrap:wrap;">
+                            <button class="btn btn-outline active" type="button" data-cr-observed-gender="all">All</button>
+                            <button class="btn btn-outline" type="button" data-cr-observed-gender="male">Male</button>
+                            <button class="btn btn-outline" type="button" data-cr-observed-gender="female">Female</button>
+                        </div>
+                    </div>
+
+                    <div class="cr-observed-table-wrap" id="crObservedTableWrap">
+                        <div class="cr-observed-scroll-cue-layer" aria-hidden="true">
+                            <video class="cr-observed-scroll-cue" id="crObservedScrollCue" autoplay loop muted playsinline preload="auto" aria-hidden="true" hidden>
+                                <source src="../assets/icons/arrow.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="cr-grade-empty-overlay cr-observed-empty-overlay" id="crObservedEmptyOverlay" hidden></div>
+                        <table class="tx-table" id="tblObservedValues">
+                            <thead id="theadObservedValues"></thead>
+                            <tbody id="tbodyObservedValues"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Honors Tab -->
+                <section id="tabHonors" style="display:none;">
+
+
+                    <div class="cr-filters cr-honors-controls" style="margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label class="form-label" for="selHonScope">Scope</label>
+                            <select class="form-control" id="selHonScope">
+                                <option value="section">Per Section</option>
+                                <option value="grade">Per Year Level</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="wrapHonSchoolYear">
+                            <label class="form-label" for="selHonSchoolYear">School Year</label>
+                            <select class="form-control" id="selHonSchoolYear"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="selHonSection">Section</label>
+                            <select class="form-control" id="selHonSection"></select>
+                        </div>
+                        <div class="form-group" id="wrapHonGradeLevel" style="display:none;">
+                            <label class="form-label" for="selHonGradeLevel">Year Level</label>
+                            <select class="form-control" id="selHonGradeLevel"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="selHonMode">Period</label>
+                            <select class="form-control" id="selHonMode">
+                                <option value="quarter">Specific period</option>
+                                <option value="final">Final (average of all periods)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="wrapHonPeriod">
+                            <label class="form-label" for="selHonPeriod">Grading Period</label>
+                            <select class="form-control" id="selHonPeriod"></select>
+                        </div>
+                        <div class="cr-honors-actions">
+                            <button class="btn btn-outline" id="btnHonExport" type="button"><i class="fas fa-file-alt"></i> Generate Preview</button>
+                        </div>
+                    </div>
+
+                    <div class="cr-honors-table-wrap">
+                        <table class="tx-table" id="tblHonors">
+                            <thead id="theadHonors"></thead>
+                            <tbody id="tbodyHonors"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="cr-print-area" style="display:none;"></div>
+                </section>
+    </div>
+
+    <div class="modal print-preview-modal" id="honorsPrintModal" aria-hidden="true">
+        <div class="modal-content modal-xl" role="dialog" aria-modal="true" aria-labelledby="honorsPrintModalTitle">
+            <div class="modal-header">
+                <h2 class="modal-title" id="honorsPrintModalTitle">Honors List Preview</h2>
+                <button class="modal-close" id="btnCloseHonorsPrintPreview" type="button" aria-label="Close honors preview">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="print-preview-scroll" tabindex="0" aria-label="Honors list paper preview">
+                    <iframe class="print-preview-frame" id="honorsPrintFrame" data-print-preview-items=".honors-print-sheet" title="Honors list preview"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="btnCloseHonorsPrintPreviewFooter" type="button">Close</button>
+                <button class="btn btn-primary" id="btnPrintHonorsPreview" type="button">
+                    <i class="fas fa-print" aria-hidden="true"></i> Print
+                </button>
+            </div>
+        </div>
+    </div>
+        </div>
+
+
+</main>
+
+    <script src="../assets/js/dashboard.js?v=20261014-responsive-long-names-v1"></script>
+    <script src="../assets/js/components/unsaved-changes-dialog.js?v=20260930-unsaved-dialog-v2"></script>
+    <script src="../assets/js/sf9-pace-template.js?v=20261004-g1-pace-shared-v1"></script>
+    <script src="../assets/js/print-preview-fit.js?v=20261012-mobile-fit-v5"></script>
+    <script src="../js/class-records.js?v=20261014-completed-roster-v1"></script>
+    <script src="../assets/js/components/logo-loader.js?v=20261002-logo-assets-v1"></script>
+</body>
+</html>

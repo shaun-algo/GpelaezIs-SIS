@@ -1,0 +1,83 @@
+# Operating-system and editor files
+.DS_Store
+.vscode/
+.devin/
+.agents/
+.venv/
+.sessions/
+
+# Local configuration and runtime secrets
+.env
+.env.*
+!.env.example
+**/config.local.php
+api/recovery_private/app-recovery.php
+tests/account_centralization/fixtures.json
+
+# Dependencies and generated tooling
+node_modules/
+files/
+api/mail/vendor/
+*.zip
+*.bak
+*.backup
+
+# Local-only research, demo, and test material
+/compare/
+/document/
+/docs/
+/tests/
+/sample_xlxs/
+/importsample/
+/sample_pages/
+/class_schedule_sample/
+/classofferingsample/
+/import_feature_module_sample/
+/honors/
+/Sf10/
+/sf2/
+/sf9/
+/database_exportsAugust/
+/hosted_database/
+/dbdiagram/
+/tools/
+INFINITYFREE*.md
+CAPSTONE RESEARCH 1.pdf
+School-Form-1-SF1.xlsx
+
+# Legacy database drafts and data exports
+/schema/*
+!/schema/export_july10.3.sql
+/api/database/backup/
+/api/database/drafts/
+/api/database/dashboard/
+/api/database/*.sql
+/api/database/psgc/*.csv
+/api/database/migrations/seed_2026_2027_teachers.sql
+/api/database/migrations/seed_2026_2027_grades_1_10.sql
+/api/database/migrations/seed_2026_2027_balanced_section.sql
+/api/mail/composer.phar
+/*.sql
+/*.csv
+/*.pdf
+/*.docx
+/*.xlsx
+/*.xls
+/*.numbers
+
+# Old screenshots and unrelated root media
+/ALERT.png
+/blueline.png
+/print.png
+/risk.png
+/risk01.png
+/selector.png
+/preview.png
+/sf9_report_card-3.html
+/package-lock.json
+/skills-lock.json
+
+# Personal profile media and unused social icons
+/assets/img/me/
+/assets/icons/contacts/*
+!assets/icons/contacts/approved.png
